@@ -41,7 +41,7 @@ namespace trillbot.Commands
                 RetryMode = RetryMode.RetryRatelimit
             };
 
-            Context.Channel.sendMessageAsync(name + ", you have created an account. You can now use tb!bet <racer> <amount>");
+            await ReplyAsync(name + ", you have created an account. You can now use tb!bet <racer> <amount>");
 
         }
 

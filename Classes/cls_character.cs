@@ -21,7 +21,7 @@ namespace trillbot.Classes {
         public int ID { get; set; }
         public ulong player_discord_id { get; set; }
         public string name { get; set; }
-        public List<Classes.bet> bets { get; set; }
+        public List<Classes.Bet> bets { get; set; }
 
         public static List<character> get_character () {
             var store = new DataStore ("character.json");
