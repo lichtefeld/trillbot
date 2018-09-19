@@ -23,7 +23,7 @@ namespace trillbot
         private CommandService _commands;
         private IServiceProvider _services;
         public static readonly string[] prefixes = {
-            "tb!"
+            "ta!"
         };
 
         public async Task RunBotAsync()

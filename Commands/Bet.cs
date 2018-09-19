@@ -12,7 +12,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Newtonsoft.Json;
 using RestSharp;
-using trillbot;
+using trillbot.Classes;
 
 namespace trillbot.Commands
 {
