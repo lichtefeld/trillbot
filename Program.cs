@@ -89,7 +89,7 @@ namespace trillbot
                 await Log(new LogMessage(LogSeverity.Info, "VERBOSE", logmessage));
 
                 int argPosition = 0;
-                if (message.HasStringPrefix("sb!", ref argPosition) || message.HasMentionPrefix(_client.CurrentUser, ref argPosition))
+                if (message.HasStringPrefix("ta!", ref argPosition) || message.HasMentionPrefix(_client.CurrentUser, ref argPosition))
                 {
                     var context = new SocketCommandContext(_client, message);
 

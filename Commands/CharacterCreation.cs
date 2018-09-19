@@ -21,8 +21,10 @@ namespace trillbot.Commands
         [Command("registeraccount")]
         public async Task NewcharacterAsync(params string[] args)
         {
+            SocketGuildUser usr = Context.Guild.GetUser(Context.Message.Author.Id);
 
-            string name = string.Join(" ", args);
+            string name = usr.Nickname != null ? usr.Nickname : usr.Username;
+            
             Classes.character character = new character
             {
                 name = name
@@ -32,14 +34,14 @@ namespace trillbot.Commands
 
             character.insert_character(character);
 
-            string serialized = Newtonsoft.Json.JsonConvert.SerializeObject(character);
+            /*string serialized = Newtonsoft.Json.JsonConvert.SerializeObject(character);
 
             await System.IO.File.WriteAllTextAsync(name + ".json", serialized);
 
             RequestOptions opt = new RequestOptions
             {
                 RetryMode = RetryMode.RetryRatelimit
-            };
+            };*/
 
             await ReplyAsync(name + ", you have created an account. You can now use tb!bet <racer> <amount>");
 
@@ -49,12 +51,17 @@ namespace trillbot.Commands
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task DeletecharacterAsync(params string[] args)
         {
-            string name = string.Join(" ",args);
-            Classes.character character = character.get_character(name);
+            Classes.character character = character.get_character(Context.Message.Author.Id);
 
-            Classes.character.delete_character(character);
+            if(character == null) {
+                await ReplyAsync("No character found for you");
+            } else {
 
-            await ReplyAsync("Account Deleted.");
+                Classes.character.delete_character(character);
+                await ReplyAsync("Account Deleted.");
+            }
+
+            
 
         }
 
