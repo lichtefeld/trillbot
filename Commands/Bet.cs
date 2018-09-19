@@ -37,6 +37,22 @@ namespace trillbot.Commands
         public async Task DisplaybetsAsync()
         {
             //Display bets to the User in a DM?
+            SocketGuildUser usr = Context.Guild.GetUser(Context.Message.Author.Id);
+            character character = character.get_character(Context.Message.Author.Id);
+
+            if (character == null)
+            {
+                await ReplyAsync("Account not found. Please create one before proceeding via `tb!registeraccount`");
+                return;
+            }
+
+            string output = character.name + "\n";
+
+            foreach (trillbot.Classes.Bet bet in character.bets) {
+                output+= bet.toString() + "\n";
+            }
+
+            await ReplyAsync(output);
         }
 
         [Command("cancelbet")]
@@ -52,7 +68,16 @@ namespace trillbot.Commands
                 return;
             }
 
-            
+            foreach (trillbot.Classes.Bet bet in character.bets) {
+                if (bet.Id == ID) {
+                    character.bets.Remove(bet);
+                    await ReplyAsync("Bet with ID: " + ID + "has been cancled.");
+                    return;
+                }
+            }
+
+            await ReplyAsync("Bet not found. You can see the list of bets you've made with `tb!displaybets`");
+            return;
         }
 
         
