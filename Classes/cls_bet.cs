@@ -1,10 +1,10 @@
-
-namespace trillbot.Classes {
     using System.Collections.Generic;
     using System.Globalization;
     using System;
     using Newtonsoft.Json.Converters;
     using Newtonsoft.Json;
+
+namespace trillbot.Classes {
 
     public partial class Bet {
         [JsonProperty ("ID")]
@@ -16,7 +16,7 @@ namespace trillbot.Classes {
         [JsonProperty ("Amount")]
         public long Amount { get; set; }
 
-        public string toString() {
+        public override string ToString() {
             return "Bet ID: " + Id + " | Racer Name: " + RacerName + " | Amount: " + Amount;
         }
 

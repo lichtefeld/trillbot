@@ -49,7 +49,7 @@ namespace trillbot.Commands
             string output = character.name + "\n";
 
             foreach (trillbot.Classes.Bet bet in character.bets) {
-                output+= bet.toString() + "\n";
+                output+= bet.ToString() + "\n";
             }
 
             await ReplyAsync(output);
