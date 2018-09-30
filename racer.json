@@ -2,9 +2,24 @@
   "racer": [
     {
       "id": 0,
-      "racername": " ",
+      "player_discord_id": 0,
+      "name": null,
       "faction": "",
-      "payout": 0.0
+      "cards": null
+    },
+    {
+      "id": 1,
+      "player_discord_id": 106768024857501696,
+      "name": "Testing Text Input",
+      "faction": null,
+      "cards": null
+    },
+    {
+      "id": 2,
+      "player_discord_id": 130413955783983104,
+      "name": "Mister Man",
+      "faction": null,
+      "cards": null
     }
   ]
 }
