@@ -21,7 +21,8 @@ namespace trillbot.Classes {
         public int ID { get; set; }
         public ulong player_discord_id { get; set; }
         public string name { get; set; }
-        public List<Classes.Bet> bets { get; set; }
+        public int balance { get; set; } = 1000000;
+        public List<Classes.Bet> bets { get; set; } = new List<Bet>();
 
         public static List<Character> get_character () {
             var store = new DataStore ("character.json");
@@ -63,7 +64,7 @@ namespace trillbot.Classes {
         public static void update_character (Character character) {
             var store = new DataStore ("character.json");
 
-            store.GetCollection<Character> ().UpdateOne (e => e.ID == character.ID, character);
+            store.GetCollection<Character> ().ReplaceOneAsync (e => e.ID == character.ID, character);
             store.Dispose();
         }
 

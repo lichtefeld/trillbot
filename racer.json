@@ -2,23 +2,9 @@
   "racer": [
     {
       "id": 0,
-      "player_discord_id": 0,
-      "name": null,
-      "faction": "",
-      "cards": null
-    },
-    {
-      "id": 1,
       "player_discord_id": 106768024857501696,
-      "name": "Testing Text Input",
-      "faction": null,
-      "cards": null
-    },
-    {
-      "id": 2,
-      "player_discord_id": 130413955783983104,
-      "name": "Mister Man",
-      "faction": null,
+      "name": "The Best Racer",
+      "faction": "House Eridanus",
       "cards": null
     }
   ]

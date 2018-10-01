@@ -22,17 +22,23 @@ namespace trillbot.Commands
         public async Task NewcharacterAsync(params string[] args)
         {
             SocketGuildUser usr = Context.Guild.GetUser(Context.Message.Author.Id);
+            Classes.Character c = Character.get_character(Context.Message.Author.Id);
+            if (c != null) { 
+                await ReplyAsync("You already have an account!");
+                return;
+            }
+
 
             string name = usr.Nickname != null ? usr.Nickname : usr.Username;
             
-            Classes.character character = new character
+            Classes.Character character = new Character
             {
                 name = name
             };
 
             character.player_discord_id = Context.Message.Author.Id;
 
-            character.insert_character(character);
+            Character.insert_character(character);
 
             /*string serialized = Newtonsoft.Json.JsonConvert.SerializeObject(character);
 
@@ -43,7 +49,7 @@ namespace trillbot.Commands
                 RetryMode = RetryMode.RetryRatelimit
             };*/
 
-            await ReplyAsync(name + ", you have created an account. You can now use tb!bet <racer> <amount>");
+            await ReplyAsync(name + ", you have created an account. You can now use ta!bet <racer> <amount>");
 
         }
 
@@ -51,13 +57,13 @@ namespace trillbot.Commands
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task DeletecharacterAsync(params string[] args)
         {
-            Classes.character character = character.get_character(Context.Message.Author.Id);
+            Classes.Character character = Character.get_character(Context.Message.Author.Id);
 
             if(character == null) {
                 await ReplyAsync("No character found for you");
             } else {
 
-                Classes.character.delete_character(character);
+                Classes.Character.delete_character(character);
                 await ReplyAsync("Account Deleted.");
             }
         }
@@ -66,7 +72,7 @@ namespace trillbot.Commands
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task ListcharactersAsync()
         {
-            List<Classes.character> characters = character.get_character();
+            List<Classes.Character> characters = Character.get_character();
 
             await ReplyAsync("**Racers for the Grand Prix**"+System.Environment.NewLine+string.Join(System.Environment.NewLine,characters.Select(e=>e.name).ToList()));
         }

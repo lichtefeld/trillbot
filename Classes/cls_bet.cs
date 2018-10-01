@@ -14,9 +14,9 @@ namespace trillbot.Classes {
         public string RacerName { get; set; }
 
         [JsonProperty ("Amount")]
-        public long Amount { get; set; }
+        public int Amount { get; set; }
 
-        public Bet(string rn, long a) {
+        public Bet(string rn, int a) {
             RacerName = rn;
             Amount = a;
         }

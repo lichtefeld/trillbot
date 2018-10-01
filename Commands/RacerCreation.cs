@@ -57,7 +57,7 @@ namespace trillbot.Commands
                 await ReplyAsync("No racer found for you");
             } else {
                 string output = "";
-                if (racer.cards == null) { 
+                if (!racer.cards.Any()) { 
                     await ReplyAsync("Hold up, you don't have any cards. The game must not have started yet.");
                 } else {
                     foreach(Card c in racer.cards) {
