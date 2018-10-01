@@ -20,19 +20,12 @@ namespace trillbot.Commands
     {
         private List<racer> racers = new List<racer>();
         private Stack<Card> cards = new Stack<Card>();
+        private bool endGame = false;
 
         [Command("startgame")]
-        public async Task startGame()
-        {
-            cards = this.generateDeck();
-            foreach(racer r in racers) {
-                for(int i = 0; i < 8; i++) {
-                    if(!cards.Any()) { cards = generateDeck(); }
-                    r.cards.Add(cards.Pop());
-                }
-            }
-
-            await ReplyAsync("Game Started...");
+        public async Task startGame() {
+            await ReplyAsync("Game Started");
+            this.doWorkAsyncInfiniteLoop();
         }
 
         [Command("joingame")]
@@ -46,6 +39,30 @@ namespace trillbot.Commands
             }
 
             await ReplyAsync("You have joined the game");
+        }
+
+        [Command("dealDeck")]
+        public async Task dealCards()
+        {
+            cards = this.generateDeck();
+            foreach(racer r in racers) {
+                for(int i = 0; i < 8; i++) {
+                    if(!cards.Any()) { cards = generateDeck(); }
+                    r.cards.Add(cards.Pop());
+                }
+                racer.update_racer(r);
+            }
+
+            await ReplyAsync("Cards Delt");
+        }
+
+        private async Task doWorkAsyncInfiniteLoop() {
+            while(true) {
+                if(endGame) {
+                    break;
+                }
+                await Task.Delay(200);
+            }
         }
 
         private Stack<Card> generateDeck() {
@@ -68,7 +85,7 @@ namespace trillbot.Commands
         private Stack<Card> shuffleDeck(List<Card> c) {
             Stack<Card> s = new Stack<Card>();
 
-            while (!c.Any()) {
+            while (c.Count > 0) {
                 int num = trillbot.Program.rand.Next(0,c.Count);
                 s.Push(c[num]);
                 c.RemoveAt(num);

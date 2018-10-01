@@ -18,7 +18,6 @@ namespace trillbot
     {
         private static void Main() => new Program().RunBotAsync().GetAwaiter().GetResult();
         public static Random rand = new Random();
-
         private DiscordSocketClient _client;
         private CommandService _commands;
         private IServiceProvider _services;

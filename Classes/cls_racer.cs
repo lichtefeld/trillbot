@@ -22,7 +22,7 @@ namespace trillbot.Classes {
         public ulong player_discord_id { get; set; }
         public string name { get; set; }
         public string faction { get; set; }
-        public List<Classes.Card> cards { get; set; }
+        public List<Classes.Card> cards { get; set; } = new List<Classes.Card>();
 
         public static List<racer> get_racer () {
             var store = new DataStore ("racer.json");
