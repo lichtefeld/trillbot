@@ -22,11 +22,11 @@ namespace trillbot.Commands
         public async Task BetAsync(int ID, int amount)
         {
             SocketGuildUser usr = Context.Guild.GetUser(Context.Message.Author.Id);
-            character character = character.get_character(Context.Message.Author.Id);
+            trillbot.Classes.Character char = character.get_character(Context.Message.Author.Id);
             racer racer = racer.get_racer(ID);
             string name = usr.Nickname != null ? usr.Nickname : usr.Username;
 
-            if (character == null)
+            if (char == null)
             {
                 await ReplyAsync("Account not found. Please create one before proceeding via `tb!registeraccount`");
                 return;
@@ -44,8 +44,8 @@ namespace trillbot.Commands
 
             trillbot.Classes.Bet b = new trillbot.Classes.Bet(racer.name,(long)amount);
 
-            character.bets.Add(b);
-            character.update_character(character);
+            char.bets.Add(b);
+            character.update_character(char);
             await ReplyAsync(name + ", you have placed the following bet: " + System.Environment.NewLine + b.ToString());
 
         }

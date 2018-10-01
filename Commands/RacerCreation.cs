@@ -87,11 +87,11 @@ namespace trillbot.Commands
         public async Task ListRacersAsync()
         {
             List<Classes.racer> racers = racer.get_racer();
-            string s = "Racers for the Grand Prix!" + System.Environment.NewLine;
+            string s = "Racers for the Grand Prix!" + System.Environment.NewLine + "```" + System.Environment.NewLine;
             foreach(Classes.racer r in racers) {
-                s += "ID: #" + r.ID + " | " + r.name;
+                s += "ID: #" + r.ID + " | " + r.name + System.Environment.NewLine;
             }
-
+            s += "```";
             await ReplyAsync(s);
         }
     }
