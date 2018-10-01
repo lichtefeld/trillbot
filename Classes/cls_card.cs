@@ -1,12 +1,27 @@
-using System.Collections.Generic;
-using System.Globalization;
 using System;
-using Newtonsoft.Json.Converters;
+using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Dynamic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
+using JsonFlatFileDataStore;
 using Newtonsoft.Json;
+using trillbot.Classes;
 
 namespace trillbot.Classes {
 
     public partial class Card {
+        [JsonProperty ("ID")]
+        public int ID { get; set; }
+        [JsonProperty ("count")]
+        public int count { get; set; }
 
         [JsonProperty ("title")]
         public string title { get; set; }
@@ -23,6 +38,50 @@ namespace trillbot.Classes {
     public partial class Card
     {
         public static Card[] FromJson(string json) => JsonConvert.DeserializeObject<Card[]>(json, Converter.Settings);
+
+        public static List<Card> get_card () {
+            var store = new DataStore ("card.json");
+
+            // Get employee collection
+            return store.GetCollection<Card> ().AsQueryable ().ToList();
+        }
+
+        public static Card get_card (int id) {
+            var store = new DataStore ("card.json");
+
+            // Get employee collection
+            return store.GetCollection<Card> ().AsQueryable ().FirstOrDefault (e => e.ID == id);
+        }
+
+        public static Card get_card (string name) {
+            var store = new DataStore ("card.json");
+
+            // Get employee collection
+            return store.GetCollection<Card> ().AsQueryable ().FirstOrDefault (e => e.title == name);
+        }
+
+        public static void insert_card (Card card) {
+            var store = new DataStore ("card.json");
+
+            // Get employee collection
+            store.GetCollection<Card> ().InsertOneAsync (card);
+
+            store.Dispose();
+        }
+
+        public static void update_card (Card card) {
+            var store = new DataStore ("card.json");
+
+            store.GetCollection<Card> ().ReplaceOneAsync (e => e.ID == card.ID, card);
+            store.Dispose();
+        }
+
+        public static void delete_card (Card card) {
+            var store = new DataStore ("card.json");
+
+            store.GetCollection<Card> ().DeleteOne (e => e.ID == card.ID);
+            store.Dispose();
+        }
     }
 
 }
