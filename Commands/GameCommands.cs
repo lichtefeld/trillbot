@@ -65,13 +65,13 @@ namespace trillbot.Commands
             return c;
         }
 
-        private Stack<Card> shuffleDeck(List<Card> cards) {
+        private Stack<Card> shuffleDeck(List<Card> c) {
             Stack<Card> s = new Stack<Card>();
 
-            while (!cards.Any()) {
-                int num = trillbot.Program.rand.Next(cards.Count);
-                s.Push(cards[num]);
-                cards.RemoveAt(num);
+            while (!c.Any()) {
+                int num = trillbot.Program.rand.Next(0,c.Count);
+                s.Push(c[num]);
+                c.RemoveAt(num);
             }
 
             return s;
