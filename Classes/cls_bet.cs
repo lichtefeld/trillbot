@@ -16,6 +16,11 @@ namespace trillbot.Classes {
         [JsonProperty ("Amount")]
         public long Amount { get; set; }
 
+        public Bet(string rn, long a) {
+            RacerName = rn;
+            Amount = a;
+        }
+
         public override string ToString() {
             return "Bet ID: " + Id + " | Racer Name: " + RacerName + " | Amount: " + Amount;
         }

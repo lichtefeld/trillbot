@@ -87,8 +87,12 @@ namespace trillbot.Commands
         public async Task ListRacersAsync()
         {
             List<Classes.racer> racers = racer.get_racer();
+            string s = "Racers for the Grand Prix!" + System.Environment.NewLine;
+            foreach(Classes.racer r in racers) {
+                s += "ID: #" + r.ID + " | " + r.name;
+            }
 
-            await ReplyAsync(string.Join(System.Environment.NewLine,racers.Select(e=>e.name).ToList()));
+            await ReplyAsync(s);
         }
     }
 }

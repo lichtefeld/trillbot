@@ -19,17 +19,34 @@ namespace trillbot.Commands
     public class Bet : ModuleBase<SocketCommandContext>
     {
         [Command("bet")]
-        public async Task BetAsync(string racerName, int amount)
+        public async Task BetAsync(int ID, int amount)
         {
             SocketGuildUser usr = Context.Guild.GetUser(Context.Message.Author.Id);
             character character = character.get_character(Context.Message.Author.Id);
+            racer racer = racer.get_racer(ID);
+            string name = usr.Nickname != null ? usr.Nickname : usr.Username;
 
             if (character == null)
             {
                 await ReplyAsync("Account not found. Please create one before proceeding via `tb!registeraccount`");
                 return;
             }
+
+            if(racer == null) {
+                await ReplyAsync("The racer you selected doesn't exist.");
+                return;
+            }
             
+            if (amount <= 0) {
+                await ReplyAsync("You can't make a negative bet!");
+                return;
+            }
+
+            trillbot.Classes.Bet b = new trillbot.Classes.Bet(racer.name,(long)amount);
+
+            character.bets.Add(b);
+            character.update_character(character);
+            await ReplyAsync(name + ", you have placed the following bet: " + System.Environment.NewLine + b.ToString());
 
         }
 

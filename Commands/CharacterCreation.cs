@@ -68,7 +68,7 @@ namespace trillbot.Commands
         {
             List<Classes.character> characters = character.get_character();
 
-            await ReplyAsync("**Racers for the Grand Prix**" +System.Environment.NewLine+string.Join(System.Environment.NewLine,characters.Select(e=>e.name).ToList()));
+            await ReplyAsync("**Racers for the Grand Prix**"+System.Environment.NewLine+string.Join(System.Environment.NewLine,characters.Select(e=>e.name).ToList()));
         }
     }
 }
