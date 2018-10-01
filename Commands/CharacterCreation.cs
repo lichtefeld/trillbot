@@ -40,15 +40,6 @@ namespace trillbot.Commands
 
             Character.insert_character(character);
 
-            /*string serialized = Newtonsoft.Json.JsonConvert.SerializeObject(character);
-
-            await System.IO.File.WriteAllTextAsync(name + ".json", serialized);
-
-            RequestOptions opt = new RequestOptions
-            {
-                RetryMode = RetryMode.RetryRatelimit
-            };*/
-
             await ReplyAsync(name + ", you have created an account. You can now use ta!bet <racer> <amount>");
 
         }

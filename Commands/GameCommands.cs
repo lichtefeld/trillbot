@@ -18,19 +18,10 @@ namespace trillbot.Commands
 {
     public class GameCommands : ModuleBase<SocketCommandContext>
     {
-        [Command("hand")]
-        public async Task DisplayCardsAsyn(string racerName, int amount)
+        [Command("startgame")]
+        public async Task DisplayCardsAsyn()
         {
-            SocketGuildUser usr = Context.Guild.GetUser(Context.Message.Author.Id);
-            racer racer = racer.get_racer(Context.Message.Author.Id);
-
-            if (racer == null)
-            {
-                await ReplyAsync("I don't think you are a racer");
-                return;
-            }
             
-            if (!racer.cards.Any())
 
         }
 

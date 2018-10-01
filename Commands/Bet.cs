@@ -42,7 +42,7 @@ namespace trillbot.Commands
                 return;
             }
 
-            trillbot.Classes.Bet b = new trillbot.Classes.Bet(racer.name,(long)amount);
+            trillbot.Classes.Bet b = new trillbot.Classes.Bet(racer.name,amount);
 
             character.bets.Add(b);
             character.balance -= amount;
