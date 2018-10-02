@@ -24,6 +24,11 @@ namespace trillbot.Classes {
         public string faction { get; set; }
         public List<Classes.Card> cards { get; set; } = new List<Classes.Card>();
 
+        public void resetCards() {
+            cards = new List<Classes.Card>();
+            racer.update_racer(this);
+        }
+
         public static List<racer> get_racer () {
             var store = new DataStore ("racer.json");
 

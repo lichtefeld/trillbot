@@ -34,7 +34,14 @@ namespace trillbot.Commands
 
             if(racer == null) {
                 await ReplyAsync("No racer found for you");
+                return;
             } else {
+                foreach (racer r in racers) {
+                    if(r.ID == racer.ID) {
+                        await ReplyAsync("You have already joined the game!");
+                        return;
+                    }
+                }
                 racers.Add(racer);
             }
 
@@ -48,12 +55,21 @@ namespace trillbot.Commands
             foreach(racer r in racers) {
                 for(int i = 0; i < 8; i++) {
                     if(cards.Count == 0) { cards = this.generateDeck(); }
-                    r.cards.Append(cards.Pop());
+                    r.cards.Add(cards.Pop());
                 }
                 racer.update_racer(r);
             }
 
             await ReplyAsync("Cards Dealt");
+        }
+        [Command("reset")]
+        public async Task doReset() {
+            cards = new Stack<Card>();
+            foreach (racer r in racers) {
+                r.resetCards();
+            }
+            racers = new List<racer>();
+            await ReplyAsync("Game Reset");
         }
 
         private async Task doWorkAsyncInfiniteLoop() {
