@@ -18,8 +18,8 @@ namespace trillbot.Commands
 {
     public class GameCommands : ModuleBase<SocketCommandContext>
     {
-        private List<racer> racers = new List<racer>();
-        private Stack<Card> cards = new Stack<Card>();
+        private static List<racer> racers = new List<racer>();
+        private static Stack<Card> cards = new Stack<Card>();
         private bool endGame = false;
 
         [Command("startgame")]
@@ -47,13 +47,13 @@ namespace trillbot.Commands
             cards = this.generateDeck();
             foreach(racer r in racers) {
                 for(int i = 0; i < 8; i++) {
-                    if(!cards.Any()) { cards = generateDeck(); }
-                    r.cards.Add(cards.Pop());
+                    if(cards.Count == 0) { cards = this.generateDeck(); }
+                    r.cards.Append(cards.Pop());
                 }
                 racer.update_racer(r);
             }
 
-            await ReplyAsync("Cards Delt");
+            await ReplyAsync("Cards Dealt");
         }
 
         private async Task doWorkAsyncInfiniteLoop() {

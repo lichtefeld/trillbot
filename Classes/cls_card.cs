@@ -39,6 +39,10 @@ namespace trillbot.Classes {
     {
         public static Card[] FromJson(string json) => JsonConvert.DeserializeObject<Card[]>(json, Converter.Settings);
 
+        public override string ToString() {
+            return "**" + title + "** : " + description;
+        }
+
         public static List<Card> get_card () {
             var store = new DataStore ("card.json");
 

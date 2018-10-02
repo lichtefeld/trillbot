@@ -5,7 +5,136 @@
       "player_discord_id": 106768024857501696,
       "name": "Xavier",
       "faction": "Eridanus",
-      "cards": []
+      "cards": [
+        {
+          "id": 0,
+          "count": 11,
+          "title": "Movement 1",
+          "description": "Move foward 1 spaces",
+          "type": "Movement",
+          "value": 1
+        },
+        {
+          "id": 1,
+          "count": 11,
+          "title": "Movement 2",
+          "description": "Move foward 2 spaces",
+          "type": "Movement",
+          "value": 2
+        },
+        {
+          "id": 14,
+          "count": 4,
+          "title": "Cyber Healthcare",
+          "description": "Removes heart attack and High G forces",
+          "type": "Remedy",
+          "value": 2
+        },
+        {
+          "id": 7,
+          "count": 3,
+          "title": "Mech Failure",
+          "description": "Target another user, target is prevented from playing move cards",
+          "type": "Hazard",
+          "value": 2
+        },
+        {
+          "id": 3,
+          "count": 11,
+          "title": "Movement 4",
+          "description": "Move foward 4 spaces",
+          "type": "Movement",
+          "value": 4
+        },
+        {
+          "id": 8,
+          "count": 3,
+          "title": "Sabotage",
+          "description": "Target another user, Target is killed if they end a turn with it and another hazard applied",
+          "type": "Hazard",
+          "value": 3
+        },
+        {
+          "id": 3,
+          "count": 11,
+          "title": "Movement 4",
+          "description": "Move foward 4 spaces",
+          "type": "Movement",
+          "value": 4
+        },
+        {
+          "id": 14,
+          "count": 4,
+          "title": "Cyber Healthcare",
+          "description": "Removes heart attack and High G forces",
+          "type": "Remedy",
+          "value": 2
+        },
+        {
+          "id": 0,
+          "count": 11,
+          "title": "Movement 1",
+          "description": "Move foward 1 spaces",
+          "type": "Movement",
+          "value": 1
+        },
+        {
+          "id": 14,
+          "count": 4,
+          "title": "Cyber Healthcare",
+          "description": "Removes heart attack and High G forces",
+          "type": "Remedy",
+          "value": 2
+        },
+        {
+          "id": 9,
+          "count": 3,
+          "title": "Heart Attack",
+          "description": "Target another user, kills them in three turns if not removed",
+          "type": "Hazard",
+          "value": 4
+        },
+        {
+          "id": 8,
+          "count": 3,
+          "title": "Sabotage",
+          "description": "Target another user, Target is killed if they end a turn with it and another hazard applied",
+          "type": "Hazard",
+          "value": 3
+        },
+        {
+          "id": 1,
+          "count": 11,
+          "title": "Movement 2",
+          "description": "Move foward 2 spaces",
+          "type": "Movement",
+          "value": 2
+        },
+        {
+          "id": 8,
+          "count": 3,
+          "title": "Sabotage",
+          "description": "Target another user, Target is killed if they end a turn with it and another hazard applied",
+          "type": "Hazard",
+          "value": 3
+        },
+        {
+          "id": 4,
+          "count": 5,
+          "title": "Movement 8",
+          "description": "This can be played to move you 8 spaces OR used as a dodge card (Removes debris and ram)",
+          "type": "Movement",
+          "value": 8
+        },
+        {
+          "id": 6,
+          "count": 3,
+          "title": "Ram",
+          "description": "Move forward 3, the racer in front of you after the move cannot play move cards",
+          "type": "Hazard",
+          "value": 1
+        }
+      ]
     }
   ]
 }

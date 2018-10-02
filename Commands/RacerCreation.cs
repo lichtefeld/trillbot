@@ -61,7 +61,7 @@ namespace trillbot.Commands
                     await ReplyAsync("Hold up, you don't have any cards. The game must not have started yet.");
                 } else {
                     foreach(Card c in racer.cards) {
-                        output = c.ToString() + System.Environment.NewLine;
+                        output += c.ToString() + System.Environment.NewLine;
                     }
                     await Context.User.SendMessageAsync(output);
                 }
