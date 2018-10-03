@@ -28,7 +28,7 @@ namespace trillbot.Commands
             if (name == null) {
                 name = usr.Nickname != null ? usr.Nickname : usr.Username;
             }
-            if(usr.Roles.FirstOrDefault(e=>e.Name == "racer") == null) 
+            if(usr.Roles.FirstOrDefault(e=>e.Name == "Racer") == null) 
             { 
                 await ReplyAsync(name + ", Please contact a moderator if you should be a racer");
             } 
@@ -56,12 +56,12 @@ namespace trillbot.Commands
             if(racer == null) {
                 await ReplyAsync("No racer found for you");
             } else {
-                string output = "";
+                string output = "**Your Current Hand**";
                 if (racer.cards.Count == 0) { 
                     await ReplyAsync("Hold up, you don't have any cards. The game must not have started yet.");
                 } else {
-                    foreach(Card c in racer.cards) {
-                        output += c.ToString() + System.Environment.NewLine;
+                    for(int i = 0; i < racer.cards.Count; i++) {
+                        output += "#" + (i+1) + ": " + racer.cards[i].ToString() + System.Environment.NewLine;
                     }
                     await Context.User.SendMessageAsync(output);
                 }

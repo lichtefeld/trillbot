@@ -200,6 +200,7 @@ namespace trillbot.Commands
                     await ReplyAsync(usr + ", you have won the race!");
                 }
                 position -= racers.Count;
+                await displayCurrentBoard();
             }
             await whosTurnAsync();
         }
@@ -207,10 +208,10 @@ namespace trillbot.Commands
         [Command("reset")]
         public async Task doReset() {
             cards = new Stack<Card>();
-            foreach (racer r in racers) {
-                r.resetCards();
-                racer.update_racer(r);
-            }
+            racers.ForEach(e=> {
+                e.reset();
+                racer.update_racer(e);
+            });
             racers = new List<racer>();
             position = 0;
             await ReplyAsync("Game Reset");
@@ -223,6 +224,20 @@ namespace trillbot.Commands
                 await ReplyAsync("Uhh boss, something went wrong.");
             }
             await ReplyAsync("Hey " + usr.Mention + " It's your turn now!");
+        }
+
+        private async Task displayCurrentBoard() {
+            List<string> str = new List<string>();
+            str.Add("**Leaderboard!**");
+            str.Add("```");
+            str.Add("Distance | Racer Name (ID)");
+            racers.OrderBy(e=> e.distance).ToList().ForEach(e=> str.Add(e.distance + " | " + e.nameID()));
+            str.Add("```");
+            string ouput_string = string.Join(System.Environment.NewLine, str);
+
+            var channel = Context.Guild.GetTextChannel(Context.Guild.Channels.FirstOrDefault(e=>e.Name == "leaderboard").Id);
+            await channel.SendMessageAsync(ouput_string);
+             
         }
 
         private async Task endOfTurn() {

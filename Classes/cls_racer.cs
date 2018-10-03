@@ -34,8 +34,21 @@ namespace trillbot.Classes {
         public int heartTurns { get; set; } = 0;
         public bool sab { get; set; } = false;
 
-        public void resetCards() {
+        public void reset() {
+            stillIn = false;
+            canMove = true;
+            crash = false;
+            maxMove2 = false;
+            heartAtt = false;
+            sab = false;
+            heartTurns = 0;
+            distance = 0;
+            //reset hazards
             cards = new List<Classes.Card>();
+        }
+
+        public string nameID() {
+            return this.name + " (" + this.ID + ") ";
         }
 
         public static List<racer> get_racer () {
