@@ -4,7 +4,7 @@
       "id": 0,
       "count": 11,
       "title": "Movement 1",
-      "description": "Move foward 1 spaces",
+      "description": "Move forward 1 spaces",
       "type": "Movement",
       "value": 1
     },
@@ -12,7 +12,7 @@
       "id": 1,
       "count": 11,
       "title": "Movement 2",
-      "description": "Move foward 2 spaces",
+      "description": "Move forward 2 spaces",
       "type": "Movement",
       "value": 2
     },
@@ -20,7 +20,7 @@
       "id": 2,
       "count": 11,
       "title": "Movement 3",
-      "description": "Move foward 3 spaces",
+      "description": "Move forward 3 spaces",
       "type": "Movement",
       "value": 3
     },
@@ -28,7 +28,7 @@
       "id": 3,
       "count": 11,
       "title": "Movement 4",
-      "description": "Move foward 4 spaces",
+      "description": "Move forward 4 spaces",
       "type": "Movement",
       "value": 4
     },
@@ -36,7 +36,7 @@
       "id": 4,
       "count": 5,
       "title": "Movement 8",
-      "description": "This can be played to move you 8 spaces OR used as a dodge card (Removes debris and ram)",
+      "description": "This can be played to move you 8 spaces OR used as a dodge card (Removes debris and ram). To play as movement provide the value of 0, to play as a dodge provide 1",
       "type": "Movement",
       "value": 8
     },
@@ -58,43 +58,43 @@
     },
     {
       "id": 7,
-      "count": 3,
-      "title": "Mech Failure",
-      "description": "Target another user, target is prevented from playing move cards",
+      "count": 1,
+      "title": "Crash",
+      "description": "Played on self, move 1. Anyone in your space at the start of your next turn dies.",
       "type": "Hazard",
       "value": 2
     },
     {
       "id": 8,
       "count": 3,
-      "title": "Sabotage",
-      "description": "Target another user, Target is killed if they end a turn with it and another hazard applied",
-      "type": "Hazard",
-      "value": 3
+      "title": "Mech Failure",
+      "description": "Target another user, target is prevented from playing move cards",
+      "type": "THazard",
+      "value": 0
     },
     {
       "id": 9,
       "count": 3,
-      "title": "Heart Attack",
-      "description": "Target another user, kills them in three turns if not removed",
-      "type": "Hazard",
-      "value": 4
+      "title": "Sabotage",
+      "description": "Target another user, Target is killed if they end a turn with it and another hazard applied",
+      "type": "THazard",
+      "value": 1
     },
     {
       "id": 10,
       "count": 3,
-      "title": "High G",
-      "description": "Target another user, You can't play a move card higher than move 2.",
-      "type": "Hazard",
-      "value": 5
+      "title": "Heart Attack",
+      "description": "Target another user, kills them in three turns if not removed",
+      "type": "THazard",
+      "value": 2
     },
     {
       "id": 11,
-      "count": 1,
-      "title": "Crash",
-      "description": "Played on self, move 1. Anyone in your space at the start of your next turn dies.",
-      "type": "Hazard",
-      "value": 6
+      "count": 3,
+      "title": "High G",
+      "description": "Target another user, You can't play a move card higher than move 2.",
+      "type": "THazard",
+      "value": 3
     },
     {
       "id": 12,

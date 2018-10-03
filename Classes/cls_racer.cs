@@ -23,10 +23,19 @@ namespace trillbot.Classes {
         public string name { get; set; }
         public string faction { get; set; }
         public List<Classes.Card> cards { get; set; } = new List<Classes.Card>();
+        //Variables Used for Game Mechanics:
+        public long distance { get; set;} 
+        public List<Tuple<int,int>> hazards { get; set; } = new List<Tuple<int,int>>();
+        public bool stillIn { get; set; } = false;
+        public bool crash { get; set; } = false;
+        public bool canMove { get; set; } = true;
+        public bool maxMove2 { get; set; } = false;
+        public bool heartAtt { get; set; } = false;
+        public int heartTurns { get; set; } = 0;
+        public bool sab { get; set; } = false;
 
         public void resetCards() {
             cards = new List<Classes.Card>();
-            racer.update_racer(this);
         }
 
         public static List<racer> get_racer () {
@@ -69,7 +78,7 @@ namespace trillbot.Classes {
         public static void update_racer (racer racer) {
             var store = new DataStore ("racer.json");
 
-            store.GetCollection<racer> ().UpdateOne (e => e.ID == racer.ID, racer);
+            store.GetCollection<racer> ().ReplaceOne (e => e.ID == racer.ID, racer);
             store.Dispose();
         }
 
