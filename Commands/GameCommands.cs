@@ -27,11 +27,21 @@ namespace trillbot.Commands
             {1,new Tuple<int,int>(8,9)},
             {2,new Tuple<int,int>(10,11)}
         };
+        public struct pair {
+            int item1;
+            int item2;
+        }
 
         [Command("startgame")]
         public async Task startGame() {
-            shuffleRacers();
+            await dealCards();
+            await shuffleRacers();
+            var guild = Context.Client.GetGuild (Context.Guild.Id);
+            var user = guild.GetUser (Context.Client.CurrentUser.Id);
+            await Context.Client.SetStatusAsync (UserStatus.Online);
+            await Context.Client.SetGameAsync ("The 86th Trilliant Grand Prix", null, StreamType.NotStreaming);
             await ReplyAsync("Game Started");
+            await whosTurnAsync();
         }
 
         [Command("joingame")]
@@ -53,9 +63,7 @@ namespace trillbot.Commands
 
             await ReplyAsync("You have joined the game");
         }
-
-        [Command("dealDeck")]
-        public async Task dealCards()
+        private async Task dealCards()
         {
             cards = this.generateDeck();
             foreach(racer r in racers) {
@@ -99,7 +107,6 @@ namespace trillbot.Commands
                             }
                             else if (racerID == 1) {
                                 //PASTE DOGE SYSTEM
-                                break;
                             } else if (racerID == 0) {
                                 r.distance += c.value;
                                 if (r.distance > 24) {
@@ -107,6 +114,7 @@ namespace trillbot.Commands
                                     await ReplyAsync("Woah there, you can't move past space 24! Try a different card.");
                                     return;
                                 }
+                                await ReplyAsync(r.name + " played a " + c.title + " spaces. They are now at a distance of " + r.distance + " units." );
                             }
                             break;
                         case 1:
@@ -119,6 +127,7 @@ namespace trillbot.Commands
                                 await ReplyAsync("Woah there, you can't move past space 24! Try a different card.");
                                 return;
                             }
+                            await ReplyAsync(r.name + " played a " + c.title + " spaces. They are now at a distance of " + r.distance + " units." );
                             break;
                         default:
                             await ReplyAsync("Um boss, something went wrong. Let's try again!");
@@ -170,10 +179,10 @@ namespace trillbot.Commands
                 await ReplyAsync(r.name + " subcumbs to Sabotage!");
             }
             foreach(Tuple<int,int> t in r.hazards) {
-                t.Item2++;
+               // t.Item2++;
                 if(t.Item2 > 2) {
                     r.stillIn = false;
-                    await ReplyAsync(r.name + " subcumbs to " + Card.get_card().FirstOrDefault(e=>e.ID == t.Item1).title + "!";
+                    await ReplyAsync(r.name + " subcumbs to " + Card.get_card().FirstOrDefault(e=>e.ID == t.Item1).title + "!");
                 }
             }
             //IF Entire Turn Completed Successfully
@@ -192,7 +201,7 @@ namespace trillbot.Commands
                 }
                 position -= racers.Count;
             }
-            await ReplyAsync("");
+            await whosTurnAsync();
         }
 
         [Command("reset")]
@@ -207,8 +216,20 @@ namespace trillbot.Commands
             await ReplyAsync("Game Reset");
         }
 
+        [Command("turn")]
+        public async Task whosTurnAsync() {
+            var usr = Context.Guild.GetUser(racers[position].player_discord_id);
+            if (usr == null ) {
+                await ReplyAsync("Uhh boss, something went wrong.");
+            }
+            await ReplyAsync("Hey " + usr.Mention + " It's your turn now!");
+        }
+
         private async Task endOfTurn() {
-            racers.ForEach(e=>e.distance++);
+            foreach (racer r in racers ) {
+                r.distance++;
+                racer.update_racer(r);
+            }
             await ReplyAsync("Passive Movement Applied");
         }
 
@@ -221,7 +242,7 @@ namespace trillbot.Commands
             return null;
         }
 
-        private void shuffleRacers() {
+        private async Task shuffleRacers() {
             List<racer> temp = new List<racer>();
 
             while (racers.Count > 0) {
@@ -231,6 +252,7 @@ namespace trillbot.Commands
             }
 
             racers = temp;
+            await ReplyAsync("Turn Order Shuffled");
         }
         private async Task doWorkAsyncInfiniteLoop() {
             while(true) {
