@@ -210,7 +210,7 @@ namespace trillbot.Commands
             cards = new Stack<Card>();
             racers.ForEach(e=> {
                 e.reset();
-                racer.update_racer(e);
+                racer.replace_racer(e);
             });
             racers = new List<racer>();
             position = 0;
@@ -230,8 +230,10 @@ namespace trillbot.Commands
             List<string> str = new List<string>();
             str.Add("**Leaderboard!**");
             str.Add("```");
-            str.Add("Distance | Racer Name (ID)");
-            racers.OrderBy(e=> e.distance).ToList().ForEach(e=> str.Add(e.distance + " | " + e.nameID()));
+            str.Add("Distance | Racer Name (ID) | Sponsor");
+            var listRacer = racers.OrderBy(e=> e.distance).ToList();
+            listRacer.Reverse();
+            listRacer.ForEach(e=> str.Add(e.distance + " | " + e.nameID() + " | " + e.faction));
             str.Add("```");
             string ouput_string = string.Join(System.Environment.NewLine, str);
 

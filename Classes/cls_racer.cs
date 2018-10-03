@@ -95,6 +95,13 @@ namespace trillbot.Classes {
             store.Dispose();
         }
 
+        public static void replace_racer(racer racer) {
+            var store = new DataStore ("racer.json");
+
+            store.GetCollection<racer> ().ReplaceOne (e => e.ID == racer.ID, racer);
+            store.Dispose();
+        }
+
         public static void delete_racer (racer racer) {
             var store = new DataStore ("racer.json");
 

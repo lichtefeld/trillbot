@@ -56,7 +56,7 @@ namespace trillbot.Commands
             if(racer == null) {
                 await ReplyAsync("No racer found for you");
             } else {
-                string output = "**Your Current Hand**";
+                string output = "**Your Current Hand**" + System.Environment.NewLine;
                 if (racer.cards.Count == 0) { 
                     await ReplyAsync("Hold up, you don't have any cards. The game must not have started yet.");
                 } else {

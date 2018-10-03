@@ -7,43 +7,11 @@
       "faction": "House Eridanus",
       "cards": [
         {
-          "id": 8,
-          "count": 3,
-          "title": "Mech Failure",
-          "description": "Target another user, target is prevented from playing move cards",
-          "type": "THazard",
-          "value": 0
-        },
-        {
-          "id": 13,
-          "count": 5,
-          "title": "Tech Savy",
-          "description": "Removes tech failure and sabotage",
-          "type": "Remedy",
-          "value": 1
-        },
-        {
           "id": 9,
           "count": 3,
           "title": "Sabotage",
           "description": "Target another user, Target is killed if they end a turn with it and another hazard applied",
           "type": "THazard",
-          "value": 1
-        },
-        {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes debris and ram",
-          "type": "Remedy",
-          "value": 0
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 spaces",
-          "type": "Movement",
           "value": 1
         },
         {
@@ -55,23 +23,55 @@
           "value": 3
         },
         {
-          "id": 8,
+          "id": 2,
+          "count": 11,
+          "title": "Movement 3",
+          "description": "Move forward 3 spaces",
+          "type": "Movement",
+          "value": 3
+        },
+        {
+          "id": 1,
+          "count": 11,
+          "title": "Movement 2",
+          "description": "Move forward 2 spaces",
+          "type": "Movement",
+          "value": 2
+        },
+        {
+          "id": 5,
           "count": 3,
-          "title": "Mech Failure",
-          "description": "Target another user, target is prevented from playing move cards",
-          "type": "THazard",
+          "title": "Debris",
+          "description": "The five racers at the front cannot play move cards",
+          "type": "Hazard",
           "value": 0
         },
         {
-          "id": 9,
+          "id": 10,
           "count": 3,
-          "title": "Sabotage",
-          "description": "Target another user, Target is killed if they end a turn with it and another hazard applied",
+          "title": "Heart Attack",
+          "description": "Target another user, kills them in three turns if not removed",
           "type": "THazard",
+          "value": 2
+        },
+        {
+          "id": 13,
+          "count": 5,
+          "title": "Tech Savy",
+          "description": "Removes tech failure and sabotage",
+          "type": "Remedy",
           "value": 1
+        },
+        {
+          "id": 1,
+          "count": 11,
+          "title": "Movement 2",
+          "description": "Move forward 2 spaces",
+          "type": "Movement",
+          "value": 2
         }
       ],
-      "distance": 7,
+      "distance": 14,
       "hazards": [],
       "stillIn": false,
       "crash": false,
@@ -169,6 +169,14 @@
       "faction": "Vagrant",
       "cards": [
         {
+          "id": 5,
+          "count": 3,
+          "title": "Debris",
+          "description": "The five racers at the front cannot play move cards",
+          "type": "Hazard",
+          "value": 0
+        },
+        {
           "id": 0,
           "count": 11,
           "title": "Movement 1",
@@ -177,19 +185,11 @@
           "value": 1
         },
         {
-          "id": 10,
-          "count": 3,
-          "title": "Heart Attack",
-          "description": "Target another user, kills them in three turns if not removed",
-          "type": "THazard",
-          "value": 2
-        },
-        {
-          "id": 13,
-          "count": 5,
-          "title": "Tech Savy",
-          "description": "Removes tech failure and sabotage",
-          "type": "Remedy",
+          "id": 0,
+          "count": 11,
+          "title": "Movement 1",
+          "description": "Move forward 1 spaces",
+          "type": "Movement",
           "value": 1
         },
         {
@@ -201,39 +201,39 @@
           "value": 3
         },
         {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes debris and ram",
-          "type": "Remedy",
+          "id": 8,
+          "count": 3,
+          "title": "Mech Failure",
+          "description": "Target another user, target is prevented from playing move cards",
+          "type": "THazard",
           "value": 0
         },
         {
-          "id": 3,
+          "id": 0,
           "count": 11,
-          "title": "Movement 4",
-          "description": "Move forward 4 spaces",
+          "title": "Movement 1",
+          "description": "Move forward 1 spaces",
           "type": "Movement",
-          "value": 4
+          "value": 1
         },
         {
-          "id": 10,
+          "id": 8,
           "count": 3,
-          "title": "Heart Attack",
-          "description": "Target another user, kills them in three turns if not removed",
+          "title": "Mech Failure",
+          "description": "Target another user, target is prevented from playing move cards",
           "type": "THazard",
-          "value": 2
+          "value": 0
+        },
+        {
+          "id": 0,
+          "count": 11,
+          "title": "Movement 1",
+          "description": "Move forward 1 spaces",
+          "type": "Movement",
+          "value": 1
         }
       ],
-      "distance": 5,
+      "distance": 7,
       "hazards": [],
       "stillIn": false,
       "crash": false,
