@@ -22,6 +22,7 @@ namespace trillbot.Commands
         private static Stack<Card> cards = new Stack<Card>();
         private bool endGame = false;
         private static int position = 0;
+        private static int round = 1;
         private Dictionary<int, Tuple<int,int>> remedy_to_hazards = new Dictionary<int, Tuple<int,int>> {
             {0,new Tuple<int, int>(5,6)},
             {1,new Tuple<int,int>(8,9)},
@@ -188,6 +189,7 @@ namespace trillbot.Commands
             });
             racers = new List<racer>();
             position = 0;
+            round = 1;
             await Context.Client.SetGameAsync(null, null, StreamType.NotStreaming);
             await ReplyAsync("Game Reset");
         }
@@ -217,6 +219,7 @@ namespace trillbot.Commands
                     return;
                 }
                 position -= racers.Count;
+                round++;
             }
             await displayCurrentBoard();
             await nextTurn();
@@ -255,7 +258,7 @@ namespace trillbot.Commands
 
         private async Task displayCurrentBoard() {
             List<string> str = new List<string>();
-            str.Add("**Leaderboard!**");
+            str.Add("**Leaderboard!** Turn " + round + "." + (position+1));
             str.Add("```");
             str.Add("Distance | Racer Name (ID) | Sponsor");
             var listRacer = racers.OrderBy(e=> e.distance).ToList();
@@ -265,7 +268,7 @@ namespace trillbot.Commands
             string ouput_string = string.Join(System.Environment.NewLine, str);
 
             var channel = Context.Guild.GetTextChannel(Context.Guild.Channels.FirstOrDefault(e=>e.Name == "leaderboard").Id);
-            var messages = await this.Context.Channel.GetMessagesAsync(1).Flatten();
+            var messages = await channel.GetMessagesAsync(1).Flatten();
             await channel.DeleteMessagesAsync(messages);
             await channel.SendMessageAsync(ouput_string);
              
