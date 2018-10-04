@@ -34,14 +34,14 @@ namespace trillbot.Commands
 
         [Command("startgame")]
         public async Task startGame() {
-            await dealCards();
-            await shuffleRacers();
+            await dealCards(); //Deal cards to all racers
+            await shuffleRacers(); //Randomize Turn Order
             var guild = Context.Client.GetGuild (Context.Guild.Id);
             var user = guild.GetUser (Context.Client.CurrentUser.Id);
             await Context.Client.SetStatusAsync (UserStatus.Online);
             await Context.Client.SetGameAsync ("The 86th Trilliant Grand Prix", null, StreamType.NotStreaming);
             await ReplyAsync("Game Started");
-            await whosTurnAsync();
+            await nextTurn();
         }
 
         [Command("joingame")]
@@ -84,7 +84,7 @@ namespace trillbot.Commands
                 await ReplyAsync("It's not your turn!");
                 return;
             }
-            if (1 > i && i > 10) {
+            if (i < 1 && i > 8) {
                 await ReplyAsync("You only have 8 cards in your hand! Provide a number 1-8.");
                 return;
             }
@@ -174,18 +174,34 @@ namespace trillbot.Commands
                     return;
             }
             //Handle Survival Checks
-            if(r.sab && r.hazards.Count > 1) {
-                r.stillIn = false;
-                await ReplyAsync(r.name + " subcumbs to Sabotage!");
-            }
-            foreach(Tuple<int,int> t in r.hazards) {
-               // t.Item2++;
-                if(t.Item2 > 2) {
-                    r.stillIn = false;
-                    await ReplyAsync(r.name + " subcumbs to " + Card.get_card().FirstOrDefault(e=>e.ID == t.Item1).title + "!");
-                }
-            }
+            await SurvivalChecks(r);
             //IF Entire Turn Completed Successfully
+            await endOfTurnLogic(r, i);
+        }
+
+        [Command("reset")] //Reset the game to initial state
+        public async Task doReset() {
+            cards = new Stack<Card>();
+            racers.ForEach(e=> {
+                e.reset();
+                racer.replace_racer(e);
+            });
+            racers = new List<racer>();
+            position = 0;
+            await Context.Client.SetGameAsync(null, null, StreamType.NotStreaming);
+            await ReplyAsync("Game Reset");
+        }
+
+        [Command("turn")]
+        public async Task whosTurnAsync() { //Need to remind a person its there turn?
+            var usr = Context.Guild.GetUser(racers[position].player_discord_id);
+            if (usr == null ) {
+                await ReplyAsync("Uhh boss, something went wrong.");
+            }
+            await ReplyAsync("Hey " + usr.Mention + " It's your turn now!");
+        }
+
+        private async Task endOfTurnLogic(racer r, int i) { //Handle All Logic for Transitioning an End of Turn
             r.cards.RemoveAt(i);
             if(cards.Count == 0 ) cards = generateDeck();
             r.cards.Add(cards.Pop());
@@ -198,32 +214,43 @@ namespace trillbot.Commands
                     endGame = true;
                     SocketGuildUser usr = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
                     await ReplyAsync(usr + ", you have won the race!");
+                    return;
                 }
                 position -= racers.Count;
-                await displayCurrentBoard();
             }
-            await whosTurnAsync();
+            await displayCurrentBoard();
+            await nextTurn();
         }
 
-        [Command("reset")]
-        public async Task doReset() {
-            cards = new Stack<Card>();
-            racers.ForEach(e=> {
-                e.reset();
-                racer.replace_racer(e);
-            });
-            racers = new List<racer>();
-            position = 0;
-            await ReplyAsync("Game Reset");
+        private async Task SurvivalChecks(racer r) { //Need to Finish Checking all Systems
+            if(r.sab && r.hazards.Count > 1) {
+                r.stillIn = false;
+                await ReplyAsync(r.name + " subcumbs to Sabotage!");
+            }
+            foreach(Tuple<int,int> t in r.hazards) {
+               // t.Item2++;
+                if(t.Item2 > 2) {
+                    r.stillIn = false;
+                    await ReplyAsync(r.name + " subcumbs to " + Card.get_card().FirstOrDefault(e=>e.ID == t.Item1).title + "!");
+                }
+            }
         }
 
-        [Command("turn")]
-        public async Task whosTurnAsync() {
+        private async Task nextTurn() { //DM the next turn person
             var usr = Context.Guild.GetUser(racers[position].player_discord_id);
             if (usr == null ) {
                 await ReplyAsync("Uhh boss, something went wrong.");
             }
-            await ReplyAsync("Hey " + usr.Mention + " It's your turn now!");
+            string output = "**Your Current Hand**" + System.Environment.NewLine;
+            if (racers[position].cards.Count == 0) { 
+                await ReplyAsync("Hold up, you don't have any cards. The game must not have started yet.");
+            } else {
+                for(int i = 0; i < racers[position].cards.Count; i++) {
+                    output += "#" + (i+1) + ": " + racers[position].cards[i].ToString() + System.Environment.NewLine;
+                }
+                await usr.SendMessageAsync(output);
+            }
+            await Context.Channel.SendMessageAsync(racers[position].name + " has the next turn.");
         }
 
         private async Task displayCurrentBoard() {
@@ -238,6 +265,8 @@ namespace trillbot.Commands
             string ouput_string = string.Join(System.Environment.NewLine, str);
 
             var channel = Context.Guild.GetTextChannel(Context.Guild.Channels.FirstOrDefault(e=>e.Name == "leaderboard").Id);
+            var messages = await this.Context.Channel.GetMessagesAsync(1).Flatten();
+            await channel.DeleteMessagesAsync(messages);
             await channel.SendMessageAsync(ouput_string);
              
         }

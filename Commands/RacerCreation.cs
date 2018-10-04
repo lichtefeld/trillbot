@@ -68,6 +68,8 @@ namespace trillbot.Commands
             }
         }
 
+        
+
         [Command("deleteracer")]
         public async Task DeleteRacerAsync(params string[] args)
         {
