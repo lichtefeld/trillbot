@@ -40,6 +40,7 @@ namespace trillbot.Commands
             await Context.Client.SetGameAsync ("The 86th Trilliant Grand Prix", null, StreamType.NotStreaming);
             await displayCurrentBoard(true);
             await ReplyAsync("Game Started");
+            await inGameAsync();
             await nextTurn();
         }
 
@@ -304,7 +305,13 @@ namespace trillbot.Commands
             }
             List<string> str = new List<string>();
             str.Add("**Current Racers**");
-            racers.ForEach(e=> str.Add(e.nameID()));
+            for(int i = 0; i < racers.Count; i++) {
+                if(i == position) {
+                    str.Add("**#" + i + ": " + racers[i].nameID() + "**");
+                } else {
+                    str.Add("#" + i + ": " + racers[i].nameID());
+                }
+            }
             string output = String.Join(System.Environment.NewLine, str);
             await ReplyAsync(output);
         }
