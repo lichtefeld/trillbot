@@ -92,7 +92,7 @@
       "id": 11,
       "count": 3,
       "title": "High G",
-      "description": "Target another user, You can't play a move card higher than move 2.",
+      "description": "Target another user, They can't play a move card higher than move 2.",
       "type": "THazard",
       "value": 3
     },

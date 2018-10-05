@@ -13,7 +13,6 @@
       "canMove": true,
       "maxMove2": false,
       "heartAtt": false,
-      "heartTurns": 0,
       "sab": false
     },
     {
@@ -29,7 +28,6 @@
       "canMove": true,
       "maxMove2": false,
       "heartAtt": false,
-      "heartTurns": 0,
       "sab": false
     },
     {
@@ -45,7 +43,6 @@
       "canMove": true,
       "maxMove2": false,
       "heartAtt": false,
-      "heartTurns": 0,
       "sab": false
     }
   ]

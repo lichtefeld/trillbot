@@ -28,10 +28,7 @@ namespace trillbot.Commands
             {1,new Tuple<int,int>(8,9)},
             {2,new Tuple<int,int>(10,11)}
         };
-        public struct pair {
-            int item1;
-            int item2;
-        }
+        
 
         [Command("startgame")]
         public async Task startGame() {
@@ -138,7 +135,16 @@ namespace trillbot.Commands
                 case "Hazard":
                     switch(c.value) {
                         case 0:
-
+                            var listRacer = racers.OrderBy(e=> e.distance).ToList();
+                            listRacer.Reverse();
+                            List<string> str = new List<string>();
+                            str.Add(r.name + " causes debreis to hit " + listRacer[0]);
+                            for(int j = 1; j < 5; j++) {
+                                str.Add(listRacer[j].name);
+                                listRacer[j].hazards.Add(new pair(c, 0));
+                            }
+                            string debreis = String.Join(",",str);
+                            await ReplyAsync(debreis);
                         break;
                         case 1:
                             string ram = r.name + " takes the ram action against ";
@@ -150,25 +156,60 @@ namespace trillbot.Commands
                             }
                             racers.Where(e=>e.distance == r.distance+1).ToList().ForEach(e => {
                                 e.canMove = false;
-                                e.hazards.Add(new Tuple<int, int>(c.ID,0));
+                                e.hazards.Add(new pair(c,0));
                                 ram += e.name + " ";
                             });
                             await ReplyAsync(ram);
                         break;
                         case 2:
                             r.crash = true;
-
+                            await ReplyAsync(r.name + " plays a **CRASH** card. You don't want to be on their space at the start of their next turn!");
                         break;
                     }
                     break;
                 case "THazard":
-                    if(racerID == -1) {
-                        await ReplyAsync("You didn't provide a racer ID to target! Try again.");
+                    var target = racers.FirstOrDefault(e=>e.ID == racerID);
+                    if(target == null) {
+                        await ReplyAsync("You didn't target a valid racer. Try again.");
                         return;
                     }
+                    switch(c.value) {
+                        case 0:
+                            target.canMove = false;
+                            target.hazards.Add(new pair(c,0));
+                            await ReplyAsync(r.name + " played a " + c.title + " against " + target.name + ". They are unable to move until they solve this issue.");
+                        break;
+                        case 1:
+                            target.sab = true;
+                            target.hazards.Add(new pair(c,0));
+                            await ReplyAsync(r.name + " played a " + c.title + " against " + target.name + ". They better not have any other hazards applied!");
+                        break;
+                        case 2:
+                            target.heartAtt = true;
+                            target.hazards.Add(new pair(c,0));
+                            await ReplyAsync(r.name + " played a " + c.title + " against " + target.name + ". They have 3 turns to solve this issue");
+                        break;
+                        case 3:
+                            target.maxMove2 = true;
+                            target.hazards.Add(new pair(c,0));
+                            await ReplyAsync(r.name + " played a " + c.title + " against " + target.name + ". They are unable to move more than two spaces!");
+                        break;
+                    }
+                    racer.replace_racer(target);
                     break;
                 case "Remedy":
-
+                    var h = r.hazards.Where(e=> e.item1.ID == remedy_to_hazards[c.ID].Item1 || e.item1.ID == remedy_to_hazards[c.ID].Item2 ).ToList();
+                    if (h == null) {
+                        await ReplyAsync("You can't play this card. Try another.");
+                        return;
+                    }
+                    string solved = h[0].item1.title;
+                    if(h.Count > 1 ) {
+                        for(int j = 1; i < h.Count; j++) {
+                            solved += ", " + h[j].item1.title;
+                        }
+                    }
+                    await ReplyAsync(r.name + " played " + c.title + " solving " + solved);
                     break;
                 default:
                     await ReplyAsync("Um boss, something went wrong. Let's try again!");
@@ -203,6 +244,10 @@ namespace trillbot.Commands
             await ReplyAsync("Hey " + usr.Mention + " It's your turn now!");
         }
 
+        private void removeHazard(Card c, racer r) {
+
+        }
+
         private async Task endOfTurnLogic(racer r, int i) { //Handle All Logic for Transitioning an End of Turn
             r.cards.RemoveAt(i);
             if(cards.Count == 0 ) cards = generateDeck();
@@ -230,11 +275,11 @@ namespace trillbot.Commands
                 r.stillIn = false;
                 await ReplyAsync(r.name + " subcumbs to Sabotage!");
             }
-            foreach(Tuple<int,int> t in r.hazards) {
-               // t.Item2++;
-                if(t.Item2 > 2) {
+            foreach(pair p in r.hazards) {
+                p.item2++;
+                if(p.item2 > 2) {
                     r.stillIn = false;
-                    await ReplyAsync(r.name + " subcumbs to " + Card.get_card().FirstOrDefault(e=>e.ID == t.Item1).title + "!");
+                    await ReplyAsync(r.name + " subcumbs to " + p.item1.title + "!");
                 }
             }
         }
@@ -243,7 +288,40 @@ namespace trillbot.Commands
             var usr = Context.Guild.GetUser(racers[position].player_discord_id);
             if (usr == null ) {
                 await ReplyAsync("Uhh boss, something went wrong.");
+                return;
             }
+            while(!racers[position].stillIn) {
+                await ReplyAsync(racers[position].name + " is no longer in the race.");
+                position++;
+                if(position == racers.Count) {
+                    await endOfTurn(); //Handle Passive Movement
+                    racer winner = checkWinner();
+                    if(winner != null) {
+                        endGame = true;
+                        var usr2 = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
+                        await ReplyAsync(usr2 + ", you have won the race!");
+                        return;
+                    }
+                    position -= racers.Count;
+                    round++;
+                    await displayCurrentBoard();
+                }
+            }
+            //Start of New Turn
+            if(racers[position].crash) {
+                List<string> str = new List<string>();
+                str.Add(racers[position].name + "'s crash card triggers. The following racers crash out of the race.");
+                racers.Where(e=>e.distance == racers[position].distance).ToList().ForEach(e=> {
+                    if (e != racers[position]) {
+                        e.stillIn = false;
+                        str.Add(e.nameID());
+                    }
+                });
+                string crashed = String.Join(System.Environment.NewLine,str);
+                await ReplyAsync(crashed);
+            }
+
+            //DM Current Hand & Status
             string output = "**Your Current Hand**" + System.Environment.NewLine;
             if (racers[position].cards.Count == 0) { 
                 await ReplyAsync("Hold up, you don't have any cards. The game must not have started yet.");
@@ -260,10 +338,10 @@ namespace trillbot.Commands
             List<string> str = new List<string>();
             str.Add("**Leaderboard!** Turn " + round + "." + (position+1));
             str.Add("```");
-            str.Add("Distance | Racer Name (ID) | Sponsor");
+            str.Add("Distance | Racer Name (ID) | Sponsor | Debris | Ramed | Crash | Mech Failure | Sabotage | Heart Attack | High G");
             var listRacer = racers.OrderBy(e=> e.distance).ToList();
             listRacer.Reverse();
-            listRacer.ForEach(e=> str.Add(e.distance + " | " + e.nameID() + " | " + e.faction));
+            listRacer.ForEach(e=> str.Add(e.leader()));
             str.Add("```");
             string ouput_string = string.Join(System.Environment.NewLine, str);
 

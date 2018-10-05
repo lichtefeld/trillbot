@@ -25,13 +25,12 @@ namespace trillbot.Classes {
         public List<Classes.Card> cards { get; set; } = new List<Classes.Card>();
         //Variables Used for Game Mechanics:
         public long distance { get; set;} 
-        public List<Tuple<int,int>> hazards { get; set; } = new List<Tuple<int,int>>();
+        public List<pair> hazards { get; set; } = new List<pair>();
         public bool stillIn { get; set; } = false;
         public bool crash { get; set; } = false;
         public bool canMove { get; set; } = true;
         public bool maxMove2 { get; set; } = false;
         public bool heartAtt { get; set; } = false;
-        public int heartTurns { get; set; } = 0;
         public bool sab { get; set; } = false;
 
         public void reset() {
@@ -41,7 +40,6 @@ namespace trillbot.Classes {
             maxMove2 = false;
             heartAtt = false;
             sab = false;
-            heartTurns = 0;
             distance = 0;
             //reset hazards
             cards = new List<Classes.Card>();
@@ -50,6 +48,23 @@ namespace trillbot.Classes {
         public string nameID() {
             return this.name + " (" + this.ID + ") ";
         }
+
+        public string leader() {
+            List<string> str = new List<string>();
+            str.Add(this.distance.ToString());
+            str.Add(this.nameID());
+            str.Add(this.faction);
+            int[] haz = {0, 0, 0, 0, 0, 0, 0};
+            hazards.ForEach(e=> {
+                haz[e.item1.ID-5] = e.item2;
+            });
+            foreach (int b in haz) {
+                str.Add(b.ToString());
+            }
+            string output_string = String.Join(" | ", str);
+            return output_string;
+        }
+
 
         public static List<racer> get_racer () {
             var store = new DataStore ("racer.json");
