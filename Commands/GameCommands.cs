@@ -38,6 +38,7 @@ namespace trillbot.Commands
             var user = guild.GetUser (Context.Client.CurrentUser.Id);
             await Context.Client.SetStatusAsync (UserStatus.Online);
             await Context.Client.SetGameAsync ("The 86th Trilliant Grand Prix", null, StreamType.NotStreaming);
+            await displayCurrentBoard(true);
             await ReplyAsync("Game Started");
             await nextTurn();
         }
@@ -73,6 +74,25 @@ namespace trillbot.Commands
             }
 
             await ReplyAsync("Cards Dealt");
+        }
+
+        [Command("discard")]
+        public async Task discardAsync(int i) {
+            racer r = racers[position];
+            if(r.player_discord_id != Context.Message.Author.Id) {
+                await ReplyAsync("It's not your turn!");
+                return;
+            }
+            if (i < 1 && i > 8) {
+                await ReplyAsync("You only have 8 cards in your hand! Provide a number 1-8.");
+                return;
+            }
+            Card c = r.cards[--i];
+            await ReplyAsync(r.name + " discarded " + c.title);
+            //Handle Survival Checks
+            await SurvivalChecks(r);
+            //IF Entire Turn Completed Successfully
+            await endOfTurnLogic(r, i);
         }
 
         [Command("playcard")]
@@ -139,7 +159,7 @@ namespace trillbot.Commands
                             listRacer.Reverse();
                             List<string> str = new List<string>();
                             str.Add(r.name + " causes debreis to hit " + listRacer[0]);
-                            for(int j = 1; j < 5; j++) {
+                            for(int j = 1; j < 5 && j < listRacer.Count; j++) {
                                 str.Add(listRacer[j].name);
                                 listRacer[j].hazards.Add(new pair(c, 0));
                             }
@@ -159,7 +179,7 @@ namespace trillbot.Commands
                                 e.hazards.Add(new pair(c,0));
                                 ram += e.name + " ";
                             });
-                            await ReplyAsync(ram);
+                            await ReplyAsync(ram + " by moving 3 spaces!");
                         break;
                         case 2:
                             r.crash = true;
@@ -198,7 +218,7 @@ namespace trillbot.Commands
                     racer.replace_racer(target);
                     break;
                 case "Remedy":
-                    var h = r.hazards.Where(e=> e.item1.ID == remedy_to_hazards[c.ID].Item1 || e.item1.ID == remedy_to_hazards[c.ID].Item2 ).ToList();
+                    var h = r.hazards.Where(e=> e.item1.ID == remedy_to_hazards[(int)c.value].Item1 || e.item1.ID == remedy_to_hazards[(int)c.value].Item2 ).ToList();
                     if (h == null) {
                         await ReplyAsync("You can't play this card. Try another.");
                         return;
@@ -209,6 +229,18 @@ namespace trillbot.Commands
                             solved += ", " + h[j].item1.title;
                         }
                     }
+                   h.ForEach(e=> {
+                        r.hazards.Remove(e);
+                        if(e.item1.ID == 5 || e.item1.ID == 8) {
+                            r.canMove = false;
+                        }
+                        if(e.item1.ID == 11) {
+                            r.maxMove2 = false;
+                        }
+                        if(e.item1.ID == 9) {
+                            r.sab = false;
+                        }
+                    });
                     await ReplyAsync(r.name + " played " + c.title + " solving " + solved);
                     break;
                 default:
@@ -244,10 +276,6 @@ namespace trillbot.Commands
             await ReplyAsync("Hey " + usr.Mention + " It's your turn now!");
         }
 
-        private void removeHazard(Card c, racer r) {
-
-        }
-
         private async Task endOfTurnLogic(racer r, int i) { //Handle All Logic for Transitioning an End of Turn
             r.cards.RemoveAt(i);
             if(cards.Count == 0 ) cards = generateDeck();
@@ -260,7 +288,8 @@ namespace trillbot.Commands
                 if(winner != null) {
                     endGame = true;
                     SocketGuildUser usr = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
-                    await ReplyAsync(usr + ", you have won the race!");
+                    await ReplyAsync(usr.Mention + ", you have won the race!");
+                    await doReset();
                     return;
                 }
                 position -= racers.Count;
@@ -293,6 +322,7 @@ namespace trillbot.Commands
             while(!racers[position].stillIn) {
                 await ReplyAsync(racers[position].name + " is no longer in the race.");
                 position++;
+                usr = Context.Guild.GetUser(racers[position].player_discord_id);
                 if(position == racers.Count) {
                     await endOfTurn(); //Handle Passive Movement
                     racer winner = checkWinner();
@@ -319,6 +349,7 @@ namespace trillbot.Commands
                 });
                 string crashed = String.Join(System.Environment.NewLine,str);
                 await ReplyAsync(crashed);
+                racers[position].crash = false;
             }
 
             //DM Current Hand & Status
@@ -334,11 +365,11 @@ namespace trillbot.Commands
             await Context.Channel.SendMessageAsync(racers[position].name + " has the next turn.");
         }
 
-        private async Task displayCurrentBoard() {
+        private async Task displayCurrentBoard(bool first = false) {
             List<string> str = new List<string>();
             str.Add("**Leaderboard!** Turn " + round + "." + (position+1));
             str.Add("```");
-            str.Add("Distance | Racer Name (ID) | Sponsor | Debris | Ramed | Crash | Mech Failure | Sabotage | Heart Attack | High G");
+            str.Add("Distance | Racer Name (ID) | Still In | Sponsor | Debris | Ramed | Crash | Mech Failure | Sabotage | Heart Attack | High G");
             var listRacer = racers.OrderBy(e=> e.distance).ToList();
             listRacer.Reverse();
             listRacer.ForEach(e=> str.Add(e.leader()));
@@ -346,8 +377,10 @@ namespace trillbot.Commands
             string ouput_string = string.Join(System.Environment.NewLine, str);
 
             var channel = Context.Guild.GetTextChannel(Context.Guild.Channels.FirstOrDefault(e=>e.Name == "leaderboard").Id);
-            var messages = await channel.GetMessagesAsync(1).Flatten();
-            await channel.DeleteMessagesAsync(messages);
+            if(!first) { 
+                var messages = await channel.GetMessagesAsync(1).Flatten();
+                await channel.DeleteMessagesAsync(messages);
+            }
             await channel.SendMessageAsync(ouput_string);
              
         }
@@ -355,6 +388,9 @@ namespace trillbot.Commands
         private async Task endOfTurn() {
             foreach (racer r in racers ) {
                 r.distance++;
+                if (r.distance > 24) {
+                    r.distance = 24;
+                }
                 racer.update_racer(r);
             }
             await ReplyAsync("Passive Movement Applied");

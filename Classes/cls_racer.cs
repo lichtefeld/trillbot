@@ -26,7 +26,7 @@ namespace trillbot.Classes {
         //Variables Used for Game Mechanics:
         public long distance { get; set;} 
         public List<pair> hazards { get; set; } = new List<pair>();
-        public bool stillIn { get; set; } = false;
+        public bool stillIn { get; set; } = true;
         public bool crash { get; set; } = false;
         public bool canMove { get; set; } = true;
         public bool maxMove2 { get; set; } = false;
@@ -34,14 +34,14 @@ namespace trillbot.Classes {
         public bool sab { get; set; } = false;
 
         public void reset() {
-            stillIn = false;
+            stillIn = true;
             canMove = true;
             crash = false;
             maxMove2 = false;
             heartAtt = false;
             sab = false;
             distance = 0;
-            //reset hazards
+            hazards = new List<pair>();
             cards = new List<Classes.Card>();
         }
 
@@ -53,8 +53,9 @@ namespace trillbot.Classes {
             List<string> str = new List<string>();
             str.Add(this.distance.ToString());
             str.Add(this.nameID());
+            str.Add(this.stillIn.ToString());
             str.Add(this.faction);
-            int[] haz = {0, 0, 0, 0, 0, 0, 0};
+            int[] haz = {-1, -1, -1, -1, -1, -1, -1};
             hazards.ForEach(e=> {
                 haz[e.item1.ID-5] = e.item2;
             });
