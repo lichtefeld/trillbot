@@ -139,7 +139,7 @@ namespace trillbot.Commands
                                 h2.ForEach(e=> {
                                     r.hazards.Remove(e);
                                     if(e.item1.ID == 5 || e.item1.ID == 8) {
-                                        r.canMove = false;
+                                        r.canMove = true;
                                     }
                                     if(e.item1.ID == 11) {
                                         r.maxMove2 = false;
@@ -274,8 +274,8 @@ namespace trillbot.Commands
                     }
                    h.ForEach(e=> {
                         r.hazards.Remove(e);
-                        if(e.item1.ID == 5 || e.item1.ID == 8) {
-                            r.canMove = false;
+                        if(e.item1.ID == 5 || e.item1.ID == 8 || e.item1.ID == 6) {
+                            r.canMove = true;
                         }
                         if(e.item1.ID == 11) {
                             r.maxMove2 = false;
@@ -294,6 +294,18 @@ namespace trillbot.Commands
             await SurvivalChecks(r);
             //IF Entire Turn Completed Successfully
             await endOfTurnLogic(r, i);
+        }
+        [Command("ingame")]
+        public async Task inGameAsync() {
+            if (racers.Count == 0) {
+                await ReplyAsync("No racers in game.");
+                return;
+            }
+            List<string> str = new List<string>();
+            str.Add("**Current Racers**");
+            racers.ForEach(e=> str.Add(e.nameID()));
+            string output = String.Join(System.Environment.NewLine, str);
+            await ReplyAsync(output);
         }
 
         [Command("reset")] //Reset the game to initial state
@@ -396,13 +408,21 @@ namespace trillbot.Commands
             }
 
             //DM Current Hand & Status
-            string output = "**Your Current Hand**" + System.Environment.NewLine;
+            List<string> str2 = new List<string>();
+            str2.Add("**Your Current Hand**");
             if (racers[position].cards.Count == 0) { 
                 await ReplyAsync("Hold up, you don't have any cards. The game must not have started yet.");
             } else {
                 for(int i = 0; i < racers[position].cards.Count; i++) {
-                    output += "#" + (i+1) + ": " + racers[position].cards[i].ToString() + System.Environment.NewLine;
+                    str2.Add("#" + (i+1) + ": " + racers[position].cards[i].ToString());
                 }
+                str2.Add("-- -- -- -- --");
+                str2.Add("**Current Hazards**");
+                if (racers[position].hazards.Count == 0) str2.Add("None");
+                foreach (pair p in racers[position].hazards) {
+                    str2.Add("-> " + p.item1.title +" has been applied for " + p.item2 + " turns");
+                }
+                string output = String.Join(System.Environment.NewLine, str2);
                 await usr.SendMessageAsync(output);
             }
             await Context.Channel.SendMessageAsync(racers[position].name + " has the next turn.");

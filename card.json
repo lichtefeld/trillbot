@@ -108,7 +108,7 @@
       "id": 13,
       "count": 5,
       "title": "Tech Savvy",
-      "description": "Removes Tech Failure and Sabotage",
+      "description": "Removes Mechanical Failure and Sabotage",
       "type": "Remedy",
       "value": 1
     },

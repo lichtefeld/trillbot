@@ -83,6 +83,62 @@
       "canMove": true,
       "maxMove2": false,
       "sab": false
+    },
+    {
+      "id": 6,
+      "player_discord_id": 337284183623729162,
+      "name": "DVodka Ultra",
+      "faction": "Deathless",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "stillIn": true,
+      "crash": false,
+      "canMove": true,
+      "maxMove2": false,
+      "sab": false
+    },
+    {
+      "id": 7,
+      "player_discord_id": 125697188432052224,
+      "name": "Lev Taafe",
+      "faction": "PoorAsDirtSponsor",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "stillIn": true,
+      "crash": false,
+      "canMove": true,
+      "maxMove2": false,
+      "sab": false
+    },
+    {
+      "id": 8,
+      "player_discord_id": 130413955783983104,
+      "name": "Mr Fasty",
+      "faction": "The Speedy Bois",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "stillIn": true,
+      "crash": false,
+      "canMove": true,
+      "maxMove2": false,
+      "sab": false
+    },
+    {
+      "id": 9,
+      "player_discord_id": 121081559477518340,
+      "name": "H Flyx",
+      "faction": "Trilliant",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "stillIn": true,
+      "crash": false,
+      "canMove": true,
+      "maxMove2": false,
+      "sab": false
     }
   ]
 }
