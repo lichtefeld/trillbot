@@ -249,7 +249,6 @@ namespace trillbot.Commands
                             await ReplyAsync(r.name + " played a " + c.title + " against " + target.name + ". They better not have any other hazards applied!");
                         break;
                         case 2:
-                            target.heartAtt = true;
                             target.hazards.Add(new pair(c,0));
                             await ReplyAsync(r.name + " played a " + c.title + " against " + target.name + ". They have 3 turns to solve this issue");
                         break;

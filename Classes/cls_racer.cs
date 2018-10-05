@@ -37,7 +37,6 @@ namespace trillbot.Classes {
             canMove = true;
             crash = false;
             maxMove2 = false;
-            heartAtt = false;
             sab = false;
             distance = 0;
             hazards = new List<pair>();
