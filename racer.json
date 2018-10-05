@@ -12,7 +12,6 @@
       "crash": false,
       "canMove": true,
       "maxMove2": false,
-      "heartAtt": false,
       "sab": false
     },
     {
@@ -27,7 +26,6 @@
       "crash": false,
       "canMove": true,
       "maxMove2": false,
-      "heartAtt": false,
       "sab": false
     },
     {
@@ -42,7 +40,6 @@
       "crash": false,
       "canMove": true,
       "maxMove2": false,
-      "heartAtt": false,
       "sab": false
     },
     {
@@ -57,7 +54,6 @@
       "crash": false,
       "canMove": true,
       "maxMove2": false,
-      "heartAtt": false,
       "sab": false
     },
     {
@@ -72,7 +68,6 @@
       "crash": false,
       "canMove": true,
       "maxMove2": false,
-      "heartAtt": false,
       "sab": false
     },
     {
@@ -87,7 +82,6 @@
       "crash": false,
       "canMove": true,
       "maxMove2": false,
-      "heartAtt": false,
       "sab": false
     }
   ]

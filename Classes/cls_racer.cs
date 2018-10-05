@@ -30,7 +30,6 @@ namespace trillbot.Classes {
         public bool crash { get; set; } = false;
         public bool canMove { get; set; } = true;
         public bool maxMove2 { get; set; } = false;
-        public bool heartAtt { get; set; } = false;
         public bool sab { get; set; } = false;
 
         public void reset() {
