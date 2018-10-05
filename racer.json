@@ -5,73 +5,8 @@
       "player_discord_id": 106768024857501696,
       "name": "Xavier Stordiz",
       "faction": "House Eridanus",
-      "cards": [
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        },
-        {
-          "id": 13,
-          "count": 5,
-          "title": "Tech Savvy",
-          "description": "Removes Mechanical Failure and Sabotage",
-          "type": "Remedy",
-          "value": 1
-        },
-        {
-          "id": 13,
-          "count": 5,
-          "title": "Tech Savvy",
-          "description": "Removes Mechanical Failure and Sabotage",
-          "type": "Remedy",
-          "value": 1
-        },
-        {
-          "id": 4,
-          "count": 5,
-          "title": "Movement 8",
-          "description": "This card can be played to move forward 8 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
-          "type": "Movement",
-          "value": 8
-        },
-        {
-          "id": 10,
-          "count": 3,
-          "title": "Heart Attack",
-          "description": "Target another user, kills them in three turns if not removed",
-          "type": "THazard",
-          "value": 2
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        }
-      ],
-      "distance": 7,
+      "cards": [],
+      "distance": 0,
       "hazards": [],
       "stillIn": true,
       "crash": false,
@@ -84,73 +19,8 @@
       "player_discord_id": 129231359712559104,
       "name": "Ethel Riverty",
       "faction": "Trilliant",
-      "cards": [
-        {
-          "id": 14,
-          "count": 4,
-          "title": "Cyber Healthcare",
-          "description": "Removes Heart Attack and High G Forces",
-          "type": "Remedy",
-          "value": 2
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        },
-        {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes Debris and Ram",
-          "type": "Remedy",
-          "value": 0
-        },
-        {
-          "id": 6,
-          "count": 3,
-          "title": "Ram",
-          "description": "Move forward 3 spaces, the racers in front of you by 1 space after the move cannot play Movement cards",
-          "type": "Hazard",
-          "value": 1
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 8,
-          "count": 3,
-          "title": "Mechanical Failure",
-          "description": "Target another user, target is prevented from playing Movement cards",
-          "type": "THazard",
-          "value": 0
-        },
-        {
-          "id": 13,
-          "count": 5,
-          "title": "Tech Savvy",
-          "description": "Removes Mechanical Failure and Sabotage",
-          "type": "Remedy",
-          "value": 1
-        }
-      ],
-      "distance": 1,
+      "cards": [],
+      "distance": 0,
       "hazards": [],
       "stillIn": true,
       "crash": false,
@@ -191,86 +61,9 @@
       "player_discord_id": 445385432524390401,
       "name": "Mingus",
       "faction": "Trilliant",
-      "cards": [
-        {
-          "id": 3,
-          "count": 11,
-          "title": "Movement 4",
-          "description": "Move forward 4 spaces",
-          "type": "Movement",
-          "value": 4
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        },
-        {
-          "id": 9,
-          "count": 3,
-          "title": "Sabotage",
-          "description": "Target another user, target is killed if they end a turn with Sabotage AND another hazard applied",
-          "type": "THazard",
-          "value": 1
-        },
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        },
-        {
-          "id": 8,
-          "count": 3,
-          "title": "Mechanical Failure",
-          "description": "Target another user, target is prevented from playing Movement cards",
-          "type": "THazard",
-          "value": 0
-        },
-        {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes Debris and Ram",
-          "type": "Remedy",
-          "value": 0
-        },
-        {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes Debris and Ram",
-          "type": "Remedy",
-          "value": 0
-        }
-      ],
-      "distance": 9,
-      "hazards": [
-        {
-          "item1": {
-            "id": 5,
-            "count": 3,
-            "title": "Debris",
-            "description": "The five racers at the front cannot play Movement cards",
-            "type": "Hazard",
-            "value": 0
-          },
-          "item2": 0
-        }
-      ],
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
       "stillIn": true,
       "crash": false,
       "canMove": true,
@@ -310,89 +103,12 @@
       "player_discord_id": 125697188432052224,
       "name": "Lev Taafe",
       "faction": "PoorAsDirtSponsor",
-      "cards": [
-        {
-          "id": 8,
-          "count": 3,
-          "title": "Mechanical Failure",
-          "description": "Target another user, target is prevented from playing Movement cards",
-          "type": "THazard",
-          "value": 0
-        },
-        {
-          "id": 7,
-          "count": 1,
-          "title": "Crash",
-          "description": "Played on self, move forward 1 space. Anyone in your space at the start of your next turn dies.",
-          "type": "Hazard",
-          "value": 2
-        },
-        {
-          "id": 3,
-          "count": 11,
-          "title": "Movement 4",
-          "description": "Move forward 4 spaces",
-          "type": "Movement",
-          "value": 4
-        },
-        {
-          "id": 4,
-          "count": 5,
-          "title": "Movement 8",
-          "description": "This card can be played to move forward 8 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
-          "type": "Movement",
-          "value": 8
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 14,
-          "count": 4,
-          "title": "Cyber Healthcare",
-          "description": "Removes Heart Attack and High G Forces",
-          "type": "Remedy",
-          "value": 2
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 4,
-          "count": 5,
-          "title": "Movement 8",
-          "description": "This card can be played to move forward 8 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
-          "type": "Movement",
-          "value": 8
-        }
-      ],
-      "distance": 3,
-      "hazards": [
-        {
-          "item1": {
-            "id": 5,
-            "count": 3,
-            "title": "Debris",
-            "description": "The five racers at the front cannot play Movement cards",
-            "type": "Hazard",
-            "value": 0
-          },
-          "item2": 0
-        }
-      ],
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
       "stillIn": true,
       "crash": false,
-      "canMove": false,
+      "canMove": true,
       "maxMove2": false,
       "sab": false
     },
@@ -401,101 +117,13 @@
       "player_discord_id": 130413955783983104,
       "name": "Mr Fasty",
       "faction": "The Speedy Bois",
-      "cards": [
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 4,
-          "count": 5,
-          "title": "Movement 8",
-          "description": "This card can be played to move forward 8 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
-          "type": "Movement",
-          "value": 8
-        },
-        {
-          "id": 3,
-          "count": 11,
-          "title": "Movement 4",
-          "description": "Move forward 4 spaces",
-          "type": "Movement",
-          "value": 4
-        },
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        },
-        {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes Debris and Ram",
-          "type": "Remedy",
-          "value": 0
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 14,
-          "count": 4,
-          "title": "Cyber Healthcare",
-          "description": "Removes Heart Attack and High G Forces",
-          "type": "Remedy",
-          "value": 2
-        },
-        {
-          "id": 4,
-          "count": 5,
-          "title": "Movement 8",
-          "description": "This card can be played to move forward 8 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
-          "type": "Movement",
-          "value": 8
-        }
-      ],
-      "distance": 5,
-      "hazards": [
-        {
-          "item1": {
-            "id": 11,
-            "count": 3,
-            "title": "High G Forces",
-            "description": "Target another user, they can't play a Movement card higher than move 2.",
-            "type": "THazard",
-            "value": 3
-          },
-          "item2": 0
-        },
-        {
-          "item1": {
-            "id": 5,
-            "count": 3,
-            "title": "Debris",
-            "description": "The five racers at the front cannot play Movement cards",
-            "type": "Hazard",
-            "value": 0
-          },
-          "item2": 0
-        }
-      ],
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
       "stillIn": true,
       "crash": false,
-      "canMove": false,
-      "maxMove2": true,
+      "canMove": true,
+      "maxMove2": false,
       "sab": false
     },
     {
@@ -503,73 +131,8 @@
       "player_discord_id": 121081559477518340,
       "name": "H Flyx",
       "faction": "Trilliant",
-      "cards": [
-        {
-          "id": 10,
-          "count": 3,
-          "title": "Heart Attack",
-          "description": "Target another user, kills them in three turns if not removed",
-          "type": "THazard",
-          "value": 2
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 14,
-          "count": 4,
-          "title": "Cyber Healthcare",
-          "description": "Removes Heart Attack and High G Forces",
-          "type": "Remedy",
-          "value": 2
-        },
-        {
-          "id": 3,
-          "count": 11,
-          "title": "Movement 4",
-          "description": "Move forward 4 spaces",
-          "type": "Movement",
-          "value": 4
-        },
-        {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes Debris and Ram",
-          "type": "Remedy",
-          "value": 0
-        },
-        {
-          "id": 6,
-          "count": 3,
-          "title": "Ram",
-          "description": "Move forward 3 spaces, the racers in front of you by 1 space after the move cannot play Movement cards",
-          "type": "Hazard",
-          "value": 1
-        },
-        {
-          "id": 13,
-          "count": 5,
-          "title": "Tech Savvy",
-          "description": "Removes Mechanical Failure and Sabotage",
-          "type": "Remedy",
-          "value": 1
-        },
-        {
-          "id": 5,
-          "count": 3,
-          "title": "Debris",
-          "description": "The five racers at the front cannot play Movement cards",
-          "type": "Hazard",
-          "value": 0
-        }
-      ],
-      "distance": 4,
+      "cards": [],
+      "distance": 0,
       "hazards": [],
       "stillIn": true,
       "crash": false,
@@ -596,73 +159,8 @@
       "player_discord_id": 118476475254046723,
       "name": "Demon Dimi",
       "faction": "The Deathless",
-      "cards": [
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        },
-        {
-          "id": 3,
-          "count": 11,
-          "title": "Movement 4",
-          "description": "Move forward 4 spaces",
-          "type": "Movement",
-          "value": 4
-        },
-        {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes Debris and Ram",
-          "type": "Remedy",
-          "value": 0
-        },
-        {
-          "id": 3,
-          "count": 11,
-          "title": "Movement 4",
-          "description": "Move forward 4 spaces",
-          "type": "Movement",
-          "value": 4
-        },
-        {
-          "id": 4,
-          "count": 5,
-          "title": "Movement 8",
-          "description": "This card can be played to move forward 8 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
-          "type": "Movement",
-          "value": 8
-        },
-        {
-          "id": 6,
-          "count": 3,
-          "title": "Ram",
-          "description": "Move forward 3 spaces, the racers in front of you by 1 space after the move cannot play Movement cards",
-          "type": "Hazard",
-          "value": 1
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        }
-      ],
-      "distance": 1,
+      "cards": [],
+      "distance": 0,
       "hazards": [],
       "stillIn": true,
       "crash": false,
@@ -675,73 +173,8 @@
       "player_discord_id": 212888056280252416,
       "name": "Wraith Of Death",
       "faction": "The Deathless",
-      "cards": [
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 9,
-          "count": 3,
-          "title": "Sabotage",
-          "description": "Target another user, target is killed if they end a turn with Sabotage AND another hazard applied",
-          "type": "THazard",
-          "value": 1
-        },
-        {
-          "id": 13,
-          "count": 5,
-          "title": "Tech Savvy",
-          "description": "Removes Mechanical Failure and Sabotage",
-          "type": "Remedy",
-          "value": 1
-        },
-        {
-          "id": 11,
-          "count": 3,
-          "title": "High G Forces",
-          "description": "Target another user, they can't play a Movement card higher than move 2.",
-          "type": "THazard",
-          "value": 3
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        }
-      ],
-      "distance": 1,
+      "cards": [],
+      "distance": 0,
       "hazards": [],
       "stillIn": true,
       "crash": false,
@@ -754,100 +187,12 @@
       "player_discord_id": 273220295572324353,
       "name": "Orin Locke",
       "faction": "Voted Goldest Trill",
-      "cards": [
-        {
-          "id": 11,
-          "count": 3,
-          "title": "High G Forces",
-          "description": "Target another user, they can't play a Movement card higher than move 2.",
-          "type": "THazard",
-          "value": 3
-        },
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 5,
-          "count": 3,
-          "title": "Debris",
-          "description": "The five racers at the front cannot play Movement cards",
-          "type": "Hazard",
-          "value": 0
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 5,
-          "count": 3,
-          "title": "Debris",
-          "description": "The five racers at the front cannot play Movement cards",
-          "type": "Hazard",
-          "value": 0
-        },
-        {
-          "id": 3,
-          "count": 11,
-          "title": "Movement 4",
-          "description": "Move forward 4 spaces",
-          "type": "Movement",
-          "value": 4
-        },
-        {
-          "id": 14,
-          "count": 4,
-          "title": "Cyber Healthcare",
-          "description": "Removes Heart Attack and High G Forces",
-          "type": "Remedy",
-          "value": 2
-        }
-      ],
-      "distance": 5,
-      "hazards": [
-        {
-          "item1": {
-            "id": 10,
-            "count": 3,
-            "title": "Heart Attack",
-            "description": "Target another user, kills them in three turns if not removed",
-            "type": "THazard",
-            "value": 2
-          },
-          "item2": 0
-        },
-        {
-          "item1": {
-            "id": 5,
-            "count": 3,
-            "title": "Debris",
-            "description": "The five racers at the front cannot play Movement cards",
-            "type": "Hazard",
-            "value": 0
-          },
-          "item2": 0
-        }
-      ],
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
       "stillIn": true,
       "crash": false,
-      "canMove": false,
+      "canMove": true,
       "maxMove2": false,
       "sab": false
     },
@@ -856,73 +201,8 @@
       "player_discord_id": 140786461929766915,
       "name": "Free Loader",
       "faction": "Trilliant",
-      "cards": [
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 3,
-          "count": 11,
-          "title": "Movement 4",
-          "description": "Move forward 4 spaces",
-          "type": "Movement",
-          "value": 4
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        },
-        {
-          "id": 13,
-          "count": 5,
-          "title": "Tech Savvy",
-          "description": "Removes Mechanical Failure and Sabotage",
-          "type": "Remedy",
-          "value": 1
-        },
-        {
-          "id": 9,
-          "count": 3,
-          "title": "Sabotage",
-          "description": "Target another user, target is killed if they end a turn with Sabotage AND another hazard applied",
-          "type": "THazard",
-          "value": 1
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes Debris and Ram",
-          "type": "Remedy",
-          "value": 0
-        }
-      ],
-      "distance": 4,
+      "cards": [],
+      "distance": 0,
       "hazards": [],
       "stillIn": true,
       "crash": false,

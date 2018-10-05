@@ -139,7 +139,7 @@ namespace trillbot.Commands
                                 }
                                 h2.ForEach(e=> {
                                     r.hazards.Remove(e);
-                                    if(e.item1.ID == 5 || e.item1.ID == 8) {
+                                    if(e.item1.ID == 5 || e.item1.ID == 8 || e.item1.ID == 6) {
                                         r.canMove = true;
                                     }
                                     if(e.item1.ID == 11) {
@@ -264,7 +264,7 @@ namespace trillbot.Commands
                     break;
                 case "Remedy":
                     var h = r.hazards.Where(e=> e.item1.ID == remedy_to_hazards[(int)c.value].Item1 || e.item1.ID == remedy_to_hazards[(int)c.value].Item2 ).ToList();
-                    if (h == null) {
+                    if (h.Count == 0) {
                         await ReplyAsync("You can't play this card. Try another.");
                         return;
                     }
@@ -307,9 +307,9 @@ namespace trillbot.Commands
             str.Add("**Current Racers**");
             for(int i = 0; i < racers.Count; i++) {
                 if(i == position) {
-                    str.Add("**#" + i + ": " + racers[i].nameID() + "**");
+                    str.Add("**#" + (i+1) + ": " + racers[i].nameID() + "**");
                 } else {
-                    str.Add("#" + i + ": " + racers[i].nameID());
+                    str.Add("#" + (i+1) + ": " + racers[i].nameID());
                 }
             }
             string output = String.Join(System.Environment.NewLine, str);
@@ -347,7 +347,10 @@ namespace trillbot.Commands
             racer.update_racer(r);
             if(position == racers.Count) {
                 await endOfTurn(); //Handle Passive Movement
-                racer winner = checkWinner();
+                position -= racers.Count;
+                round++;
+            }
+            racer winner = checkWinner();
                 if(winner != null) {
                     endGame = true;
                     SocketGuildUser usr = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
@@ -356,9 +359,6 @@ namespace trillbot.Commands
                     await doReset();
                     return;
                 }
-                position -= racers.Count;
-                round++;
-            }
             await displayCurrentBoard();
             await nextTurn();
         }

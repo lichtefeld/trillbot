@@ -49,7 +49,7 @@ namespace trillbot.Classes {
 
         public string leader() {
             List<string> str = new List<string>();
-            str.Add(this.distance.ToString());
+            str.Add(this.twoDigitDistance());
             str.Add(this.nameID());
             str.Add(this.stillIn.ToString());
             str.Add(this.faction);
@@ -62,6 +62,14 @@ namespace trillbot.Classes {
             }
             string output_string = String.Join(" | ", str);
             return output_string;
+        }
+
+        private string twoDigitDistance() {
+            if( this.distance < 10 ) {
+                return "0"+ this.distance;
+            } else {
+                return distance.ToString();
+            }
         }
 
 
