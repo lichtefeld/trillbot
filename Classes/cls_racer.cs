@@ -46,7 +46,7 @@ namespace trillbot.Classes {
         }
 
         public string nameID() {
-            return this.name + " (" + this.ID + ") ";
+            return this.name + " (" + this.ID + ")";
         }
 
         public string leader() {

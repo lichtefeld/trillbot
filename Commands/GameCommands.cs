@@ -109,7 +109,7 @@ namespace trillbot.Commands
             Card c = r.cards[--i];
             switch(c.type) { 
                 case "Movement":
-                    if(!r.canMove) {
+                    if(!r.canMove && racerID != 1) {
                         await ReplyAsync("You currently can't move. Try solving a hazard!");
                         return;
                     }
@@ -124,7 +124,32 @@ namespace trillbot.Commands
                                 return;
                             }
                             else if (racerID == 1) {
-                                //PASTE DOGE SYSTEM
+                                c = Card.get_card(12);
+                                var h2 = r.hazards.Where(e=> e.item1.ID == remedy_to_hazards[(int)c.value].Item1 || e.item1.ID == remedy_to_hazards[(int)c.value].Item2 ).ToList();
+                                if (h2 == null) {
+                                    await ReplyAsync("You can't play this card. Try another.");
+                                    return;
+                                }
+                                string s2 = h2[0].item1.title;
+                                if(h2.Count > 1 ) {
+                                    for(int j = 1; i < h2.Count; j++) {
+                                        s2 += ", " + h2[j].item1.title;
+                                    }
+                                }
+                                h2.ForEach(e=> {
+                                    r.hazards.Remove(e);
+                                    if(e.item1.ID == 5 || e.item1.ID == 8) {
+                                        r.canMove = false;
+                                    }
+                                    if(e.item1.ID == 11) {
+                                        r.maxMove2 = false;
+                                    }
+                                    if(e.item1.ID == 9) {
+                                        r.sab = false;
+                                    }
+                                });
+                                await ReplyAsync(r.name + " played " + c.title + " solving " + s2);
+                                break;
                             } else if (racerID == 0) {
                                 r.distance += c.value;
                                 if (r.distance > 24) {
@@ -158,16 +183,25 @@ namespace trillbot.Commands
                             var listRacer = racers.OrderBy(e=> e.distance).ToList();
                             listRacer.Reverse();
                             List<string> str = new List<string>();
-                            str.Add(r.name + " causes debreis to hit " + listRacer[0]);
+                            str.Add(r.name + " causes debreis to hit " + listRacer[0].name);
                             for(int j = 1; j < 5 && j < listRacer.Count; j++) {
                                 str.Add(listRacer[j].name);
                                 listRacer[j].hazards.Add(new pair(c, 0));
+                                listRacer[j].canMove = false;
                             }
-                            string debreis = String.Join(",",str);
+                            string debreis = String.Join(", ",str);
                             await ReplyAsync(debreis);
                         break;
                         case 1:
                             string ram = r.name + " takes the ram action against ";
+                            if(!r.canMove) {
+                                await ReplyAsync("Sorry, you can't move. Try a different card.");
+                                return;
+                            } 
+                            if(r.maxMove2) {
+                                await ReplyAsync("Sorry, you can't move this far! Try a different card");
+                                return;
+                            }
                             r.distance += 3;
                             if (r.distance > 24) {
                                 r.distance -= 3;
@@ -182,6 +216,16 @@ namespace trillbot.Commands
                             await ReplyAsync(ram + " by moving 3 spaces!");
                         break;
                         case 2:
+                            if(!r.canMove) {
+                                await ReplyAsync("Sorry, you can't move. Try a different card.");
+                                return;
+                            }
+                            r.distance++;
+                            if (r.distance > 24) {
+                                r.distance--;
+                                await ReplyAsync("Woah there, you can't move past space 24! Try a different card.");
+                                return;
+                            }
                             r.crash = true;
                             await ReplyAsync(r.name + " plays a **CRASH** card. You don't want to be on their space at the start of their next turn!");
                         break;
@@ -322,7 +366,6 @@ namespace trillbot.Commands
             while(!racers[position].stillIn) {
                 await ReplyAsync(racers[position].name + " is no longer in the race.");
                 position++;
-                usr = Context.Guild.GetUser(racers[position].player_discord_id);
                 if(position == racers.Count) {
                     await endOfTurn(); //Handle Passive Movement
                     racer winner = checkWinner();
@@ -336,6 +379,7 @@ namespace trillbot.Commands
                     round++;
                     await displayCurrentBoard();
                 }
+                usr = Context.Guild.GetUser(racers[position].player_discord_id);
             }
             //Start of New Turn
             if(racers[position].crash) {

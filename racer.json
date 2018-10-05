@@ -59,6 +59,36 @@
       "maxMove2": false,
       "heartAtt": false,
       "sab": false
+    },
+    {
+      "id": 4,
+      "player_discord_id": 445385432524390401,
+      "name": "Mingus",
+      "faction": "Trilliant",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "stillIn": true,
+      "crash": false,
+      "canMove": true,
+      "maxMove2": false,
+      "heartAtt": false,
+      "sab": false
+    },
+    {
+      "id": 5,
+      "player_discord_id": 159589407991529472,
+      "name": "Hart",
+      "faction": "Trilliant",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "stillIn": true,
+      "crash": false,
+      "canMove": true,
+      "maxMove2": false,
+      "heartAtt": false,
+      "sab": false
     }
   ]
 }
