@@ -4,7 +4,7 @@
       "id": 0,
       "count": 11,
       "title": "Movement 1",
-      "description": "Move forward 1 spaces",
+      "description": "Move forward 1 space",
       "type": "Movement",
       "value": 1
     },
@@ -36,7 +36,7 @@
       "id": 4,
       "count": 5,
       "title": "Movement 8",
-      "description": "This can be played to move you 8 spaces OR used as a dodge card (Removes debris and ram). To play as movement provide the value of 0, to play as a dodge provide 1",
+      "description": "This card can be played to move forward 8 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
       "type": "Movement",
       "value": 8
     },
@@ -44,7 +44,7 @@
       "id": 5,
       "count": 3,
       "title": "Debris",
-      "description": "The five racers at the front cannot play move cards",
+      "description": "The five racers at the front cannot play Movement cards",
       "type": "Hazard",
       "value": 0
     },
@@ -52,7 +52,7 @@
       "id": 6,
       "count": 3,
       "title": "Ram",
-      "description": "Move forward 3, the racer in front of you after the move cannot play move cards",
+      "description": "Move forward 3 spaces, the racer in front of you after the move cannot play Movement cards",
       "type": "Hazard",
       "value": 1
     },
@@ -60,15 +60,15 @@
       "id": 7,
       "count": 1,
       "title": "Crash",
-      "description": "Played on self, move 1. Anyone in your space at the start of your next turn dies.",
+      "description": "Played on self, move forward 1 space. Anyone in your space at the start of your next turn dies.",
       "type": "Hazard",
       "value": 2
     },
     {
       "id": 8,
       "count": 3,
-      "title": "Mech Failure",
-      "description": "Target another user, target is prevented from playing move cards",
+      "title": "Mechanical Failure",
+      "description": "Target another user, target is prevented from playing Movement cards",
       "type": "THazard",
       "value": 0
     },
@@ -76,7 +76,7 @@
       "id": 9,
       "count": 3,
       "title": "Sabotage",
-      "description": "Target another user, Target is killed if they end a turn with it and another hazard applied",
+      "description": "Target another user, target is killed if they end a turn with Sabotage AND another hazard applied",
       "type": "THazard",
       "value": 1
     },
@@ -91,8 +91,8 @@
     {
       "id": 11,
       "count": 3,
-      "title": "High G",
-      "description": "Target another user, They can't play a move card higher than move 2.",
+      "title": "High G Forces",
+      "description": "Target another user, they can't play a Movement card higher than move 2.",
       "type": "THazard",
       "value": 3
     },
@@ -100,7 +100,7 @@
       "id": 12,
       "count": 6,
       "title": "Dodge",
-      "description": "Removes debris and ram",
+      "description": "Removes Debris and Ram",
       "type": "Remedy",
       "value": 0
     },
@@ -108,7 +108,7 @@
       "id": 13,
       "count": 5,
       "title": "Tech Savvy",
-      "description": "Removes tech failure and sabotage",
+      "description": "Removes Tech Failure and Sabotage",
       "type": "Remedy",
       "value": 1
     },
@@ -116,7 +116,7 @@
       "id": 14,
       "count": 4,
       "title": "Cyber Healthcare",
-      "description": "Removes heart attack and High G forces",
+      "description": "Removes Heart Attack and High G Forces",
       "type": "Remedy",
       "value": 2
     }
