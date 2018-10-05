@@ -139,6 +139,62 @@
       "canMove": true,
       "maxMove2": false,
       "sab": false
+    },
+    {
+      "id": 10,
+      "player_discord_id": 158368659507642368,
+      "name": "Death Bae",
+      "faction": "The Deathless",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "stillIn": true,
+      "crash": false,
+      "canMove": true,
+      "maxMove2": false,
+      "sab": false
+    },
+    {
+      "id": 11,
+      "player_discord_id": 118476475254046723,
+      "name": "Demon Dimi",
+      "faction": "The Deathless",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "stillIn": true,
+      "crash": false,
+      "canMove": true,
+      "maxMove2": false,
+      "sab": false
+    },
+    {
+      "id": 12,
+      "player_discord_id": 212888056280252416,
+      "name": "Wraith Of Death",
+      "faction": "The Deathless",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "stillIn": true,
+      "crash": false,
+      "canMove": true,
+      "maxMove2": false,
+      "sab": false
+    },
+    {
+      "id": 13,
+      "player_discord_id": 273220295572324353,
+      "name": "Orin Locke",
+      "faction": "Voted Goldest Trill",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "stillIn": true,
+      "crash": false,
+      "canMove": true,
+      "maxMove2": false,
+      "sab": false
     }
   ]
 }

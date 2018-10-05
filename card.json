@@ -52,7 +52,7 @@
       "id": 6,
       "count": 3,
       "title": "Ram",
-      "description": "Move forward 3 spaces, the racer in front of you after the move cannot play Movement cards",
+      "description": "Move forward 3 spaces, the racers in front of you by 1 space after the move cannot play Movement cards",
       "type": "Hazard",
       "value": 1
     },

@@ -113,7 +113,7 @@ namespace trillbot.Commands
                         await ReplyAsync("You currently can't move. Try solving a hazard!");
                         return;
                     }
-                    if(c.value > 2 && r.maxMove2) {
+                    if(c.value > 2 && r.maxMove2 && racerID != 1) {
                         await ReplyAsync("You currently can't move more than 2 spaces. Try solving a hazard!");
                         return;
                     }
@@ -184,6 +184,7 @@ namespace trillbot.Commands
                             listRacer.Reverse();
                             List<string> str = new List<string>();
                             str.Add(r.name + " causes debreis to hit " + listRacer[0].name);
+                            listRacer[0].hazards.Add(new pair(c, 0));
                             for(int j = 1; j < 5 && j < listRacer.Count; j++) {
                                 str.Add(listRacer[j].name);
                                 listRacer[j].hazards.Add(new pair(c, 0));
@@ -344,6 +345,7 @@ namespace trillbot.Commands
                     endGame = true;
                     SocketGuildUser usr = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
                     await ReplyAsync(usr.Mention + ", you have won the race!");
+                    await displayCurrentBoard();
                     await doReset();
                     return;
                 }
@@ -417,16 +419,25 @@ namespace trillbot.Commands
                     str2.Add("#" + (i+1) + ": " + racers[position].cards[i].ToString());
                 }
                 str2.Add("-- -- -- -- --");
-                str2.Add("**Current Hazards**");
+                str2.Add("**Current Hazards** - If any Hazard is applied for 3 turns, you will explode.");
                 if (racers[position].hazards.Count == 0) str2.Add("None");
                 foreach (pair p in racers[position].hazards) {
-                    str2.Add("-> " + p.item1.title +" has been applied for " + p.item2 + " turns");
+                    str2.Add("-> " + p.item1.title +" has been applied for " + p.item2 + " turns. " + id_to_condition[p.item1.ID]);
                 }
                 string output = String.Join(System.Environment.NewLine, str2);
                 await usr.SendMessageAsync(output);
             }
             await Context.Channel.SendMessageAsync(racers[position].name + " has the next turn.");
         }
+
+        private Dictionary<int, string> id_to_condition = new Dictionary<int, string> {
+            {5,"You cannot move until you play a Dodge card."},
+            {6, "You cannot move until you play a Dodge card."},
+            {8, "You cannot move until you play a Tech Savvy card."},
+            {9, "Can be removed by a Tech Savvy card. If you end your turn with both Sabotage and another Hazard, you explode."},
+            {10, "Can be removed by a Cyber Healthcare card."},
+            {11, "You cannot play Movement cards higher than 2. Can be removed by a Cyber Healthcare card."}
+        };
 
         private async Task displayCurrentBoard(bool first = false) {
             List<string> str = new List<string>();
@@ -445,7 +456,7 @@ namespace trillbot.Commands
                 await channel.DeleteMessagesAsync(messages);
             }
             await channel.SendMessageAsync(ouput_string);
-             
+            await ReplyAsync(ouput_string);
         }
 
         private async Task endOfTurn() {
