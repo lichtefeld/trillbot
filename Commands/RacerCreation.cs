@@ -56,13 +56,22 @@ namespace trillbot.Commands
             if(racer == null) {
                 await ReplyAsync("No racer found for you");
             } else {
-                string output = "**Your Current Hand**" + System.Environment.NewLine;
+                List<string> str2 = new List<string>();
+                str2.Add("**Your Current Hand**");
                 if (racer.cards.Count == 0) { 
                     await ReplyAsync("Hold up, you don't have any cards. The game must not have started yet.");
                 } else {
                     for(int i = 0; i < racer.cards.Count; i++) {
-                        output += "#" + (i+1) + ": " + racer.cards[i].ToString() + System.Environment.NewLine;
+                        str2.Add("#" + (i+1) + ": " + racer.cards[i].ToString());
                     }
+                    str2.Add("-- -- -- -- --");
+                    str2.Add("**Current Hazards** - If any Hazard is applied for 3 turns, you will explode.");
+                    if (racer.hazards.Count == 0) str2.Add("None");
+                    int j = 0;
+                    foreach (pair p in racer.hazards) {
+                        str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + p.item2 + " turns. " + id_to_condition[p.item1.ID]);
+                    }
+                    string output = String.Join(System.Environment.NewLine, str2);
                     await Context.User.SendMessageAsync(output);
                 }
             }

@@ -58,7 +58,7 @@ namespace trillbot.Classes {
             }
             str.Add(this.faction);
             foreach(pair p in hazards) {
-                str.Add(p.item1.title + " (" + p.item2 + ")");
+                str.Add(p.item1.title + " (" + (p.item2+1) + ")");
             }
             string output_string = String.Join(" | ", str);
             return output_string;

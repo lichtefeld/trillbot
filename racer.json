@@ -7,12 +7,12 @@
       "faction": "House Eridanus",
       "cards": [
         {
-          "id": 0,
+          "id": 2,
           "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
+          "title": "Movement 3",
+          "description": "Move forward 3 spaces",
           "type": "Movement",
-          "value": 1
+          "value": 3
         },
         {
           "id": 12,
@@ -21,30 +21,6 @@
           "description": "Removes Debris and Ram",
           "type": "Remedy",
           "value": 0
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 15,
-          "count": 4,
-          "title": "System Reboot",
-          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
-          "type": "Remedy",
-          "value": 3
-        },
-        {
-          "id": 15,
-          "count": 4,
-          "title": "System Reboot",
-          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
-          "type": "Remedy",
-          "value": 3
         },
         {
           "id": 9,
@@ -55,12 +31,28 @@
           "value": 1
         },
         {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes Debris and Ram",
-          "type": "Remedy",
-          "value": 0
+          "id": 3,
+          "count": 11,
+          "title": "Movement 4",
+          "description": "Move forward 4 spaces",
+          "type": "Movement",
+          "value": 4
+        },
+        {
+          "id": 0,
+          "count": 11,
+          "title": "Movement 1",
+          "description": "Move forward 1 space",
+          "type": "Movement",
+          "value": 1
+        },
+        {
+          "id": 9,
+          "count": 3,
+          "title": "Sabotage",
+          "description": "Target another user, target is killed if they end a turn with Sabotage AND another hazard applied",
+          "type": "THazard",
+          "value": 1
         },
         {
           "id": 3,
@@ -69,9 +61,17 @@
           "description": "Move forward 4 spaces",
           "type": "Movement",
           "value": 4
+        },
+        {
+          "id": 9,
+          "count": 3,
+          "title": "Sabotage",
+          "description": "Target another user, target is killed if they end a turn with Sabotage AND another hazard applied",
+          "type": "THazard",
+          "value": 1
         }
       ],
-      "distance": 3,
+      "distance": 2,
       "hazards": [],
       "stillIn": true,
       "crash": false,
@@ -86,6 +86,14 @@
       "faction": "Trilliant",
       "cards": [
         {
+          "id": 13,
+          "count": 5,
+          "title": "Tech Savvy",
+          "description": "Removes Mechanical Failure and Sabotage",
+          "type": "Remedy",
+          "value": 1
+        },
+        {
           "id": 5,
           "count": 3,
           "title": "Debris",
@@ -94,12 +102,20 @@
           "value": 0
         },
         {
-          "id": 1,
+          "id": 12,
+          "count": 6,
+          "title": "Dodge",
+          "description": "Removes Debris and Ram",
+          "type": "Remedy",
+          "value": 0
+        },
+        {
+          "id": 2,
           "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
+          "title": "Movement 3",
+          "description": "Move forward 3 spaces",
           "type": "Movement",
-          "value": 2
+          "value": 3
         },
         {
           "id": 16,
@@ -110,12 +126,12 @@
           "value": 3
         },
         {
-          "id": 3,
+          "id": 2,
           "count": 11,
-          "title": "Movement 4",
-          "description": "Move forward 4 spaces",
+          "title": "Movement 3",
+          "description": "Move forward 3 spaces",
           "type": "Movement",
-          "value": 4
+          "value": 3
         },
         {
           "id": 3,
@@ -132,25 +148,9 @@
           "description": "Move forward 2 spaces",
           "type": "Movement",
           "value": 2
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
         }
       ],
-      "distance": 2,
+      "distance": 4,
       "hazards": [],
       "stillIn": true,
       "crash": false,
@@ -165,12 +165,20 @@
       "faction": "Deathless",
       "cards": [
         {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
+          "id": 15,
+          "count": 4,
+          "title": "System Reboot",
+          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
+          "type": "Remedy",
           "value": 3
+        },
+        {
+          "id": 12,
+          "count": 6,
+          "title": "Dodge",
+          "description": "Removes Debris and Ram",
+          "type": "Remedy",
+          "value": 0
         },
         {
           "id": 2,
@@ -179,6 +187,14 @@
           "description": "Move forward 3 spaces",
           "type": "Movement",
           "value": 3
+        },
+        {
+          "id": 13,
+          "count": 5,
+          "title": "Tech Savvy",
+          "description": "Removes Mechanical Failure and Sabotage",
+          "type": "Remedy",
+          "value": 1
         },
         {
           "id": 11,
@@ -189,12 +205,12 @@
           "value": 3
         },
         {
-          "id": 8,
-          "count": 3,
-          "title": "Mechanical Failure",
-          "description": "Target another user, target is prevented from playing Movement cards",
-          "type": "THazard",
-          "value": 0
+          "id": 15,
+          "count": 4,
+          "title": "System Reboot",
+          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
+          "type": "Remedy",
+          "value": 3
         },
         {
           "id": 1,
@@ -205,31 +221,15 @@
           "value": 2
         },
         {
-          "id": 9,
-          "count": 3,
-          "title": "Sabotage",
-          "description": "Target another user, target is killed if they end a turn with Sabotage AND another hazard applied",
-          "type": "THazard",
-          "value": 1
-        },
-        {
-          "id": 2,
+          "id": 1,
           "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
+          "title": "Movement 2",
+          "description": "Move forward 2 spaces",
           "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 9,
-          "count": 3,
-          "title": "Sabotage",
-          "description": "Target another user, target is killed if they end a turn with Sabotage AND another hazard applied",
-          "type": "THazard",
-          "value": 1
+          "value": 2
         }
       ],
-      "distance": 2,
+      "distance": 9,
       "hazards": [],
       "stillIn": true,
       "crash": false,
@@ -242,8 +242,73 @@
       "player_discord_id": 135553530399293440,
       "name": "James",
       "faction": "Trill",
-      "cards": [],
-      "distance": 0,
+      "cards": [
+        {
+          "id": 4,
+          "count": 5,
+          "title": "Movement 6",
+          "description": "This card can be played to move forward 6 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
+          "type": "Movement",
+          "value": 6
+        },
+        {
+          "id": 8,
+          "count": 3,
+          "title": "Mechanical Failure",
+          "description": "Target another user, target is prevented from playing Movement cards",
+          "type": "THazard",
+          "value": 0
+        },
+        {
+          "id": 12,
+          "count": 6,
+          "title": "Dodge",
+          "description": "Removes Debris and Ram",
+          "type": "Remedy",
+          "value": 0
+        },
+        {
+          "id": 16,
+          "count": 3,
+          "title": "Dazzle",
+          "description": "Affects 3 players behind you. They cannot move for 1 turn. Does not require a Remedy card to clear.",
+          "type": "Hazard",
+          "value": 3
+        },
+        {
+          "id": 13,
+          "count": 5,
+          "title": "Tech Savvy",
+          "description": "Removes Mechanical Failure and Sabotage",
+          "type": "Remedy",
+          "value": 1
+        },
+        {
+          "id": 11,
+          "count": 3,
+          "title": "High G Forces",
+          "description": "Target another user, they can't play a Movement card higher than move 2.",
+          "type": "THazard",
+          "value": 3
+        },
+        {
+          "id": 10,
+          "count": 3,
+          "title": "Heart Attack",
+          "description": "Target another user, kills them in three turns if not removed",
+          "type": "THazard",
+          "value": 2
+        },
+        {
+          "id": 14,
+          "count": 4,
+          "title": "Cyber Healthcare",
+          "description": "Removes Heart Attack and High G Forces",
+          "type": "Remedy",
+          "value": 2
+        }
+      ],
+      "distance": 5,
       "hazards": [],
       "stillIn": true,
       "crash": false,
@@ -314,44 +379,44 @@
       "faction": "The Speedy Bois",
       "cards": [
         {
-          "id": 14,
-          "count": 4,
-          "title": "Cyber Healthcare",
-          "description": "Removes Heart Attack and High G Forces",
-          "type": "Remedy",
-          "value": 2
-        },
-        {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes Debris and Ram",
-          "type": "Remedy",
-          "value": 0
-        },
-        {
-          "id": 13,
-          "count": 5,
-          "title": "Tech Savvy",
-          "description": "Removes Mechanical Failure and Sabotage",
-          "type": "Remedy",
+          "id": 0,
+          "count": 11,
+          "title": "Movement 1",
+          "description": "Move forward 1 space",
+          "type": "Movement",
           "value": 1
         },
         {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes Debris and Ram",
-          "type": "Remedy",
-          "value": 0
+          "id": 4,
+          "count": 5,
+          "title": "Movement 6",
+          "description": "This card can be played to move forward 6 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
+          "type": "Movement",
+          "value": 6
         },
         {
-          "id": 10,
-          "count": 3,
-          "title": "Heart Attack",
-          "description": "Target another user, kills them in three turns if not removed",
-          "type": "THazard",
-          "value": 2
+          "id": 2,
+          "count": 11,
+          "title": "Movement 3",
+          "description": "Move forward 3 spaces",
+          "type": "Movement",
+          "value": 3
+        },
+        {
+          "id": 2,
+          "count": 11,
+          "title": "Movement 3",
+          "description": "Move forward 3 spaces",
+          "type": "Movement",
+          "value": 3
+        },
+        {
+          "id": 3,
+          "count": 11,
+          "title": "Movement 4",
+          "description": "Move forward 4 spaces",
+          "type": "Movement",
+          "value": 4
         },
         {
           "id": 0,
@@ -362,24 +427,36 @@
           "value": 1
         },
         {
-          "id": 15,
-          "count": 4,
-          "title": "System Reboot",
-          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
-          "type": "Remedy",
-          "value": 3
+          "id": 3,
+          "count": 11,
+          "title": "Movement 4",
+          "description": "Move forward 4 spaces",
+          "type": "Movement",
+          "value": 4
         },
         {
-          "id": 14,
-          "count": 4,
-          "title": "Cyber Healthcare",
-          "description": "Removes Heart Attack and High G Forces",
-          "type": "Remedy",
-          "value": 2
+          "id": 2,
+          "count": 11,
+          "title": "Movement 3",
+          "description": "Move forward 3 spaces",
+          "type": "Movement",
+          "value": 3
         }
       ],
-      "distance": 2,
-      "hazards": [],
+      "distance": 8,
+      "hazards": [
+        {
+          "item1": {
+            "id": 10,
+            "count": 3,
+            "title": "Heart Attack",
+            "description": "Target another user, kills them in three turns if not removed",
+            "type": "THazard",
+            "value": 2
+          },
+          "item2": 1
+        }
+      ],
       "stillIn": true,
       "crash": false,
       "canMove": true,
@@ -407,20 +484,28 @@
       "faction": "The Deathless",
       "cards": [
         {
-          "id": 4,
-          "count": 5,
-          "title": "Movement 6",
-          "description": "This card can be played to move forward 6 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
-          "type": "Movement",
-          "value": 6
+          "id": 14,
+          "count": 4,
+          "title": "Cyber Healthcare",
+          "description": "Removes Heart Attack and High G Forces",
+          "type": "Remedy",
+          "value": 2
         },
         {
-          "id": 13,
-          "count": 5,
-          "title": "Tech Savvy",
-          "description": "Removes Mechanical Failure and Sabotage",
-          "type": "Remedy",
+          "id": 6,
+          "count": 3,
+          "title": "Ram",
+          "description": "Move forward 3 spaces, the racers in front of you by 1 space after the move cannot play Movement cards",
+          "type": "Hazard",
           "value": 1
+        },
+        {
+          "id": 1,
+          "count": 11,
+          "title": "Movement 2",
+          "description": "Move forward 2 spaces",
+          "type": "Movement",
+          "value": 2
         },
         {
           "id": 11,
@@ -431,20 +516,20 @@
           "value": 3
         },
         {
-          "id": 13,
-          "count": 5,
-          "title": "Tech Savvy",
-          "description": "Removes Mechanical Failure and Sabotage",
+          "id": 14,
+          "count": 4,
+          "title": "Cyber Healthcare",
+          "description": "Removes Heart Attack and High G Forces",
           "type": "Remedy",
-          "value": 1
+          "value": 2
         },
         {
-          "id": 5,
+          "id": 10,
           "count": 3,
-          "title": "Debris",
-          "description": "The five racers at the front cannot play Movement cards",
-          "type": "Hazard",
-          "value": 0
+          "title": "Heart Attack",
+          "description": "Target another user, kills them in three turns if not removed",
+          "type": "THazard",
+          "value": 2
         },
         {
           "id": 3,
@@ -455,23 +540,15 @@
           "value": 4
         },
         {
-          "id": 3,
+          "id": 1,
           "count": 11,
-          "title": "Movement 4",
-          "description": "Move forward 4 spaces",
+          "title": "Movement 2",
+          "description": "Move forward 2 spaces",
           "type": "Movement",
-          "value": 4
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
+          "value": 2
         }
       ],
-      "distance": 4,
+      "distance": 7,
       "hazards": [],
       "stillIn": true,
       "crash": false,
@@ -532,6 +609,97 @@
       "stillIn": true,
       "crash": false,
       "canMove": true,
+      "maxMove2": false,
+      "sab": false
+    },
+    {
+      "id": 15,
+      "player_discord_id": 184463158214262784,
+      "name": "Akira Werner",
+      "faction": "Serpens",
+      "cards": [
+        {
+          "id": 0,
+          "count": 11,
+          "title": "Movement 1",
+          "description": "Move forward 1 space",
+          "type": "Movement",
+          "value": 1
+        },
+        {
+          "id": 14,
+          "count": 4,
+          "title": "Cyber Healthcare",
+          "description": "Removes Heart Attack and High G Forces",
+          "type": "Remedy",
+          "value": 2
+        },
+        {
+          "id": 0,
+          "count": 11,
+          "title": "Movement 1",
+          "description": "Move forward 1 space",
+          "type": "Movement",
+          "value": 1
+        },
+        {
+          "id": 5,
+          "count": 3,
+          "title": "Debris",
+          "description": "The five racers at the front cannot play Movement cards",
+          "type": "Hazard",
+          "value": 0
+        },
+        {
+          "id": 1,
+          "count": 11,
+          "title": "Movement 2",
+          "description": "Move forward 2 spaces",
+          "type": "Movement",
+          "value": 2
+        },
+        {
+          "id": 7,
+          "count": 1,
+          "title": "Crash",
+          "description": "Played on self, move forward 1 space. Anyone in your space at the start of your next turn dies.",
+          "type": "Hazard",
+          "value": 2
+        },
+        {
+          "id": 15,
+          "count": 4,
+          "title": "System Reboot",
+          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
+          "type": "Remedy",
+          "value": 3
+        },
+        {
+          "id": 3,
+          "count": 11,
+          "title": "Movement 4",
+          "description": "Move forward 4 spaces",
+          "type": "Movement",
+          "value": 4
+        }
+      ],
+      "distance": 12,
+      "hazards": [
+        {
+          "item1": {
+            "id": 8,
+            "count": 3,
+            "title": "Mechanical Failure",
+            "description": "Target another user, target is prevented from playing Movement cards",
+            "type": "THazard",
+            "value": 0
+          },
+          "item2": 0
+        }
+      ],
+      "stillIn": true,
+      "crash": false,
+      "canMove": false,
       "maxMove2": false,
       "sab": false
     }
