@@ -555,73 +555,8 @@
       "player_discord_id": 135553530399293440,
       "name": "James Brighte",
       "faction": "Trilliant",
-      "cards": [
-        {
-          "id": 6,
-          "count": 3,
-          "title": "Ram",
-          "description": "Move forward 3 spaces, the racers in front of you by 1 space after the move cannot play Movement cards",
-          "type": "Hazard",
-          "value": 1
-        },
-        {
-          "id": 15,
-          "count": 4,
-          "title": "System Reboot",
-          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
-          "type": "Remedy",
-          "value": 3
-        },
-        {
-          "id": 15,
-          "count": 4,
-          "title": "System Reboot",
-          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
-          "type": "Remedy",
-          "value": 3
-        },
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        },
-        {
-          "id": 15,
-          "count": 4,
-          "title": "System Reboot",
-          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
-          "type": "Remedy",
-          "value": 3
-        },
-        {
-          "id": 14,
-          "count": 4,
-          "title": "Cyber Healthcare",
-          "description": "Removes Heart Attack and High G Forces",
-          "type": "Remedy",
-          "value": 2
-        }
-      ],
-      "distance": 12,
+      "cards": [],
+      "distance": 0,
       "hazards": [],
       "stillIn": true,
       "crash": false,

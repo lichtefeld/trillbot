@@ -61,36 +61,11 @@ namespace trillbot.Commands
             if(racer == null) {
                 await ReplyAsync("No racer found for you");
             } else {
-                List<string> str2 = new List<string>();
-                str2.Add("**Your Current Hand**");
-                if (racer.cards.Count == 0) { 
-                    await ReplyAsync("Hold up, you don't have any cards. The game must not have started yet.");
-                } else {
-                    for(int i = 0; i < racer.cards.Count; i++) {
-                        str2.Add("#" + (i+1) + ": " + racer.cards[i].ToString());
-                    }
-                    str2.Add("-- -- -- -- --");
-                    str2.Add("**Current Hazards** - If any Hazard is applied for 3 turns, you will explode.");
-                    if (racer.hazards.Count == 0) str2.Add("None");
-                    int j = 0;
-                    foreach (pair p in racer.hazards) {
-                        str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + p.item2 + " turns. " + id_to_condition[p.item1.ID]);
-                    }
-                    string output = String.Join(System.Environment.NewLine, str2);
-                    await Context.User.SendMessageAsync(output);
-                }
+                await Context.User.SendMessageAsync(racer.currentStatus());
             }
         }
 
-        private Dictionary<int, string> id_to_condition = new Dictionary<int, string> {
-            {5,"You cannot move until you play a Dodge card."},
-            {6, "You cannot move until you play a Dodge card."},
-            {8, "You cannot move until you play a Tech Savvy card."},
-            {9, "Can be removed by a Tech Savvy card. If you end your turn with both Sabotage and another Hazard, you explode."},
-            {10, "Can be removed by a Cyber Healthcare card."},
-            {11, "You cannot play Movement cards higher than 2. Can be removed by a Cyber Healthcare card."},
-            {16, "You can not move this turn. Does not need a remedy to clear."}
-        };
+        
 
         [Command("deleteracer")]
         public async Task DeleteRacerAsync(params string[] args)

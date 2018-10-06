@@ -251,12 +251,12 @@ namespace trillbot.Commands
                                 if(foundR) {
                                     if (z-j == 3) {
                                         str3.Add(r.name + " dazzles  " + listRacer2[j].name);
-                                        r.canMove = false;
-                                        r.hazards.Add(new pair(c,0));
+                                        listRacer2[j].canMove = false;
+                                        listRacer2[j].hazards.Add(new pair(c,0));
                                     } else {
                                         str3.Add(listRacer2[j].name);
-                                        r.canMove = false;
-                                        r.hazards.Add(new pair(c,0));
+                                        listRacer2[j].canMove = false;
+                                        listRacer2[j].hazards.Add(new pair(c,0));
                                     }
                                 }
                             }
@@ -329,6 +329,7 @@ namespace trillbot.Commands
                                 r.hazards.RemoveAt(racerID);
                             }
                         }
+                        r.distance-=2;
                         break;
                         default:
                         var h = r.hazards.Where(e=> e.item1.ID == remedy_to_hazards[(int)c.value].Item1 || e.item1.ID == remedy_to_hazards[(int)c.value].Item2 ).ToList();
@@ -475,7 +476,8 @@ namespace trillbot.Commands
                     racer winner = checkWinner();
                     if(winner != null) {
                         var usr2 = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
-                        await ReplyAsync(usr2 + ", you have won the race!");
+                        await ReplyAsync(usr2.Mention + ", you have won the race!");
+                        await doReset();
                         return;
                     }
                     position -= racers.Count;
@@ -500,36 +502,11 @@ namespace trillbot.Commands
             }
 
             //DM Current Hand & Status
-            List<string> str2 = new List<string>();
-            str2.Add("**Your Current Hand**");
-            if (racers[position].cards.Count == 0) { 
-                await ReplyAsync("Hold up, you don't have any cards. The game must not have started yet.");
-            } else {
-                for(int i = 0; i < racers[position].cards.Count; i++) {
-                    str2.Add("#" + (i+1) + ": " + racers[position].cards[i].ToString());
-                }
-                str2.Add("-- -- -- -- --");
-                str2.Add("**Current Hazards** - If any Hazard is applied for 3 turns, you will explode.");
-                if (racers[position].hazards.Count == 0) str2.Add("None");
-                int j = 0;
-                foreach (pair p in racers[position].hazards) {
-                    str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + (p.item2+1) + " turns. " + id_to_condition[p.item1.ID]);
-                }
-                string output = String.Join(System.Environment.NewLine, str2);
-                await usr.SendMessageAsync(output);
-            }
+            await usr.SendMessageAsync(racers[position].currentStatus());
+
+            //Start Next Turn
             await Context.Channel.SendMessageAsync(racers[position].name + " has the next turn.");
         }
-
-        private Dictionary<int, string> id_to_condition = new Dictionary<int, string> {
-            {5,"You cannot move until you play a Dodge card."},
-            {6, "You cannot move until you play a Dodge card."},
-            {8, "You cannot move until you play a Tech Savvy card."},
-            {9, "Can be removed by a Tech Savvy card. If you end your turn with both Sabotage and another Hazard, you explode."},
-            {10, "Can be removed by a Cyber Healthcare card."},
-            {11, "You cannot play Movement cards higher than 2. Can be removed by a Cyber Healthcare card."},
-            {16, "You can not move this turn. Does not need a remedy to clear."}
-        };
 
         private async Task displayCurrentBoard(bool first = false) {
             List<string> str = new List<string>();
