@@ -445,7 +445,9 @@ namespace trillbot.Commands
                 }
                 if(p.item1.ID == 16 && p.item2 > 0) {
                     r.hazards.Remove(p);
-                    r.canMove = true;
+                    if(r.hazards.FirstOrDefault(e=> e.item1.ID == 5 || e.item1.ID == 6 || e.item1.ID == 8 ) == null) {
+                        r.canMove = true;
+                    }
                 }
             }
         }
@@ -502,7 +504,7 @@ namespace trillbot.Commands
                 if (racers[position].hazards.Count == 0) str2.Add("None");
                 int j = 0;
                 foreach (pair p in racers[position].hazards) {
-                    str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + p.item2 + " turns. " + id_to_condition[p.item1.ID]);
+                    str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + (p.item2+1) + " turns. " + id_to_condition[p.item1.ID]);
                 }
                 string output = String.Join(System.Environment.NewLine, str2);
                 await usr.SendMessageAsync(output);
