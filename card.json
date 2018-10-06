@@ -127,7 +127,14 @@
       "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
       "type": "Remedy",
       "value": 3
+    },
+    {
+      "id": 16,
+      "count": 3,
+      "title": "Dazzle",
+      "description": "Affects 3 players behind you. They cannot move for 1 turn. Does not require a Remedy card to clear.",
+      "type": "Hazard",
+      "value": 3
     }
-    
   ]
 }

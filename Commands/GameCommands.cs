@@ -186,8 +186,7 @@ namespace trillbot.Commands
                 case "Hazard":
                     switch(c.value) {
                         case 0:
-                            var listRacer = racers.OrderBy(e=> e.distance).ToList();
-                            listRacer.Reverse();
+                            var listRacer = racers.OrderByDescending(e=> e.distance).ToList();
                             List<string> str = new List<string>();
                             str.Add(r.name + " causes debris to hit " + listRacer[0].name);
                             listRacer[0].hazards.Add(new pair(c, 0));
@@ -237,8 +236,7 @@ namespace trillbot.Commands
                             await ReplyAsync(r.name + " plays a **CRASH** card. You don't want to be on their space at the start of their next turn!");
                         break;
                         case 3:
-                            var listRacer2 = racers.OrderBy(e=> e.distance).ToList();
-                            listRacer2.Reverse();
+                            var listRacer2 = racers.OrderByDescending(e=> e.distance).ToList();
                             List<string> str3 = new List<string>();
                             int z = 3;
                             bool foundR = false;
@@ -378,6 +376,7 @@ namespace trillbot.Commands
         }
 
         [Command("reset")] //Reset the game to initial state
+        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task doReset() {
             cards = new Stack<Card>();
             racers.ForEach(e=> {
@@ -436,23 +435,29 @@ namespace trillbot.Commands
             await nextTurn();
         }
 
-        private async Task SurvivalChecks(racer r) { //Need to Finish Checking all Systems
+        private async Task SurvivalChecks(racer r) { 
             if(r.sab && r.hazards.Count > 1) {
                 r.stillIn = false;
                 await ReplyAsync(r.name + " subcumbs to Sabotage!");
             }
-            foreach(pair p in r.hazards) {
-                p.item2++;
-                if(p.item2 > 2) {
+            pair remove = null;
+            r.hazards.ForEach(e=>{
+                e.item2++;
+                if(e.item2 > 2)
+                {
                     r.stillIn = false;
-                    await ReplyAsync(r.name + " subcumbs to " + p.item1.title + "!");
+                    ReplyAsync(r.name + " subcumbs to " + e.item1.title + "!");
                 }
-                if(p.item1.ID == 16 && p.item2 > 0) {
-                    r.hazards.Remove(p);
-                    if(r.hazards.FirstOrDefault(e=> e.item1.ID == 5 || e.item1.ID == 6 || e.item1.ID == 8 ) == null) {
+
+                if(e.item1.ID == 16 && e.item2 > 0) {
+                    remove = e;
+                    if(r.hazards.FirstOrDefault(f=> f.item1.ID == 5 || f.item1.ID == 6 || f.item1.ID == 8 ) == null) {
                         r.canMove = true;
                     }
                 }
+            });
+            if(remove != null) {
+                r.hazards.Remove(remove);
             }
         }
 
