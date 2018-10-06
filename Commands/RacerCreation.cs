@@ -77,7 +77,15 @@ namespace trillbot.Commands
             }
         }
 
-        
+        private Dictionary<int, string> id_to_condition = new Dictionary<int, string> {
+            {5,"You cannot move until you play a Dodge card."},
+            {6, "You cannot move until you play a Dodge card."},
+            {8, "You cannot move until you play a Tech Savvy card."},
+            {9, "Can be removed by a Tech Savvy card. If you end your turn with both Sabotage and another Hazard, you explode."},
+            {10, "Can be removed by a Cyber Healthcare card."},
+            {11, "You cannot play Movement cards higher than 2. Can be removed by a Cyber Healthcare card."},
+            {16, "You can not move this turn. Does not need a remedy to clear."}
+        };
 
         [Command("deleteracer")]
         public async Task DeleteRacerAsync(params string[] args)
