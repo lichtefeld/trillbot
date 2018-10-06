@@ -51,14 +51,14 @@ namespace trillbot.Classes {
             List<string> str = new List<string>();
             str.Add(this.twoDigitDistance());
             str.Add(this.nameID());
-            str.Add(this.stillIn.ToString());
+            if(this.stillIn) {
+                str.Add("Alive");
+            } else {
+                str.Add("Dead");
+            }
             str.Add(this.faction);
-            int[] haz = {-1, -1, -1, -1, -1, -1, -1};
-            hazards.ForEach(e=> {
-                haz[e.item1.ID-5] = e.item2;
-            });
-            foreach (int b in haz) {
-                str.Add(b.ToString());
+            foreach(pair p in hazards) {
+                str.Add(p.item1.title + " (" + p.item2 + ")");
             }
             string output_string = String.Join(" | ", str);
             return output_string;

@@ -35,10 +35,10 @@
     {
       "id": 4,
       "count": 5,
-      "title": "Movement 8",
-      "description": "This card can be played to move forward 8 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
+      "title": "Movement 6",
+      "description": "This card can be played to move forward 6 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
       "type": "Movement",
-      "value": 8
+      "value": 6
     },
     {
       "id": 5,
@@ -119,6 +119,22 @@
       "description": "Removes Heart Attack and High G Forces",
       "type": "Remedy",
       "value": 2
+    },
+    {
+      "id": 15,
+      "count": 4,
+      "title": "System Reboot",
+      "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
+      "type": "Remedy",
+      "value": 3
+    },
+    {
+      "id": 16,
+      "count": 3,
+      "title": "Dazzle",
+      "description": "Affects 3 players behind you. They cannot move for 1 turn. Does not require a Remedy card to clear.",
+      "type": "Hazard",
+      "value": 3
     }
   ]
 }
