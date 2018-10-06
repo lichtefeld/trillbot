@@ -124,7 +124,7 @@ namespace trillbot.Commands
                         return;
                     }
                     switch(c.value) {
-                        case 8:
+                        case 6:
                             if (racerID <= -1 || racerID > 1) {
                                 await ReplyAsync("You didn't indicate which version of this card to use.");
                                 return;
@@ -251,7 +251,7 @@ namespace trillbot.Commands
                                     z++;
                                 }
                                 if(foundR) {
-                                    if (z-j == 2) {
+                                    if (z-j == 3) {
                                         str3.Add(r.name + " dazzles  " + listRacer2[j].name);
                                         r.canMove = false;
                                         r.hazards.Add(new pair(c,0));
@@ -319,8 +319,13 @@ namespace trillbot.Commands
                             await ReplyAsync(r.name + " played " + c.title.ToLower() + " solving " + r.hazards[racerID].item1.title.ToLower() + " and " + r.hazards[hazardID].item1.title.ToLower());
                             togglePlayerStatus(r,r.hazards[racerID].item1);
                             togglePlayerStatus(r,r.hazards[hazardID].item1);
-                            r.hazards.RemoveAt(racerID);
-                            r.hazards.RemoveAt(hazardID);
+                            if(racerID > hazardID) {   
+                                r.hazards.RemoveAt(racerID);
+                                r.hazards.RemoveAt(hazardID);
+                            } else {
+                                r.hazards.RemoveAt(hazardID);
+                                r.hazards.RemoveAt(racerID);
+                            }
                         }
                         break;
                         default:
