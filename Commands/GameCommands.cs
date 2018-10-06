@@ -273,6 +273,10 @@ namespace trillbot.Commands
                         await ReplyAsync("You didn't target a valid racer. Try again.");
                         return;
                     }
+                    if (target == r) {
+                        await ReplyAsync("You can't target yourself...");
+                        return;
+                    }
                     switch(c.value) {
                         case 0:
                             target.canMove = false;
