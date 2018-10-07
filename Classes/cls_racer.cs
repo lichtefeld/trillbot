@@ -65,8 +65,8 @@ namespace trillbot.Classes {
         }
 
         private string twoDigitDistance() {
-            if( this.distance < 10 ) {
-                return "0"+ this.distance;
+            if (-1 < this.distance && this.distance < 10) {
+                return "0"+ this.distance.ToString();
             } else {
                 return distance.ToString();
             }
@@ -82,11 +82,11 @@ namespace trillbot.Classes {
                         str2.Add("#" + (i+1) + ": " + this.cards[i].ToString());
                     }
                     str2.Add("-- -- -- -- --");
-                    str2.Add("**Current Hazards** - If any Hazard is applied for 3 turns, you will explode.");
+                    str2.Add("**Current Hazards** - If any Hazard is applied for 3 full turns, you will explode.");
                     if (this.hazards.Count == 0) str2.Add("None");
                     int j = 0;
                     foreach (pair p in this.hazards) {
-                        str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + p.item2 + " turns. " + id_to_condition[p.item1.ID]);
+                        str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + (p.item2+1) + " turns. " + id_to_condition[p.item1.ID]);
                     }
                     return String.Join(System.Environment.NewLine, str2);
                     

@@ -81,6 +81,16 @@ namespace trillbot.Commands
             }
         }
 
+        [Command("resetracers")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task resetAllRacers() {
+            var racers = racer.get_racer();
+            racers.ForEach(e=> {
+                e.reset();
+                racer.replace_racer(e);
+            });
+            await ReplyAsync("All Racers Reset");
+        }
 
         [Command("listracers")]
         public async Task ListRacersAsync()

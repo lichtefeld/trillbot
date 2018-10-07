@@ -31,6 +31,7 @@ namespace trillbot.Commands
         
 
         [Command("startgame")]
+        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task startGame() {
             await dealCards(); //Deal cards to all racers
             await shuffleRacers(); //Randomize Turn Order
