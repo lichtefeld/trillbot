@@ -132,7 +132,7 @@
       "id": 16,
       "count": 3,
       "title": "Dazzle",
-      "description": "Affects 3 players behind you. They cannot move for 1 turn. Does not require a Remedy card to clear.",
+      "description": "Affects 3 players behind you. They cannot move for 1 turn. Does not require a Remedy card to clear. You move forward one space after dazzling!",
       "type": "Hazard",
       "value": 3
     }

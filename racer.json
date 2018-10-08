@@ -9,10 +9,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 1,
@@ -23,10 +20,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 2,
@@ -37,10 +31,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 4,
@@ -51,10 +42,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 5,
@@ -65,10 +53,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 6,
@@ -79,10 +64,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 7,
@@ -93,10 +75,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 8,
@@ -107,10 +86,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 9,
@@ -121,10 +97,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 10,
@@ -135,10 +108,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 11,
@@ -149,10 +119,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 12,
@@ -163,10 +130,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 13,
@@ -177,10 +141,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 14,
@@ -191,10 +152,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 15,
@@ -205,10 +163,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 16,
@@ -219,10 +174,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 17,
@@ -233,10 +185,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 18,
@@ -247,10 +196,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     },
     {
       "id": 19,
@@ -261,10 +207,7 @@
       "distance": 0,
       "hazards": [],
       "stillIn": true,
-      "crash": false,
-      "canMove": true,
-      "maxMove2": false,
-      "sab": false
+      "crash": false
     }
   ]
 }
