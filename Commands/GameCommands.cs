@@ -431,7 +431,7 @@ namespace trillbot.Commands
                 if(e.item2 > 2)
                 {
                     r.stillIn = false;
-                    ReplyAsync(r.name + " subcumbs to " + e.item1.title + " and their vehicle expodes!");
+                    ReplyAsync(r.name + " subcumbs to " + e.item1.title + " and their vehicle explodes!");
                 }
 
                 if(e.item1.ID == 16 && e.item2 > 0) {
@@ -471,8 +471,10 @@ namespace trillbot.Commands
                 }
                 usr = Context.Guild.GetUser(racers[position].player_discord_id);
             }
-            string output_outOfRace = String.Join(System.Environment.NewLine,outOfRace);
-            await ReplyAsync(output_outOfRace);
+            if(outOfRace.Count != 0) {
+                string output_outOfRace = String.Join(System.Environment.NewLine,outOfRace);
+                await ReplyAsync(output_outOfRace);
+            }
 
             //Start of New Turn
             if(racers[position].crash) {
