@@ -14,7 +14,6 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Newtonsoft.Json;
-using RestSharp;
 using trillbot.Classes;
 
 namespace trillbot.Commands
