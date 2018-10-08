@@ -284,7 +284,7 @@ namespace trillbot.Commands
                         return;
                     }
                     await ReplyAsync(targetHazard(r,target,c));
-                    racer.replace_racer(target);
+                    racer.update_racer(target);
                     break;
                 case "Remedy":
                     switch(c.value) {
@@ -372,7 +372,7 @@ namespace trillbot.Commands
             cards = new Stack<Card>();
             racers.ForEach(e=> {
                 e.reset();
-                racer.replace_racer(e);
+                racer.update_racer(e);
             });
             racers = new List<racer>();
             position = 0;
