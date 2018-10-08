@@ -28,16 +28,48 @@ namespace trillbot.Classes {
         public List<pair> hazards { get; set; } = new List<pair>();
         public bool stillIn { get; set; } = true;
         public bool crash { get; set; } = false;
-        public bool canMove { get; set; } = true;
+        //public bool inGame { get; set; } = false;
+
+        /*public bool canMove { get; set; } = true;
         public bool maxMove2 { get; set; } = false;
-        public bool sab { get; set; } = false;
+        public bool sab { get; set; } = false;*/
+
+        public void addHazard(Card card) {
+            var h = hazards.FirstOrDefault(e=>e.item1 == card);
+            if (h == null) {
+                hazards.Add(new pair(card,0));
+            }
+        }
+        public bool canMove() {
+            var h = hazards.FirstOrDefault(e=> e.item1.ID == 5 || e.item1.ID == 8 || e.item1.ID == 6);
+            if ( h == null) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public bool maxMove2() {
+            var h = hazards.FirstOrDefault(e=> e.item1.ID == 11);
+            if( h == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        public bool sab() {
+            var h = hazards.FirstOrDefault(e=> e.item1.ID == 9);
+            if( h == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }
 
         public void reset() {
             stillIn = true;
-            canMove = true;
             crash = false;
-            maxMove2 = false;
-            sab = false;
             distance = 0;
             hazards = new List<pair>();
             cards = new List<Classes.Card>();

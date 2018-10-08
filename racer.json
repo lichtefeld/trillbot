@@ -251,6 +251,20 @@
       "canMove": true,
       "maxMove2": false,
       "sab": false
+    },
+    {
+      "id": 19,
+      "player_discord_id": 233719133617782784,
+      "name": "Vael",
+      "faction": "Snek",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "stillIn": true,
+      "crash": false,
+      "canMove": true,
+      "maxMove2": false,
+      "sab": false
     }
   ]
 }
