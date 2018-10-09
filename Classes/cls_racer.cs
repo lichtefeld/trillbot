@@ -26,13 +26,10 @@ namespace trillbot.Classes {
         //Variables Used for Game Mechanics:
         public long distance { get; set;} 
         public List<pair> hazards { get; set; } = new List<pair>();
+        public bool inGame { get; set; } = false;
         public bool stillIn { get; set; } = true;
         public bool crash { get; set; } = false;
-        //public bool inGame { get; set; } = false;
-
-        /*public bool canMove { get; set; } = true;
-        public bool maxMove2 { get; set; } = false;
-        public bool sab { get; set; } = false;*/
+        public Ability ability;
 
         public void addHazard(Card card) {
             var h = hazards.FirstOrDefault(e=>e.item1 == card);

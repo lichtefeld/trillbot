@@ -21,7 +21,7 @@ namespace trillbot.Commands
     public class RacerCreation : ModuleBase<SocketCommandContext>
     {
         [Command("createracer")]
-        public async Task NewracerAsync(string name, string faction)
+        public async Task NewracerAsync(string name, string faction, int ID = -1)
         {
             Classes.racer racer = racer.get_racer(Context.Message.Author.Id);
             if(racer != null) {
@@ -38,11 +38,21 @@ namespace trillbot.Commands
             } 
             else 
             {
-                racer = new racer
-                {
-                    name = name,
-                    faction = faction
-                };
+                if(ID == -1) {
+                    racer = new racer
+                    {
+                        name = name,
+                        faction = faction
+                    };
+                } else {
+                    Ability a = Ability.get_ability(--ID);
+                    racer = new racer
+                    {
+                        name = name,
+                        faction = faction,
+                        ability = a
+                    };
+                }
 
                 racer.player_discord_id = Context.Message.Author.Id;
 
@@ -51,6 +61,45 @@ namespace trillbot.Commands
                 await ReplyAsync(name + ", You've got a racer!");
             }
 
+        }
+
+        [Command("showracer")]
+        public async Task showRacerAsync() {
+            Classes.racer racer = racer.get_racer(Context.Message.Author.Id);
+            if(racer == null) {
+                await ReplyAsync("You don't have a racer.");
+            } else {
+                await ReplyAsync("",false,helpers.ObjToEmbed(racer,"name"),null);
+            }
+        }
+
+        [Command("updateabiliy")]
+        public async Task UpdateAbilityAsync(int ID) {
+            Classes.racer racer = racer.get_racer(Context.Message.Author.Id);
+
+            if(racer == null) {
+                await ReplyAsync("No racer found for you");
+            } else {
+                if (racer.inGame) {
+                    await ReplyAsync("You can't modify your racer while racing!");
+                    return;
+                }
+                Ability a = Ability.get_ability(--ID);
+                racer.ability = a;
+                await ReplyAsync("Ability changed to " + a.Title);
+            }
+        }
+
+        [Command("showabilities")]
+        public async Task DisplayAbilitiesAsync() {
+            List<Classes.Ability> abilities = Ability.get_ability();
+            List<string> str = new List<string>();
+            str.Add("**Special Abilities**");
+            for(int i = 0; i < abilities.Count; i++) {
+                str.Add("**#" + (i+1) + ":** " + abilities[i].Title + " (" + abilities[i].Type + ") - *" +abilities[i].Description + "*");
+            }
+            string output_string = String.Join(System.Environment.NewLine,str);
+            await Context.User.SendMessageAsync(output_string);
         }
 
         [Command("showhand")]
