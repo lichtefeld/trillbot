@@ -45,7 +45,7 @@ namespace trillbot.Commands
                         faction = faction
                     };
                 } else {
-                    Ability a = Ability.get_ability(ID);
+                    Ability a = Ability.get_ability(--ID);
                     racer = new racer
                     {
                         name = name,
@@ -79,8 +79,12 @@ namespace trillbot.Commands
 
             if(racer == null) {
                 await ReplyAsync("No racer found for you");
-            } else {    
-                Ability a = Ability.get_ability(ID);
+            } else {
+                if (racer.inGame) {
+                    await ReplyAsync("You can't modify your racer while racing!");
+                    return;
+                }
+                Ability a = Ability.get_ability(--ID);
                 racer.ability = a;
                 await ReplyAsync("Ability changed to " + a.Title);
             }
