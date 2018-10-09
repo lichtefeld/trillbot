@@ -103,6 +103,7 @@ namespace trillbot.Commands
                     string temp_output_string = String.Join(System.Environment.NewLine,str);
                     await Context.User.SendMessageAsync(temp_output_string);
                     count = s.Length;
+                    str = new List<string>();
                 }
                 str.Add(s);
             }
