@@ -86,6 +86,7 @@ namespace trillbot.Classes {
                 str.Add("Dead");
             }
             str.Add(this.faction);
+            str.Add(this.ability.Title);
             foreach(pair p in hazards) {
                 str.Add(p.item1.title + " (" + (p.item2+1) + ")");
             }
@@ -103,23 +104,27 @@ namespace trillbot.Classes {
 
         public string currentStatus() {
             List<string> str2 = new List<string>();
-                str2.Add("**Your Current Hand**");
-                if (this.cards.Count == 0) { 
-                    return "Hold up, you don't have any cards. The game must not have started yet.";
-                } else {
-                    for(int i = 0; i < this.cards.Count; i++) {
-                        str2.Add("#" + (i+1) + ": " + this.cards[i].ToString());
-                    }
-                    str2.Add("-- -- -- -- --");
-                    str2.Add("**Current Hazards** - If any Hazard is applied for 3 full turns, you will explode.");
-                    if (this.hazards.Count == 0) str2.Add("None");
-                    int j = 0;
-                    foreach (pair p in this.hazards) {
-                        str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + (p.item2+1) + " turns. " + id_to_condition[p.item1.ID]);
-                    }
-                    return String.Join(System.Environment.NewLine, str2);
-                    
+            //Cards
+            str2.Add("**Current Cards**");
+            if (this.cards.Count == 0) { 
+                str2.Add("No Cards");
+            } else {
+                for(int i = 0; i < this.cards.Count; i++) {
+                    str2.Add("#" + (i+1) + ": " + this.cards[i].ToString());
                 }
+            }
+            //Hazards
+            str2.Add("-- -- -- -- --");
+            str2.Add("**Current Hazards** - If any Hazard is applied for 3 full turns, you will explode.");
+            if (this.hazards.Count == 0) str2.Add("None");
+            int j = 0;
+            foreach (pair p in this.hazards) {
+                str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + (p.item2+1) + " turns. " + id_to_condition[p.item1.ID]);
+            }
+            //Special Ability
+            str2.Add("-- -- -- -- --");
+            str2.Add("**Special Ability:** " + this.ability.Title + " (" + this.ability.Type + ") - " + this.ability.Description);   
+            return String.Join(System.Environment.NewLine, str2);
         }
 
         private Dictionary<int, string> id_to_condition = new Dictionary<int, string> {

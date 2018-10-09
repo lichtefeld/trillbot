@@ -1,5 +1,76 @@
 {
   "racer": [
-    
+    {
+      "ability": {
+        "id": 0,
+        "title": "Jump Start",
+        "description": "You start the race 2 spaces ahead of the starting line.",
+        "type": "Passive"
+      },
+      "id": 0,
+      "player_discord_id": 106768024857501696,
+      "name": "Xavier Stordiz",
+      "faction": "Astral Synedrium",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "inGame": false,
+      "stillIn": true,
+      "crash": false
+    },
+    {
+      "ability": {
+        "id": 8,
+        "title": "Marionette Circuit",
+        "description": "You can win the race even if you die.",
+        "type": "Passive"
+      },
+      "id": 1,
+      "player_discord_id": 125697188432052224,
+      "name": "Henwick Goosewaddle",
+      "faction": "Trilliant?",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "inGame": false,
+      "stillIn": true,
+      "crash": false
+    },
+    {
+      "ability": {
+        "id": 23,
+        "title": "Seasoned trickster",
+        "description": "Target 2 other racers, apply the Sabotage Hazard to both of them.",
+        "type": "Active"
+      },
+      "id": 2,
+      "player_discord_id": 273220295572324353,
+      "name": "Orin Locke",
+      "faction": "Voted Goldest Trill",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "inGame": false,
+      "stillIn": true,
+      "crash": false
+    },
+    {
+      "ability": {
+        "id": 7,
+        "title": "Overclocked Engine",
+        "description": "Your passive movement is 2 instead of 1.",
+        "type": "Passive"
+      },
+      "id": 3,
+      "player_discord_id": 130413955783983104,
+      "name": "Mister Phas'tee",
+      "faction": "Ascension Trust",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "inGame": false,
+      "stillIn": true,
+      "crash": false
+    }
   ]
 }
