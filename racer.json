@@ -20,24 +20,6 @@
     },
     {
       "ability": {
-        "id": 8,
-        "title": "Marionette Circuit",
-        "description": "You can win the race even if you die.",
-        "type": "Passive"
-      },
-      "id": 1,
-      "player_discord_id": 125697188432052224,
-      "name": "Henwick Goosewaddle",
-      "faction": "Trilliant?",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "inGame": false,
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "ability": {
         "id": 23,
         "title": "Seasoned trickster",
         "description": "Target 2 other racers, apply the Sabotage Hazard to both of them.",
@@ -65,6 +47,24 @@
       "player_discord_id": 130413955783983104,
       "name": "Mister Phas'tee",
       "faction": "Ascension Trust",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "inGame": false,
+      "stillIn": true,
+      "crash": false
+    },
+    {
+      "ability": {
+        "id": 19,
+        "title": "Precision Laser",
+        "description": "Target another racer and apply the **Pierced Engine** Hazard to them. Pierced engine can be removed with Tech Savvy. If Pierced engine is applied for 2 full turns, they will explode.",
+        "type": "Active"
+      },
+      "id": 4,
+      "player_discord_id": 301425214162731008,
+      "name": "Decius Tullius Crispus",
+      "faction": "House Aquila",
       "cards": [],
       "distance": 0,
       "hazards": [],
