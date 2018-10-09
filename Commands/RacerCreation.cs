@@ -94,9 +94,17 @@ namespace trillbot.Commands
         public async Task DisplayAbilitiesAsync() {
             List<Classes.Ability> abilities = Ability.get_ability();
             List<string> str = new List<string>();
+            int count = 21;
             str.Add("**Special Abilities**");
             for(int i = 0; i < abilities.Count; i++) {
-                str.Add("**#" + (i+1) + ":** " + abilities[i].Title + " (" + abilities[i].Type + ") - *" +abilities[i].Description + "*");
+                string s = "**#" + (i+1) + ":** " + abilities[i].Title + " (" + abilities[i].Type + ") - *" +abilities[i].Description + "*";
+                count += s.Length;
+                if (count > 2000) {
+                    string temp_output_string = String.Join(System.Environment.NewLine,str);
+                    await Context.User.SendMessageAsync(temp_output_string);
+                    count = s.Length;
+                }
+                str.Add(s);
             }
             string output_string = String.Join(System.Environment.NewLine,str);
             await Context.User.SendMessageAsync(output_string);
