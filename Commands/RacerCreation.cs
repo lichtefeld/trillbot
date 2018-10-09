@@ -73,7 +73,7 @@ namespace trillbot.Commands
             }
         }
 
-        [Command("updateabiliy")]
+        [Command("updateability")]
         public async Task UpdateAbilityAsync(int ID) {
             Classes.racer racer = racer.get_racer(Context.Message.Author.Id);
 
@@ -150,7 +150,7 @@ namespace trillbot.Commands
         }
 
         [Command("listracers")]
-        public async Task ListRacersAsync()
+        public async Task ListRacersAsync() //Need to make this DM & account for more than 2k characters. Using a list to build output strings.
         {
             List<Classes.racer> racers = racer.get_racer();
             string s = "Racers for the Grand Prix!" + System.Environment.NewLine + "```" + System.Environment.NewLine;
