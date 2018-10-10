@@ -34,6 +34,14 @@ namespace trillbot.Commands
             {3, ". They are unable to move more than two spaces!"}
         };
 
+        [Command("initialize")]
+        public async Task initAsync() {
+            var game = new GrandPrix {
+                channelName = Context.Channel.Name
+            };
+            Program.games.Add(Context.Channel.ID, game);
+            await ReplyAsync("Game started and bound to this channel use `ta!joingame` in this channel to join.");
+        }
 
         [Command("startgame")]
         [RequireUserPermission(GuildPermission.Administrator)]

@@ -25,7 +25,7 @@ namespace trillbot
             "ta!"
         };
 
-        //public Dictionary<ulong,MilesBourne> games = new Dictionary<ulong, MilesBourne>(); //For future multi-game system
+        public Dictionary<ulong,Classes.GrandPrix> games = new Dictionary<ulong, Classes.GrandPrix>(); //For future multi-game system
 
         public async Task RunBotAsync()
         {
