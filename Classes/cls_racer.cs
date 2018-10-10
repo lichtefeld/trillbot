@@ -70,6 +70,7 @@ namespace trillbot.Classes {
             distance = 0;
             hazards = new List<pair>();
             cards = new List<Classes.Card>();
+            inGame = false;
         }
 
         public string nameID() {
