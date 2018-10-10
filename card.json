@@ -135,6 +135,14 @@
       "description": "Affects 3 players behind you. They cannot move for 1 turn. Does not require a Remedy card to clear. You move forward one space after dazzling!",
       "type": "Hazard",
       "value": 3
+    },
+    {
+      "id": 17,
+      "count": 0,
+      "title": "Pierced Engine",
+      "description": "Target another racer, if Pierced Engine is applied for 2 full turns, they will explode.",
+      "type": "THazard",
+      "value": 4
     }
   ]
 }

@@ -35,28 +35,28 @@ namespace trillbot.Classes
     {
         public static Ability[] FromJson(string json) => JsonConvert.DeserializeObject<Ability[]>(json, Converter.Settings);
         public static List<Ability> get_ability () {
-            var store = new DataStore ("abilities.json");
+            var store = new DataStore ("ability.json");
 
             // Get employee collection
             return store.GetCollection<Ability> ().AsQueryable ().ToList();
         }
 
         public static Ability get_ability (int id) {
-            var store = new DataStore ("abilities.json");
+            var store = new DataStore ("ability.json");
 
             // Get employee collection
             return store.GetCollection<Ability> ().AsQueryable ().FirstOrDefault (e => e.ID == id);
         }
 
         public static Ability get_ability (string name) {
-            var store = new DataStore ("abilities.json");
+            var store = new DataStore ("ability.json");
 
             // Get employee collection
             return store.GetCollection<Ability> ().AsQueryable ().FirstOrDefault (e => e.Title == name);
         }
 
         public static void insert_ability (Ability ability) {
-            var store = new DataStore ("abilities.json");
+            var store = new DataStore ("ability.json");
 
             // Get employee collection
             store.GetCollection<Ability> ().InsertOneAsync (ability);
@@ -65,14 +65,14 @@ namespace trillbot.Classes
         }
 
         public static void replace_ability (Ability ability) {
-            var store = new DataStore ("abilities.json");
+            var store = new DataStore ("ability.json");
 
             store.GetCollection<Ability> ().ReplaceOneAsync (e => e.ID == ability.ID, ability);
             store.Dispose();
         }
 
         public static void delete_card (Ability ability) {
-            var store = new DataStore ("abilities.json");
+            var store = new DataStore ("ability.json");
 
             store.GetCollection<Card> ().DeleteOne (e => e.ID == ability.ID);
             store.Dispose();

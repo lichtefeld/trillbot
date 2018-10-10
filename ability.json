@@ -1,5 +1,5 @@
 {
-  "abilities": [
+  "ability": [
     {
       "id": 0,
       "title": "Jump Start",
@@ -147,7 +147,7 @@
     {
       "id": 24,
       "title": "Core Synchronization",
-      "description": "Target another racer, if one of you dies the other also dies. ",
+      "description": "Target another racer, if one of you dies the other also dies.",
       "type": "Active"
     }
   ]

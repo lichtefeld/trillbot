@@ -501,7 +501,7 @@ namespace trillbot.Commands
             List<string> str = new List<string>();
             str.Add("**Leaderboard!** Turn " + round + "." + (position+1));
             str.Add("```");
-            str.Add("Distance | Racer Name (ID) | Still In | Sponsor | Hazards ");
+            str.Add("Distance | Racer Name (ID) | Still In | Sponsor | Special Ability | Hazards ");
             var listRacer = racers.OrderByDescending(e=> e.distance).ToList();
             listRacer.ForEach(e=> str.Add(e.leader()));
             str.Add("```");

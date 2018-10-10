@@ -73,7 +73,7 @@ namespace trillbot.Commands
             }
         }
 
-        [Command("updateabiliy")]
+        [Command("updateability")]
         public async Task UpdateAbilityAsync(int ID) {
             Classes.racer racer = racer.get_racer(Context.Message.Author.Id);
 
@@ -94,9 +94,18 @@ namespace trillbot.Commands
         public async Task DisplayAbilitiesAsync() {
             List<Classes.Ability> abilities = Ability.get_ability();
             List<string> str = new List<string>();
+            int count = 21;
             str.Add("**Special Abilities**");
             for(int i = 0; i < abilities.Count; i++) {
-                str.Add("**#" + (i+1) + ":** " + abilities[i].Title + " (" + abilities[i].Type + ") - *" +abilities[i].Description + "*");
+                string s = "**#" + (i+1) + ":** " + abilities[i].Title + " (" + abilities[i].Type + ") - *" +abilities[i].Description + "*";
+                count += s.Length;
+                if (count > 2000) {
+                    string temp_output_string = String.Join(System.Environment.NewLine,str);
+                    await Context.User.SendMessageAsync(temp_output_string);
+                    count = s.Length;
+                    str = new List<string>();
+                }
+                str.Add(s);
             }
             string output_string = String.Join(System.Environment.NewLine,str);
             await Context.User.SendMessageAsync(output_string);
@@ -141,7 +150,7 @@ namespace trillbot.Commands
         }
 
         [Command("listracers")]
-        public async Task ListRacersAsync()
+        public async Task ListRacersAsync() //Need to make this DM & account for more than 2k characters. Using a list to build output strings.
         {
             List<Classes.racer> racers = racer.get_racer();
             string s = "Racers for the Grand Prix!" + System.Environment.NewLine + "```" + System.Environment.NewLine;

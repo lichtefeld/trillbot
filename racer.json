@@ -1,211 +1,74 @@
 {
   "racer": [
     {
+      "ability": {
+        "id": 0,
+        "title": "Jump Start",
+        "description": "You start the race 2 spaces ahead of the starting line.",
+        "type": "Passive"
+      },
       "id": 0,
       "player_discord_id": 106768024857501696,
       "name": "Xavier Stordiz",
-      "faction": "House Eridanus",
+      "faction": "Astral Synedrium",
       "cards": [],
       "distance": 0,
       "hazards": [],
+      "inGame": false,
       "stillIn": true,
       "crash": false
     },
     {
-      "id": 1,
-      "player_discord_id": 129231359712559104,
-      "name": "Ethel Riverty",
-      "faction": "Trilliant",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
+      "ability": {
+        "id": 23,
+        "title": "Seasoned trickster",
+        "description": "Target 2 other racers, apply the Sabotage Hazard to both of them.",
+        "type": "Active"
+      },
       "id": 2,
-      "player_discord_id": 110541417746550784,
-      "name": "TUB BOY",
-      "faction": "Deathless",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "id": 4,
-      "player_discord_id": 445385432524390401,
-      "name": "Mingus",
-      "faction": "Trilliant",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "id": 5,
-      "player_discord_id": 159589407991529472,
-      "name": "Hart",
-      "faction": "Trilliant",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "id": 6,
-      "player_discord_id": 337284183623729162,
-      "name": "DVodka Ultra",
-      "faction": "Deathless",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "id": 7,
-      "player_discord_id": 125697188432052224,
-      "name": "Lev Taafe",
-      "faction": "PoorAsDirtSponsor",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "id": 8,
-      "player_discord_id": 130413955783983104,
-      "name": "Mr Fasty",
-      "faction": "The Speedy Bois",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "id": 9,
-      "player_discord_id": 121081559477518340,
-      "name": "H Flyx",
-      "faction": "Trilliant",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "id": 10,
-      "player_discord_id": 158368659507642368,
-      "name": "Death Bae",
-      "faction": "The Deathless",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "id": 11,
-      "player_discord_id": 118476475254046723,
-      "name": "Demon Dimi",
-      "faction": "The Deathless",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "id": 12,
-      "player_discord_id": 212888056280252416,
-      "name": "Wraith Of Death",
-      "faction": "The Deathless",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "id": 13,
       "player_discord_id": 273220295572324353,
       "name": "Orin Locke",
       "faction": "Voted Goldest Trill",
       "cards": [],
       "distance": 0,
       "hazards": [],
+      "inGame": false,
       "stillIn": true,
       "crash": false
     },
     {
-      "id": 14,
-      "player_discord_id": 140786461929766915,
-      "name": "Free Loader",
-      "faction": "Trilliant",
+      "ability": {
+        "id": 7,
+        "title": "Overclocked Engine",
+        "description": "Your passive movement is 2 instead of 1.",
+        "type": "Passive"
+      },
+      "id": 3,
+      "player_discord_id": 130413955783983104,
+      "name": "Mister Phas'tee",
+      "faction": "Ascension Trust",
       "cards": [],
       "distance": 0,
       "hazards": [],
+      "inGame": false,
       "stillIn": true,
       "crash": false
     },
     {
-      "id": 15,
-      "player_discord_id": 184463158214262784,
-      "name": "Akira Werner",
-      "faction": "Serpens",
+      "ability": {
+        "id": 19,
+        "title": "Precision Laser",
+        "description": "Target another racer and apply the **Pierced Engine** Hazard to them. Pierced engine can be removed with Tech Savvy. If Pierced engine is applied for 2 full turns, they will explode.",
+        "type": "Active"
+      },
+      "id": 4,
+      "player_discord_id": 301425214162731008,
+      "name": "Decius Tullius Crispus",
+      "faction": "House Aquila",
       "cards": [],
       "distance": 0,
       "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "id": 16,
-      "player_discord_id": 135553530399293440,
-      "name": "James Brighte",
-      "faction": "Trilliant",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "id": 17,
-      "player_discord_id": 183339432315715584,
-      "name": "Benjamin Nix",
-      "faction": "Trilliant",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "id": 18,
-      "player_discord_id": 472881105763041300,
-      "name": "Betty B",
-      "faction": "Trilliant",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
-      "stillIn": true,
-      "crash": false
-    },
-    {
-      "id": 19,
-      "player_discord_id": 233719133617782784,
-      "name": "Vael",
-      "faction": "Snek",
-      "cards": [],
-      "distance": 0,
-      "hazards": [],
+      "inGame": false,
       "stillIn": true,
       "crash": false
     }
