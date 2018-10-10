@@ -282,6 +282,10 @@ namespace trillbot.Classes {
                 await ReplyAsync("No racer found for you");
                 return;
             } else {
+                if(racer.inGame) {
+                    await ReplyAsync("Hold up, you can only play in one game at a time!");
+                    return;
+                }
                 foreach (racer r in racers) {
                     if(r.ID == racer.ID) {
                         await ReplyAsync("You have already joined the game!");
