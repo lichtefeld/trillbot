@@ -17,23 +17,6 @@ namespace trillbot.Commands
 {
     public class GameCommands : ModuleBase<SocketCommandContext>
     {
-        /* private static List<racer> racers = new List<racer>();
-        private static Stack<Card> cards = new Stack<Card>();
-        private static bool runningGame = false;
-        private static int position = 0;
-        private static int round = 1;
-        private Dictionary<int, Tuple<int,int>> remedy_to_hazards = new Dictionary<int, Tuple<int,int>> {
-            {0,new Tuple<int, int>(5,6)},
-            {1,new Tuple<int,int>(8,9)},
-            {2,new Tuple<int,int>(10,11)}
-        };
-        private Dictionary<int, string> target_hazard_output = new Dictionary<int, string> {
-            {0, ". They are unable to move until they remove this Hazard."},
-            {1, ". They better not have any other Hazards applied!"},
-            {2,". They have 3 turns to remove this Hazard."},
-            {3, ". They are unable to move more than two spaces!"}
-        };*/
-
         [Command("initialize")]
         public async Task initAsync() {
             var game = new GrandPrix {
