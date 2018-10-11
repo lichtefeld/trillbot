@@ -97,7 +97,11 @@ namespace trillbot.Commands
             int count = 21;
             str.Add("**Special Abilities**");
             for(int i = 0; i < abilities.Count; i++) {
-                string s = "**#" + (i+1) + ":** " + abilities[i].Title + " (" + abilities[i].Type + ") - *" +abilities[i].Description + "*";
+                string active = "Passive";
+                if (abilities[i].Active){
+                    active = "Active";
+                }
+                string s = "**#" + (i+1) + ":** " + abilities[i].Title + " (" + active + ") - *" +abilities[i].Description + "*";
                 count += s.Length;
                 if (count > 2000) {
                     string temp_output_string = String.Join(System.Environment.NewLine,str);

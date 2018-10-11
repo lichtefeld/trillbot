@@ -124,7 +124,11 @@ namespace trillbot.Classes {
             }
             //Special Ability
             str2.Add("-- -- -- -- --");
-            str2.Add("**Special Ability:** " + this.ability.Title + " (" + this.ability.Type + ") - " + this.ability.Description);   
+            string active = "Passive";
+            if (this.ability.Active){
+                active = "Active";
+            }
+            str2.Add("**Special Ability:** " + this.ability.Title + " (" + active + ") - " + this.ability.Description);   
             return String.Join(System.Environment.NewLine, str2);
         }
 
