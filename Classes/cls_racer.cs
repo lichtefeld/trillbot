@@ -29,7 +29,7 @@ namespace trillbot.Classes {
         public bool inGame { get; set; } = false;
         public bool stillIn { get; set; } = true;
         public bool crash { get; set; } = false;
-        public Ability ability;
+        public Ability ability = Ability.get_ability(1);
 
         public void addHazard(Card card) {
             var h = hazards.FirstOrDefault(e=>e.item1 == card);

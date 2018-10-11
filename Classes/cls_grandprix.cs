@@ -49,7 +49,7 @@ namespace trillbot.Classes {
                 var usr = Context.Guild.GetUser(r.player_discord_id);
                 await usr.SendMessageAsync(r.currentStatus());
             }
-            await Context.Channel.SendMessageAsync("Cards Dealt");
+            //await Context.Channel.SendMessageAsync("Cards Dealt");
         }
 
         //Hazard Output
@@ -66,7 +66,7 @@ namespace trillbot.Classes {
             racer.update_racer(r);
             position++;
             if(position == racers.Count) {
-                await endOfTurn(Context); //Handle Passive Movement
+                endOfTurn(Context); //Handle Passive Movement
                 position -= racers.Count;
                 round++;
             }
@@ -121,7 +121,7 @@ namespace trillbot.Classes {
                 outOfRace.Add(racers[position].name + " is no longer in the race.");
                 position++;
                 if(position == racers.Count) {
-                    await endOfTurn(Context); //Handle Passive Movement
+                    endOfTurn(Context); //Handle Passive Movement
                     racer winner = checkWinner();
                     if(winner != null) {
                         var usr2 = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
@@ -188,7 +188,7 @@ namespace trillbot.Classes {
         }
 
         //Passive Movement
-        private async Task endOfTurn(SocketCommandContext Context) {
+        private void endOfTurn(SocketCommandContext Context) {
             foreach (racer r in racers ) {
                 r.distance++;
                 if (r.distance > 24) {
@@ -196,7 +196,6 @@ namespace trillbot.Classes {
                 }
                 racer.update_racer(r);
             }
-            await Context.Channel.SendMessageAsync("Passive Movement Applied");
         }
 
         //Check for Winner [Return Racer]
@@ -210,7 +209,7 @@ namespace trillbot.Classes {
         }
 
         //Shuffle Racers
-        private async Task shuffleRacers(SocketCommandContext Context) {
+        private void shuffleRacers(SocketCommandContext Context) {
             List<racer> temp = new List<racer>();
 
             while (racers.Count > 0) {
@@ -220,7 +219,6 @@ namespace trillbot.Classes {
             }
 
             racers = temp;
-            await Context.Channel.SendMessageAsync("Turn Order Shuffled");
         }
 
         //Make New Deck of Shuffled Cards
@@ -258,14 +256,11 @@ namespace trillbot.Classes {
         //Start Game
         public async Task startGame(SocketCommandContext Context) {
             await dealCards(Context); //Deal cards to all racers
-            await shuffleRacers(Context); //Randomize Turn Order
-            var guild = Context.Client.GetGuild (Context.Guild.Id);
-            var user = guild.GetUser (Context.Client.CurrentUser.Id);
+            shuffleRacers(Context); //Randomize Turn Order
             runningGame = true;
             await Context.Client.SetStatusAsync (UserStatus.Online);
             await Context.Client.SetGameAsync ("The 86th Trilliant Grand Prix", null, StreamType.NotStreaming);
             await displayCurrentBoard(Context);
-            //await Context.Channel.SendMessageAsync("Game Started");
             await inGameAsync(Context);
             await nextTurn(Context);
         }

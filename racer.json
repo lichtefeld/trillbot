@@ -7,10 +7,10 @@
         "description": "You start the race 2 spaces ahead of the starting line.",
         "active": false
       },
-      "id": 0,
+      "id": 1,
       "player_discord_id": 106768024857501696,
       "name": "Xavier Stordiz",
-      "faction": "Astral Synedrium",
+      "faction": "Eridanus",
       "cards": [],
       "distance": 0,
       "hazards": [],
@@ -20,15 +20,15 @@
     },
     {
       "ability": {
-        "id": 23,
-        "title": "Seasoned trickster",
-        "description": "Target 2 other racers, apply the Sabotage Hazard to both of them.",
-        "active": false
+        "id": 16,
+        "title": "Tactical Hacking",
+        "description": "Target another racer and switch hands with them.",
+        "active": true
       },
       "id": 2,
-      "player_discord_id": 273220295572324353,
-      "name": "Orin Locke",
-      "faction": "Voted Goldest Trill",
+      "player_discord_id": 125697188432052224,
+      "name": "Coco Cobra",
+      "faction": "Trilliant",
       "cards": [],
       "distance": 0,
       "hazards": [],
@@ -38,15 +38,105 @@
     },
     {
       "ability": {
-        "id": 7,
-        "title": "Overclocked Engine",
-        "description": "Your passive movement is 2 instead of 1.",
+        "id": 0,
+        "title": "Jump Start",
+        "description": "You start the race 2 spaces ahead of the starting line.",
         "active": false
       },
       "id": 3,
-      "player_discord_id": 130413955783983104,
-      "name": "Mister Phas'tee",
-      "faction": "Ascension Trust",
+      "player_discord_id": 219502548489338882,
+      "name": "Guillaume Valls",
+      "faction": "DCS",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "inGame": false,
+      "stillIn": true,
+      "crash": false
+    },
+    {
+      "ability": {
+        "id": 0,
+        "title": "Jump Start",
+        "description": "You start the race 2 spaces ahead of the starting line.",
+        "active": false
+      },
+      "id": 4,
+      "player_discord_id": 273220295572324353,
+      "name": "Orin Locke",
+      "faction": "The Trillist",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "inGame": false,
+      "stillIn": true,
+      "crash": false
+    },
+    {
+      "ability": {
+        "id": 0,
+        "title": "Jump Start",
+        "description": "You start the race 2 spaces ahead of the starting line.",
+        "active": false
+      },
+      "id": 5,
+      "player_discord_id": 129231359712559104,
+      "name": "Dread Pirate",
+      "faction": "Vagrant",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "inGame": false,
+      "stillIn": true,
+      "crash": false
+    },
+    {
+      "ability": {
+        "id": 0,
+        "title": "Jump Start",
+        "description": "You start the race 2 spaces ahead of the starting line.",
+        "active": false
+      },
+      "id": 6,
+      "player_discord_id": 110541417746550784,
+      "name": "Xavier Stordiz the second",
+      "faction": "Eridanus",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "inGame": false,
+      "stillIn": true,
+      "crash": false
+    },
+    {
+      "ability": {
+        "id": 1,
+        "title": "Wealthy Sponsor",
+        "description": "You start the race with a custom set of cards.",
+        "active": false
+      },
+      "id": 7,
+      "player_discord_id": 158368659507642368,
+      "name": "Death Bae",
+      "faction": "Deathless",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "inGame": false,
+      "stillIn": true,
+      "crash": false
+    },
+    {
+      "ability": {
+        "id": 1,
+        "title": "Wealthy Sponsor",
+        "description": "You start the race with a custom set of cards.",
+        "active": false
+      },
+      "id": 8,
+      "player_discord_id": 183339432315715584,
+      "name": "Benjamin Nix",
+      "faction": "Trilliant",
       "cards": [],
       "distance": 0,
       "hazards": [],
@@ -59,12 +149,12 @@
         "id": 19,
         "title": "Precision Laser",
         "description": "Target another racer and apply the **Pierced Engine** Hazard to them. Pierced engine can be removed with Tech Savvy. If Pierced engine is applied for 2 full turns, they will explode.",
-        "active": false
+        "active": true
       },
-      "id": 4,
+      "id": 9,
       "player_discord_id": 301425214162731008,
       "name": "Decius Tullius Crispus",
-      "faction": "House Aquila",
+      "faction": "AQUILA IS BEST",
       "cards": [],
       "distance": 0,
       "hazards": [],
