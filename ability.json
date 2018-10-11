@@ -74,7 +74,7 @@
     },
     {
       "id": 12,
-      "title": "Escape pod",
+      "title": "Escape Pod",
       "description": "If you are killed, you can keep racing in your escape pod. While in the escape pod, your maximum hand size is 1.",
       "active": false
     },
@@ -140,7 +140,7 @@
     },
     {
       "id": 23,
-      "title": "Seasoned trickster",
+      "title": "Seasoned Trickster",
       "description": "Target 2 other racers, apply the Sabotage Hazard to both of them.",
       "active": true
     },

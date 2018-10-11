@@ -11,75 +11,10 @@
       "player_discord_id": 106768024857501696,
       "name": "Xavier Stordiz",
       "faction": "Astral Synedrium",
-      "cards": [
-        {
-          "id": 6,
-          "count": 3,
-          "title": "Ram",
-          "description": "Move forward 3 spaces, the racers in front of you by 1 space after the move cannot play Movement cards",
-          "type": "Hazard",
-          "value": 1
-        },
-        {
-          "id": 10,
-          "count": 3,
-          "title": "Heart Attack",
-          "description": "Target another user, kills them in three turns if not removed",
-          "type": "THazard",
-          "value": 2
-        },
-        {
-          "id": 4,
-          "count": 5,
-          "title": "Movement 6",
-          "description": "This card can be played to move forward 6 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
-          "type": "Movement",
-          "value": 6
-        },
-        {
-          "id": 15,
-          "count": 4,
-          "title": "System Reboot",
-          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
-          "type": "Remedy",
-          "value": 3
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 3,
-          "count": 11,
-          "title": "Movement 4",
-          "description": "Move forward 4 spaces",
-          "type": "Movement",
-          "value": 4
-        },
-        {
-          "id": 13,
-          "count": 5,
-          "title": "Tech Savvy",
-          "description": "Removes Mechanical Failure and Sabotage",
-          "type": "Remedy",
-          "value": 1
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        }
-      ],
+      "cards": [],
       "distance": 0,
       "hazards": [],
-      "inGame": true,
+      "inGame": false,
       "stillIn": true,
       "crash": false
     },
@@ -94,75 +29,10 @@
       "player_discord_id": 273220295572324353,
       "name": "Orin Locke",
       "faction": "Voted Goldest Trill",
-      "cards": [
-        {
-          "id": 7,
-          "count": 1,
-          "title": "Crash",
-          "description": "Played on self, move forward 1 space. Anyone in your space at the start of your next turn dies.",
-          "type": "Hazard",
-          "value": 2
-        },
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        },
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        },
-        {
-          "id": 14,
-          "count": 4,
-          "title": "Cyber Healthcare",
-          "description": "Removes Heart Attack and High G Forces",
-          "type": "Remedy",
-          "value": 2
-        },
-        {
-          "id": 9,
-          "count": 3,
-          "title": "Sabotage",
-          "description": "Target another user, target is killed if they end a turn with Sabotage AND another hazard applied",
-          "type": "THazard",
-          "value": 1
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        }
-      ],
+      "cards": [],
       "distance": 0,
       "hazards": [],
-      "inGame": true,
+      "inGame": false,
       "stillIn": true,
       "crash": false
     },
