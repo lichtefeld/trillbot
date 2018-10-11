@@ -274,16 +274,16 @@ namespace trillbot.Classes {
             }
 
             if(racer == null) {
-                await Context.Channel.SendMessageAsync("No racer found for you");
+                await Context.Channel.SendMessageAsync("No racer found for you, " + Context.User.Mention);
                 return;
             } else {
                 if(racer.inGame) {
-                    await Context.Channel.SendMessageAsync("Hold up, you can only play in one game at a time!");
+                    await Context.Channel.SendMessageAsync("Hold up," +  Context.User.Mention + ", youcan only play in one game at a time!");
                     return;
                 }
                 foreach (racer r in racers) {
                     if(r.ID == racer.ID) {
-                        await Context.Channel.SendMessageAsync("You have already joined the game!");
+                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you have already joined the game!");
                         return;
                     }
                 }
@@ -292,7 +292,7 @@ namespace trillbot.Classes {
                 racers.Add(racer);
             }
 
-            await Context.Channel.SendMessageAsync("You have joined the game");
+            await Context.Channel.SendMessageAsync(Context.User.Mention + ", you have joined the game");
         }
 
         //Discard a Card
