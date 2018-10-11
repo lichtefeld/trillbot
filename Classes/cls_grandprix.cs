@@ -293,6 +293,7 @@ namespace trillbot.Classes {
                     }
                 }
                 racer.inGame = true;
+                racer.replace_racer(racer);
                 racers.Add(racer);
             }
 
