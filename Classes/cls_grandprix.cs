@@ -83,7 +83,7 @@ namespace trillbot.Classes {
         }
 
         //Survival Checks
-        private async Task SurvivalChecks(SocketCommandContext Context, racer r) { 
+        private static async Task SurvivalChecks(SocketCommandContext Context, racer r) { 
             if(r.sab() && r.hazards.Count > 1) {
                 r.stillIn = false;
                 await Context.Channel.SendMessageAsync(r.name + " subcumbs to Sabotage and their vehicle explodes!");
@@ -156,7 +156,7 @@ namespace trillbot.Classes {
             }
 
             //DM Current Hand & Status
-            await usr.SendMessageAsync(racers[position].currentStatus());
+            if (!(position == 1 && round == 1)) await usr.SendMessageAsync(racers[position].currentStatus());
 
             //Start Next Turn
             await Context.Channel.SendMessageAsync(racers[position].name + " has the next turn.");
