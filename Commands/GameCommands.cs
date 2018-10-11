@@ -19,7 +19,7 @@ namespace trillbot.Commands
     {
         [Command("initialize")]
         public async Task initAsync() {
-            if (Program.games.TryGetValue(Context.Channel.Id, out  GrandPrix game)) {
+            if (Program.games.TryGetValue(Context.Channel.Id, out GrandPrix game)) {
                 await ReplyAsync("Woah there, a game is already initialized in this channel. Try using `ta!reset` to reset this channel");
                 return;
             }
