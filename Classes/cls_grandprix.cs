@@ -43,7 +43,7 @@ namespace trillbot.Classes {
             foreach(string s in str) {
                 count += s.Length + 1;
                 if (count >= 2000) {
-                    channel.SendMessageAsync(output_string);
+                    channel.SendMessageAsync(output_string).GetAwaiter().GetResult();
                     count = s.Length;
                     output_string = s + System.Environment.NewLine;
                 } else {
