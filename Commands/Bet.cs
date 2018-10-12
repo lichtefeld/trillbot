@@ -20,10 +20,10 @@ namespace trillbot.Commands
         [Command("bet")]
         public async Task BetAsync(int ID, int amount)
         {
-            SocketGuildUser usr = Context.Guild.GetUser(Context.Message.Author.Id);
-            Character character = Classes.Character.get_character(Context.Message.Author.Id);
-            racer racer = racer.get_racer(ID);
-            string name = usr.Nickname != null ? usr.Nickname : usr.Username;
+            var usr = Context.Guild.GetUser(Context.Message.Author.Id);
+            var character = Classes.Character.get_character(Context.Message.Author.Id);
+            var r = racer.get_racer(ID);
+            var name = usr.Nickname != null ? usr.Nickname : usr.Username;
 
             if (character == null)
             {
@@ -31,7 +31,7 @@ namespace trillbot.Commands
                 return;
             }
 
-            if(racer == null) {
+            if(r == null) {
                 await ReplyAsync("The racer you selected doesn't exist.");
                 return;
             }
@@ -41,7 +41,7 @@ namespace trillbot.Commands
                 return;
             }
 
-            trillbot.Classes.Bet b = new trillbot.Classes.Bet(racer.name,amount);
+            var b = new trillbot.Classes.Bet(r.name,amount);
 
             character.bets.Add(b);
             character.balance -= amount;
@@ -54,8 +54,8 @@ namespace trillbot.Commands
         public async Task DisplaybetsAsync()
         {
             //Display bets to the User in a DM?
-            SocketGuildUser usr = Context.Guild.GetUser(Context.Message.Author.Id);
-            Character character = Character.get_character(Context.Message.Author.Id);
+            var usr = Context.Guild.GetUser(Context.Message.Author.Id);
+            var character = Character.get_character(Context.Message.Author.Id);
 
             if (character == null)
             {
@@ -63,22 +63,21 @@ namespace trillbot.Commands
                 return;
             }
 
-            string output = "**" +character.name + " Bets** ```" + System.Environment.NewLine;
-
+            var output = new List<string>();
+            output.Add("**" +character.name + " Bets** ```");
             foreach (trillbot.Classes.Bet bet in character.bets) {
-                output+= bet.ToString() + "\n";
+                output.Add(bet.ToString());
             }
-
-            output += "```";
-
-            await Context.User.SendMessageAsync(output);
+            output.Add("```");
+            var output_string = String.Join(System.Environment.NewLine,output);
+            await Context.User.SendMessageAsync(output_string);
         }
 
         [Command("displaybalance")]
         public async Task DisplayBalanceAsync() {
             //Display bets to the User in a DM?
-            SocketGuildUser usr = Context.Guild.GetUser(Context.Message.Author.Id);
-            Character character = Character.get_character(Context.Message.Author.Id);
+            var usr = Context.Guild.GetUser(Context.Message.Author.Id);
+            var character = Character.get_character(Context.Message.Author.Id);
 
             if (character == null)
             {
@@ -93,8 +92,8 @@ namespace trillbot.Commands
         public async Task CancelbetAsync(int ID)
         {
             //Allow a user to cancel a bet
-            SocketGuildUser usr = Context.Guild.GetUser(Context.Message.Author.Id);
-            Character character = Character.get_character(Context.Message.Author.Id);
+            var usr = Context.Guild.GetUser(Context.Message.Author.Id);
+            var character = Character.get_character(Context.Message.Author.Id);
 
             if (character == null)
             {
@@ -102,7 +101,7 @@ namespace trillbot.Commands
                 return;
             }
 
-            foreach (trillbot.Classes.Bet bet in character.bets) {
+            foreach (var bet in character.bets) {
                 if (bet.Id == ID) {
                     character.balance += bet.Amount;
                     character.bets.Remove(bet);

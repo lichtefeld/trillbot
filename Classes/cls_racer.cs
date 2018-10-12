@@ -29,7 +29,7 @@ namespace trillbot.Classes {
         public bool inGame { get; set; } = false;
         public bool stillIn { get; set; } = true;
         public bool crash { get; set; } = false;
-        public Ability ability;
+        public Ability ability = Ability.get_ability(1);
 
         public void addHazard(Card card) {
             var h = hazards.FirstOrDefault(e=>e.item1 == card);
@@ -70,6 +70,7 @@ namespace trillbot.Classes {
             distance = 0;
             hazards = new List<pair>();
             cards = new List<Classes.Card>();
+            inGame = false;
         }
 
         public string nameID() {
@@ -77,7 +78,7 @@ namespace trillbot.Classes {
         }
 
         public string leader() {
-            List<string> str = new List<string>();
+            var str = new List<string>();
             str.Add(this.twoDigitDistance());
             str.Add(this.nameID());
             if(this.stillIn) {
@@ -90,7 +91,7 @@ namespace trillbot.Classes {
             foreach(pair p in hazards) {
                 str.Add(p.item1.title + " (" + (p.item2+1) + ")");
             }
-            string output_string = String.Join(" | ", str);
+            var output_string = String.Join(" | ", str);
             return output_string;
         }
 
@@ -103,7 +104,7 @@ namespace trillbot.Classes {
         }
 
         public string currentStatus() {
-            List<string> str2 = new List<string>();
+            var str2 = new List<string>();
             //Cards
             str2.Add("**Current Cards**");
             if (this.cards.Count == 0) { 
@@ -117,13 +118,17 @@ namespace trillbot.Classes {
             str2.Add("-- -- -- -- --");
             str2.Add("**Current Hazards** - If any Hazard is applied for 3 full turns, you will explode.");
             if (this.hazards.Count == 0) str2.Add("None");
-            int j = 0;
+            var j = 0;
             foreach (pair p in this.hazards) {
                 str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + (p.item2+1) + " turns. " + id_to_condition[p.item1.ID]);
             }
             //Special Ability
             str2.Add("-- -- -- -- --");
-            str2.Add("**Special Ability:** " + this.ability.Title + " (" + this.ability.Type + ") - " + this.ability.Description);   
+            var active = "Passive";
+            if (this.ability.Active){
+                active = "Active";
+            }
+            str2.Add("**Special Ability:** " + this.ability.Title + " (" + active + ") - " + this.ability.Description);   
             return String.Join(System.Environment.NewLine, str2);
         }
 

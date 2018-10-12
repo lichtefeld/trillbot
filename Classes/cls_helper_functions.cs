@@ -20,7 +20,7 @@ namespace trillbot.Classes
 
         public static Embed ObjToEmbed(object obj, string title_property_name = "")
         {
-            string[] properties = obj.GetType().GetProperties().Select(e=>e.Name).ToArray();
+            var properties = obj.GetType().GetProperties().Select(e=>e.Name).ToArray();
             var embed = new EmbedBuilder();
 
             foreach (var property in properties)
