@@ -225,7 +225,14 @@ namespace trillbot.Classes {
             List<string> str = new List<string>();
             str.Add("**Leaderboard!** Turn " + round + "." + (position+1));
             str.Add("```");
-            str.Add("Distance | Racer Name (ID) | Still In | Sponsor | Special Ability | Hazards ");
+            List<string> str2 = new List<string>();
+            str2.Add("Distance");
+            str2.Add(helpers.center("Racer Name (ID)", lengths[0]));
+            str2.Add(helpers.center("Still In", lengths[1]));
+            str2.Add(helpers.center("Sponsor",lengths[2]));
+            str2.Add(helpers.center("Special Ability", lengths[3]));
+            str2.Add("Hazards");
+            str.Add(String.Join(" | ",str2));
             var listRacer = racers.OrderByDescending(e=> e.distance).ToList();
             listRacer.ForEach(e=> str.Add(e.leader(lengths)));
             str.Add("```");

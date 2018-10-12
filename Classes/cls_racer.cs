@@ -94,14 +94,14 @@ namespace trillbot.Classes {
                 }
             } else {
                 str.Add("      " + this.twoDigitDistance());
-                str.Add(center(this.nameID(),lengths[0]));
+                str.Add(helpers.center(this.nameID(),lengths[0]));
                 if(this.stillIn) {
-                    str.Add(center("Alive",lengths[1]));
+                    str.Add(helpers.center("Alive",lengths[1]));
                 } else {
-                    str.Add(center("Dead",lengths[1]));
+                    str.Add(helpers.center("Dead",lengths[1]));
                 }
-                str.Add(center(this.faction,lengths[2]));
-                str.Add(center(this.ability.Title,lengths[3]));
+                str.Add(helpers.center(this.faction,lengths[2]));
+                str.Add(helpers.center(this.ability.Title,lengths[3]));
                 foreach (pair p in hazards) {
                     str.Add(p.item1.title + " (" + (p.item2+1) + ")");
                 }
@@ -118,7 +118,7 @@ namespace trillbot.Classes {
             }
         }
 
-        private string center(string s, int i) {
+        /* private string center(string s, int i) {
             bool odd = false;
             string spaces = "";
             int toCenter = i - s.Length;
@@ -131,8 +131,7 @@ namespace trillbot.Classes {
             } else {
                 return spaces + s + spaces;
             }
-
-        }
+        }*/
 
         public string currentStatus() {
             var str2 = new List<string>();
