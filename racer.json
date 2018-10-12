@@ -11,87 +11,10 @@
       "player_discord_id": 106768024857501696,
       "name": "Xavier Stordiz",
       "faction": "Eridanus",
-      "cards": [
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes Debris and Ram",
-          "type": "Remedy",
-          "value": 0
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 5,
-          "count": 3,
-          "title": "Debris",
-          "description": "The five racers at the front cannot play Movement cards",
-          "type": "Hazard",
-          "value": 0
-        },
-        {
-          "id": 11,
-          "count": 3,
-          "title": "High G Forces",
-          "description": "Target another user, they can't play a Movement card higher than move 2.",
-          "type": "THazard",
-          "value": 3
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        }
-      ],
-      "distance": 12,
-      "hazards": [
-        {
-          "item1": {
-            "id": 11,
-            "count": 3,
-            "title": "High G Forces",
-            "description": "Target another user, they can't play a Movement card higher than move 2.",
-            "type": "THazard",
-            "value": 3
-          },
-          "item2": 2
-        }
-      ],
-      "inGame": true,
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "inGame": false,
       "stillIn": true,
       "crash": false
     },
@@ -142,75 +65,10 @@
       "player_discord_id": 273220295572324353,
       "name": "Orin Locke",
       "faction": "The Trillist",
-      "cards": [
-        {
-          "id": 10,
-          "count": 3,
-          "title": "Heart Attack",
-          "description": "Target another user, kills them in three turns if not removed",
-          "type": "THazard",
-          "value": 2
-        },
-        {
-          "id": 15,
-          "count": 4,
-          "title": "System Reboot",
-          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
-          "type": "Remedy",
-          "value": 3
-        },
-        {
-          "id": 15,
-          "count": 4,
-          "title": "System Reboot",
-          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
-          "type": "Remedy",
-          "value": 3
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 0,
-          "count": 11,
-          "title": "Movement 1",
-          "description": "Move forward 1 space",
-          "type": "Movement",
-          "value": 1
-        },
-        {
-          "id": 10,
-          "count": 3,
-          "title": "Heart Attack",
-          "description": "Target another user, kills them in three turns if not removed",
-          "type": "THazard",
-          "value": 2
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        }
-      ],
-      "distance": 11,
+      "cards": [],
+      "distance": 0,
       "hazards": [],
-      "inGame": true,
+      "inGame": false,
       "stillIn": true,
       "crash": false
     },
@@ -333,75 +191,10 @@
       "player_discord_id": 121081559477518340,
       "name": "H Flyx",
       "faction": "TRILL",
-      "cards": [
-        {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes Debris and Ram",
-          "type": "Remedy",
-          "value": 0
-        },
-        {
-          "id": 12,
-          "count": 6,
-          "title": "Dodge",
-          "description": "Removes Debris and Ram",
-          "type": "Remedy",
-          "value": 0
-        },
-        {
-          "id": 1,
-          "count": 11,
-          "title": "Movement 2",
-          "description": "Move forward 2 spaces",
-          "type": "Movement",
-          "value": 2
-        },
-        {
-          "id": 2,
-          "count": 11,
-          "title": "Movement 3",
-          "description": "Move forward 3 spaces",
-          "type": "Movement",
-          "value": 3
-        },
-        {
-          "id": 3,
-          "count": 11,
-          "title": "Movement 4",
-          "description": "Move forward 4 spaces",
-          "type": "Movement",
-          "value": 4
-        },
-        {
-          "id": 15,
-          "count": 4,
-          "title": "System Reboot",
-          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
-          "type": "Remedy",
-          "value": 3
-        },
-        {
-          "id": 13,
-          "count": 5,
-          "title": "Tech Savvy",
-          "description": "Removes Mechanical Failure and Sabotage",
-          "type": "Remedy",
-          "value": 1
-        },
-        {
-          "id": 3,
-          "count": 11,
-          "title": "Movement 4",
-          "description": "Move forward 4 spaces",
-          "type": "Movement",
-          "value": 4
-        }
-      ],
-      "distance": 16,
+      "cards": [],
+      "distance": 0,
       "hazards": [],
-      "inGame": true,
+      "inGame": false,
       "stillIn": true,
       "crash": false
     }
