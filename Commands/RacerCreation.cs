@@ -162,6 +162,7 @@ namespace trillbot.Commands
             }
             s.Add("```");
             await ReplyAsync(String.Join(System.Environment.NewLine,s));
+            return;
         }
     }
 }

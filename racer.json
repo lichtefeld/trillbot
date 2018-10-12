@@ -11,10 +11,75 @@
       "player_discord_id": 106768024857501696,
       "name": "Xavier Stordiz",
       "faction": "Eridanus",
-      "cards": [],
-      "distance": 0,
+      "cards": [
+        {
+          "id": 16,
+          "count": 3,
+          "title": "Dazzle",
+          "description": "Affects 3 players behind you. They cannot move for 1 turn. Does not require a Remedy card to clear. You move forward one space after dazzling!",
+          "type": "Hazard",
+          "value": 3
+        },
+        {
+          "id": 0,
+          "count": 11,
+          "title": "Movement 1",
+          "description": "Move forward 1 space",
+          "type": "Movement",
+          "value": 1
+        },
+        {
+          "id": 1,
+          "count": 11,
+          "title": "Movement 2",
+          "description": "Move forward 2 spaces",
+          "type": "Movement",
+          "value": 2
+        },
+        {
+          "id": 2,
+          "count": 11,
+          "title": "Movement 3",
+          "description": "Move forward 3 spaces",
+          "type": "Movement",
+          "value": 3
+        },
+        {
+          "id": 2,
+          "count": 11,
+          "title": "Movement 3",
+          "description": "Move forward 3 spaces",
+          "type": "Movement",
+          "value": 3
+        },
+        {
+          "id": 1,
+          "count": 11,
+          "title": "Movement 2",
+          "description": "Move forward 2 spaces",
+          "type": "Movement",
+          "value": 2
+        },
+        {
+          "id": 12,
+          "count": 6,
+          "title": "Dodge",
+          "description": "Removes Debris and Ram",
+          "type": "Remedy",
+          "value": 0
+        },
+        {
+          "id": 2,
+          "count": 11,
+          "title": "Movement 3",
+          "description": "Move forward 3 spaces",
+          "type": "Movement",
+          "value": 3
+        }
+      ],
+      "distance": 4,
       "hazards": [],
-      "inGame": false,
+      "inGame": true,
       "stillIn": true,
       "crash": false
     },
@@ -65,10 +130,75 @@
       "player_discord_id": 273220295572324353,
       "name": "Orin Locke",
       "faction": "The Trillist",
-      "cards": [],
+      "cards": [
+        {
+          "id": 10,
+          "count": 3,
+          "title": "Heart Attack",
+          "description": "Target another user, kills them in three turns if not removed",
+          "type": "THazard",
+          "value": 2
+        },
+        {
+          "id": 3,
+          "count": 11,
+          "title": "Movement 4",
+          "description": "Move forward 4 spaces",
+          "type": "Movement",
+          "value": 4
+        },
+        {
+          "id": 11,
+          "count": 3,
+          "title": "High G Forces",
+          "description": "Target another user, they can't play a Movement card higher than move 2.",
+          "type": "THazard",
+          "value": 3
+        },
+        {
+          "id": 15,
+          "count": 4,
+          "title": "System Reboot",
+          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
+          "type": "Remedy",
+          "value": 3
+        },
+        {
+          "id": 15,
+          "count": 4,
+          "title": "System Reboot",
+          "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
+          "type": "Remedy",
+          "value": 3
+        },
+        {
+          "id": 2,
+          "count": 11,
+          "title": "Movement 3",
+          "description": "Move forward 3 spaces",
+          "type": "Movement",
+          "value": 3
+        },
+        {
+          "id": 3,
+          "count": 11,
+          "title": "Movement 4",
+          "description": "Move forward 4 spaces",
+          "type": "Movement",
+          "value": 4
+        },
+        {
+          "id": 0,
+          "count": 11,
+          "title": "Movement 1",
+          "description": "Move forward 1 space",
+          "type": "Movement",
+          "value": 1
+        }
+      ],
       "distance": 0,
       "hazards": [],
-      "inGame": false,
+      "inGame": true,
       "stillIn": true,
       "crash": false
     },
@@ -159,6 +289,107 @@
       "distance": 0,
       "hazards": [],
       "inGame": false,
+      "stillIn": true,
+      "crash": false
+    },
+    {
+      "ability": {
+        "id": 0,
+        "title": "Jump Start",
+        "description": "You start the race 2 spaces ahead of the starting line.",
+        "active": false
+      },
+      "id": 10,
+      "player_discord_id": 140786461929766915,
+      "name": "The Moose",
+      "faction": "Finland",
+      "cards": [],
+      "distance": 0,
+      "hazards": [],
+      "inGame": false,
+      "stillIn": true,
+      "crash": false
+    },
+    {
+      "ability": {
+        "id": 1,
+        "title": "Wealthy Sponsor",
+        "description": "You start the race with a custom set of cards.",
+        "active": false
+      },
+      "id": 11,
+      "player_discord_id": 121081559477518340,
+      "name": "H Flyx",
+      "faction": "TRILL",
+      "cards": [
+        {
+          "id": 12,
+          "count": 6,
+          "title": "Dodge",
+          "description": "Removes Debris and Ram",
+          "type": "Remedy",
+          "value": 0
+        },
+        {
+          "id": 12,
+          "count": 6,
+          "title": "Dodge",
+          "description": "Removes Debris and Ram",
+          "type": "Remedy",
+          "value": 0
+        },
+        {
+          "id": 1,
+          "count": 11,
+          "title": "Movement 2",
+          "description": "Move forward 2 spaces",
+          "type": "Movement",
+          "value": 2
+        },
+        {
+          "id": 2,
+          "count": 11,
+          "title": "Movement 3",
+          "description": "Move forward 3 spaces",
+          "type": "Movement",
+          "value": 3
+        },
+        {
+          "id": 3,
+          "count": 11,
+          "title": "Movement 4",
+          "description": "Move forward 4 spaces",
+          "type": "Movement",
+          "value": 4
+        },
+        {
+          "id": 4,
+          "count": 5,
+          "title": "Movement 6",
+          "description": "This card can be played to move forward 6 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
+          "type": "Movement",
+          "value": 6
+        },
+        {
+          "id": 4,
+          "count": 5,
+          "title": "Movement 6",
+          "description": "This card can be played to move forward 6 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
+          "type": "Movement",
+          "value": 6
+        },
+        {
+          "id": 0,
+          "count": 11,
+          "title": "Movement 1",
+          "description": "Move forward 1 space",
+          "type": "Movement",
+          "value": 1
+        }
+      ],
+      "distance": 1,
+      "hazards": [],
+      "inGame": true,
       "stillIn": true,
       "crash": false
     }
