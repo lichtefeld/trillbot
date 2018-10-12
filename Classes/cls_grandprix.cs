@@ -36,6 +36,31 @@ namespace trillbot.Classes {
         };
 
         //Private Helper Functions
+        //Output Function
+        private async Task output(ISocketMessageChannel channel, List<string> str) {
+            int count = 0;
+            string output_string = "";
+            foreach(string s in str) {
+                count += s.Length + 1;
+                if (count >= 2000) {
+                    await channel.SendMessageAsync(output_string);
+                    count = s.Length;
+                    output_string = s + System.Environment.NewLine;
+                } else {
+                    output_string += s + System.Environment.NewLine;
+                }
+            }
+            await channel.SendMessageAsync(output_string);
+        }
+
+        private async Task output(ISocketMessageChannel channel, string str) {
+            if (str.Length > 2000) {
+                //Handle Being Passed a String longer than 2k characers
+            } else {
+                await channel.SendMessageAsync(str);
+            }
+        }
+
         //Deal Cards
         private async Task dealCards(SocketCommandContext Context)
         {
@@ -73,7 +98,7 @@ namespace trillbot.Classes {
             racer winner = checkWinner();
                 if(winner != null) {
                     SocketGuildUser usr = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
-                    await Context.Channel.SendMessageAsync(usr.Mention + ", you have won the race!");
+                    await output(Context.Channel,usr.Mention + ", you have won the race!");
                     await displayCurrentBoard(Context);
                     await doReset(Context);
                     return;
@@ -83,10 +108,11 @@ namespace trillbot.Classes {
         }
 
         //Survival Checks
-        private static async Task SurvivalChecks(SocketCommandContext Context, racer r) { 
+        private static List<string> SurvivalChecks(SocketCommandContext Context, racer r) { 
+            var str = new List<string>();
             if(r.sab() && r.hazards.Count > 1) {
                 r.stillIn = false;
-                await Context.Channel.SendMessageAsync(r.name + " subcumbs to Sabotage and their vehicle explodes!");
+                str.Add(r.name + " subcumbs to Sabotage and their vehicle explodes!");
             }
             pair remove = null;
             r.hazards.ForEach(e=>{
@@ -94,7 +120,7 @@ namespace trillbot.Classes {
                 if(e.item2 > 2)
                 {
                     r.stillIn = false;
-                    Context.Channel.SendMessageAsync(r.name + " subcumbs to " + e.item1.title + " and their vehicle explodes!");
+                    str.Add(r.name + " subcumbs to " + e.item1.title + " and their vehicle explodes!");
                 }
 
                 if(e.item1.ID == 16 && e.item2 > 0) {
@@ -107,6 +133,7 @@ namespace trillbot.Classes {
             if (r.distance < 0) {
                 r.distance = 0;
             }
+            return str;
         }
 
         //Increment Turn
@@ -143,7 +170,7 @@ namespace trillbot.Classes {
             //Start of New Turn
             if(racers[position].crash) {
                 List<string> str = new List<string>();
-                str.Add(racers[position].name + "'s crash card triggers. The following racers crash out of the race.");
+                str.Add(racers[position].name + "'s crash card triggers.");
                 racers.Where(e=>e.distance == racers[position].distance).ToList().ForEach(e=> {
                     if (e != racers[position]) {
                         e.stillIn = false;
@@ -156,7 +183,7 @@ namespace trillbot.Classes {
             }
 
             //DM Current Hand & Status
-            if (!(position == 1 && round == 1)) await usr.SendMessageAsync(racers[position].currentStatus());
+            if (!(position == 0 && round == 1)) await usr.SendMessageAsync(racers[position].currentStatus());
 
             //Start Next Turn
             await Context.Channel.SendMessageAsync(racers[position].name + " has the next turn.");
@@ -309,7 +336,7 @@ namespace trillbot.Classes {
             Card c = r.cards[--i];
             await Context.Channel.SendMessageAsync(r.name + " discarded " + c.title);
             //Handle Survival Checks
-            await SurvivalChecks(Context, r);
+            SurvivalChecks(Context, r);
             //IF Entire Turn Completed Successfully
             await endOfTurnLogic(Context, r, i);
         }
@@ -542,7 +569,7 @@ namespace trillbot.Classes {
                     return;
             }
             //Handle Survival Checks
-            await SurvivalChecks(Context, r);
+            SurvivalChecks(Context, r);
             //IF Entire Turn Completed Successfully
             if(oneAlive()) {
                 await endOfTurnLogic(Context, r, i);
@@ -587,7 +614,7 @@ namespace trillbot.Classes {
             if (usr == null ) {
                 await Context.Channel.SendMessageAsync("Uhh boss, something went wrong.");
             }
-            await Context.Channel.SendMessageAsync("Hey " + usr.Mention + " It's your turn now!");
+            await Context.Channel.SendMessageAsync( "Hey " + usr.Mention + " It's your turn now!");
         }
 
     }

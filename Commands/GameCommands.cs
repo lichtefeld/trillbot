@@ -19,11 +19,12 @@ namespace trillbot.Commands
     {
         [Command("initialize")]
         public async Task initAsync() {
-            if (Program.games.TryGetValue(Context.Channel.Id, out GrandPrix game)) {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if (prix.Value != null) {
                 await ReplyAsync("Woah there, a game is already initialized in this channel. Try using `ta!reset` to reset this channel");
                 return;
             }
-            game = new GrandPrix {
+            var game = new GrandPrix {
                 channelName = Context.Channel.Name
             };
             Program.games.Add(Context.Channel.Id, game);
@@ -33,76 +34,76 @@ namespace trillbot.Commands
         [Command("startgame")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task startGame() {
-            try { 
-                var prix = Program.games[Context.Channel.Id];
-                await prix.startGame(Context); //Consider checking for a player to be in the game, rather than the Administrator node
-            } catch {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
                 await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else {
+                await prix.Value.startGame(Context); //Consider checking for a player to be in the game, rather than the Administrator node
             }
         }
 
         [Command("joingame")]
         public async Task joinGame() {
-            try { 
-                var prix = Program.games[Context.Channel.Id];
-                await prix.joinGame(Context);
-            } catch {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
                 await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else { 
+                await prix.Value.joinGame(Context);
             }
         }
 
         [Command("discard")]
         public async Task discardAsync(int i) {
-            try { 
-                var prix = Program.games[Context.Channel.Id];
-                await prix.discardAsync(Context, i);
-            } catch {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
                 await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else { 
+                await prix.Value.discardAsync(Context, i);
             }
         }
 
         [Command("playcard")]
         public async Task playCardAsync(int i, int racerID = -1, int hazardID = -1) {
-            try { 
-                var prix = Program.games[Context.Channel.Id];
-                await prix.playCardAsync(Context, i, racerID, hazardID);
-            } catch {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
                 await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else { 
+                await prix.Value.playCardAsync(Context, i, racerID,hazardID);
             }
         }
 
         [Command("ingame")]
         public async Task inGameAsync() {
-            try { 
-                var prix = Program.games[Context.Channel.Id];
-                await prix.inGameAsync(Context);
-            } catch {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
                 await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else { 
+                await prix.Value.inGameAsync(Context);
             }
         }
 
         [Command("reset")] //Reset the game to initial state
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task doReset() {
-            try {
-                var prix = Program.games[Context.Channel.Id];
-                await prix.doReset(Context);
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
+                await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else { 
+                await prix.Value.doReset(Context);
                 Program.games.Remove(Context.Channel.Id);
                 if(Program.games.Count == 0) {
                     await Context.Client.SetGameAsync(null, null, StreamType.NotStreaming);
                 }
-            } catch {
-                await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
             }
         }
 
         [Command("turn")]
         public async Task whosTurnAsync() { //Need to remind a person its there turn?
-            try { 
-                var prix = Program.games[Context.Channel.Id];
-                await prix.whosTurnAsync(Context);
-            } catch {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
                 await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else { 
+                await prix.Value.whosTurnAsync(Context);
             }
         }
     }
