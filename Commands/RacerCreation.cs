@@ -115,16 +115,6 @@ namespace trillbot.Commands
             await Context.User.SendMessageAsync(output_string);
         }
 
-        [Command("showhand")]
-        public async Task DisplayRacerHandAsync() {
-            var r = racer.get_racer(Context.Message.Author.Id);
-            if(r == null) {
-                await ReplyAsync("No racer found for you");
-            } else {
-                await Context.User.SendMessageAsync(r.currentStatus());
-            }
-        }
-
         [Command("deleteracer")]
         public async Task DeleteRacerAsync()
         {

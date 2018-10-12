@@ -12,6 +12,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Newtonsoft.Json;
 using trillbot.Classes;
+using trillbot;
 
 namespace trillbot.Commands
 {
@@ -90,7 +91,7 @@ namespace trillbot.Commands
                 await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else { 
                 prix.Value.doReset(Context);
-                Program.games.Remove(Context.Channel.Id);
+                trillbot.Program.games.Remove(Context.Channel.Id);
                 if(Program.games.Count == 0) {
                     await Context.Client.SetGameAsync(null, null, StreamType.NotStreaming);
                 }
@@ -104,6 +105,16 @@ namespace trillbot.Commands
                 await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else { 
                 prix.Value.whosTurnAsync(Context);
+            }
+        }
+
+        [Command("showhand")]
+        public async Task DisplayRacerHandAsync() {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
+                await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else { 
+                prix.Value.showHand(Context);
             }
         }
     }

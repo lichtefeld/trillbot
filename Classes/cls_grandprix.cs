@@ -53,11 +53,11 @@ namespace trillbot.Classes {
             channel.SendMessageAsync(output_string).GetAwaiter().GetResult();
         }
 
-        private async Task output(ISocketMessageChannel channel, string str) {
+        private void output(ISocketMessageChannel channel, string str) {
             if (str.Length > 2000) {
                 //Handle Being Passed a String longer than 2k characers
             } else {
-                await channel.SendMessageAsync(str);
+                channel.SendMessageAsync(str).GetAwaiter().GetResult();
             }
         }
 
@@ -70,7 +70,6 @@ namespace trillbot.Classes {
                     if(cards.Count == 0) { cards = generateDeck(); }
                     r.cards.Add(cards.Pop());
                 }
-                racer.update_racer(r);
                 var usr = Context.Guild.GetUser(r.player_discord_id);
                 usr.SendMessageAsync(r.currentStatus()).GetAwaiter().GetResult();
             }
@@ -87,7 +86,6 @@ namespace trillbot.Classes {
             r.cards.RemoveAt(i);
             if(cards.Count == 0 ) cards = generateDeck();
             r.cards.Add(cards.Pop());
-            racer.update_racer(r);
             position++;
             if(position == racers.Count) {
                 endOfTurn(Context); //Handle Passive Movement
@@ -135,11 +133,21 @@ namespace trillbot.Classes {
             return str;
         }
 
+        //Show ahdn
+        public void showHand(SocketCommandContext Context) {
+            var r = racers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);
+            if(r == null) {
+                output(Context.Channel,"No racer found for you, " + Context.User.Mention + ", in this game");
+            } else {
+                Context.User.SendMessageAsync(r.currentStatus()).GetAwaiter().GetResult();
+            }
+        }
+
         //Increment Turn
         private void nextTurn(SocketCommandContext Context) { //DM the next turn person
             var usr = Context.Guild.GetUser(racers[position].player_discord_id);
             if (usr == null ) {
-                Context.Channel.SendMessageAsync("Uhh boss, something went wrong.").GetAwaiter().GetResult();;
+                Context.Channel.SendMessageAsync("Uhh boss, something went wrong.").GetAwaiter().GetResult();
                 return;
             }
             List<string> outOfRace = new List<string>();
@@ -151,7 +159,7 @@ namespace trillbot.Classes {
                     racer winner = checkWinner();
                     if(winner != null) {
                         var usr2 = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
-                        Context.Channel.SendMessageAsync(usr2.Mention + ", you have won the race!").GetAwaiter().GetResult();;
+                        Context.Channel.SendMessageAsync(usr2.Mention + ", you have won the race!").GetAwaiter().GetResult();
                         doReset(Context);
                         return;
                     }
@@ -169,7 +177,7 @@ namespace trillbot.Classes {
             //Start of New Turn
             if(racers[position].crash) {
                 List<string> str = new List<string>();
-                str.Add(racers[position].name + "'s crash card triggers.");
+                str.Add(racers[position].name + "'s crash card triggers. The following racers crash out of the race:");
                 racers.Where(e=>e.distance == racers[position].distance).ToList().ForEach(e=> {
                     if (e != racers[position]) {
                         e.stillIn = false;
@@ -220,7 +228,6 @@ namespace trillbot.Classes {
                 if (r.distance > 24) {
                     r.distance = 24;
                 }
-                racer.update_racer(r);
             }
         }
 
@@ -335,7 +342,7 @@ namespace trillbot.Classes {
             Card c = r.cards[--i];
             Context.Channel.SendMessageAsync(r.name + " discarded " + c.title).GetAwaiter().GetResult();
             //Handle Survival Checks
-            SurvivalChecks(Context, r);
+            output(Context.Channel,SurvivalChecks(Context, r));
             //IF Entire Turn Completed Successfully
             endOfTurnLogic(Context, r, i);
         }
@@ -516,7 +523,6 @@ namespace trillbot.Classes {
                         return;
                     }
                     Context.Channel.SendMessageAsync(targetHazard(r,target,c)).GetAwaiter().GetResult();
-                    racer.replace_racer(target);
                     break;
                 case "Remedy":
                     switch(c.value) {
@@ -568,7 +574,7 @@ namespace trillbot.Classes {
                     return;
             }
             //Handle Survival Checks
-            SurvivalChecks(Context, r);
+            output(Context.Channel,SurvivalChecks(Context, r));
             //IF Entire Turn Completed Successfully
             if(oneAlive()) {
                 endOfTurnLogic(Context, r, i);
