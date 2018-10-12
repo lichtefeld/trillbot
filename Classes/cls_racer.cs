@@ -77,22 +77,37 @@ namespace trillbot.Classes {
             return this.name + " (" + this.ID + ")";
         }
 
-        public string leader() {
+        public string leader(int[] lengths = null) {
             var str = new List<string>();
-            str.Add(this.twoDigitDistance());
-            str.Add(this.nameID());
-            if(this.stillIn) {
-                str.Add("Alive");
+            if(lengths == null) {
+                str.Add(this.twoDigitDistance());
+                str.Add(this.nameID());
+                if(this.stillIn) {
+                    str.Add("Alive");
+                } else {
+                    str.Add("Dead");
+                }
+                str.Add(this.faction);
+                str.Add(this.ability.Title);
+                foreach(pair p in hazards) {
+                    str.Add(p.item1.title + " (" + (p.item2+1) + ")");
+                }
             } else {
-                str.Add("Dead");
-            }
-            str.Add(this.faction);
-            str.Add(this.ability.Title);
-            foreach(pair p in hazards) {
-                str.Add(p.item1.title + " (" + (p.item2+1) + ")");
+                str.Add("      " + this.twoDigitDistance());
+                str.Add(helpers.center(this.nameID(),lengths[0]));
+                if(this.stillIn) {
+                    str.Add(helpers.center("Alive",lengths[1]));
+                } else {
+                    str.Add(helpers.center("Dead",lengths[1]));
+                }
+                str.Add(helpers.center(this.faction,lengths[2]));
+                str.Add(helpers.center(this.ability.Title,lengths[3]));
+                foreach (pair p in hazards) {
+                    str.Add(p.item1.title + " (" + (p.item2+1) + ")");
+                }
             }
             var output_string = String.Join(" | ", str);
-            return output_string;
+                return output_string;
         }
 
         private string twoDigitDistance() {
@@ -103,33 +118,48 @@ namespace trillbot.Classes {
             }
         }
 
+        /* private string center(string s, int i) {
+            bool odd = false;
+            string spaces = "";
+            int toCenter = i - s.Length;
+            if (toCenter % 2 == 1) odd = true;
+            for(int j = 0; j < toCenter/2; j++) {
+                spaces += " ";
+            }
+            if(odd) {
+                return " " + spaces + s + spaces;
+            } else {
+                return spaces + s + spaces;
+            }
+        }*/
+
         public string currentStatus() {
             var str2 = new List<string>();
-            //Cards
-            str2.Add("**Current Cards**");
-            if (this.cards.Count == 0) { 
-                str2.Add("No Cards");
-            } else {
-                for(int i = 0; i < this.cards.Count; i++) {
-                    str2.Add("#" + (i+1) + ": " + this.cards[i].ToString());
+                //Cards
+                str2.Add("**Current Cards**");
+                if (this.cards.Count == 0) { 
+                    str2.Add("No Cards");
+                } else {
+                    for(int i = 0; i < this.cards.Count; i++) {
+                        str2.Add("#" + (i+1) + ": " + this.cards[i].ToString());
+                    }
                 }
-            }
-            //Hazards
-            str2.Add("-- -- -- -- --");
-            str2.Add("**Current Hazards** - If any Hazard is applied for 3 full turns, you will explode.");
-            if (this.hazards.Count == 0) str2.Add("None");
-            var j = 0;
-            foreach (pair p in this.hazards) {
-                str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + (p.item2+1) + " turns. " + id_to_condition[p.item1.ID]);
-            }
-            //Special Ability
-            str2.Add("-- -- -- -- --");
-            var active = "Passive";
-            if (this.ability.Active){
-                active = "Active";
-            }
-            str2.Add("**Special Ability:** " + this.ability.Title + " (" + active + ") - " + this.ability.Description);   
-            return String.Join(System.Environment.NewLine, str2);
+                //Hazards
+                str2.Add("-- -- -- -- --");
+                str2.Add("**Current Hazards** - If any Hazard is applied for 3 full turns, you will explode.");
+                if (this.hazards.Count == 0) str2.Add("None");
+                var j = 0;
+                foreach (pair p in this.hazards) {
+                    str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + (p.item2+1) + " turns. " + id_to_condition[p.item1.ID]);
+                }
+                //Special Ability
+                str2.Add("-- -- -- -- --");
+                var active = "Passive";
+                if (this.ability.Active){
+                    active = "Active";
+                }
+                str2.Add("**Special Ability:** " + this.ability.Title + " (" + active + ") - " + this.ability.Description);   
+                return String.Join(System.Environment.NewLine, str2);
         }
 
         private Dictionary<int, string> id_to_condition = new Dictionary<int, string> {
