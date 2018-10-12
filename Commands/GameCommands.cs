@@ -38,7 +38,7 @@ namespace trillbot.Commands
             if ( prix.Value == null) {
                 await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else {
-                await prix.Value.startGame(Context); //Consider checking for a player to be in the game, rather than the Administrator node
+                prix.Value.startGame(Context); //Consider checking for a player to be in the game, rather than the Administrator node
             }
         }
 
@@ -48,7 +48,7 @@ namespace trillbot.Commands
             if ( prix.Value == null) {
                 await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else { 
-                await prix.Value.joinGame(Context);
+                prix.Value.joinGame(Context);
             }
         }
 
@@ -58,7 +58,7 @@ namespace trillbot.Commands
             if ( prix.Value == null) {
                 await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else { 
-                await prix.Value.discardAsync(Context, i);
+                prix.Value.discardAsync(Context, i);
             }
         }
 
@@ -68,7 +68,7 @@ namespace trillbot.Commands
             if ( prix.Value == null) {
                 await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else { 
-                await prix.Value.playCardAsync(Context, i, racerID,hazardID);
+                prix.Value.playCardAsync(Context, i, racerID,hazardID);
             }
         }
 
@@ -78,7 +78,7 @@ namespace trillbot.Commands
             if ( prix.Value == null) {
                 await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else { 
-                await prix.Value.inGameAsync(Context);
+                prix.Value.inGameAsync(Context);
             }
         }
 
@@ -89,7 +89,7 @@ namespace trillbot.Commands
             if ( prix.Value == null) {
                 await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else { 
-                await prix.Value.doReset(Context);
+                prix.Value.doReset(Context);
                 Program.games.Remove(Context.Channel.Id);
                 if(Program.games.Count == 0) {
                     await Context.Client.SetGameAsync(null, null, StreamType.NotStreaming);
@@ -103,7 +103,7 @@ namespace trillbot.Commands
             if ( prix.Value == null) {
                 await ReplyAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else { 
-                await prix.Value.whosTurnAsync(Context);
+                prix.Value.whosTurnAsync(Context);
             }
         }
     }

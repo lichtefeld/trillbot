@@ -37,20 +37,20 @@ namespace trillbot.Classes {
 
         //Private Helper Functions
         //Output Function
-        private async Task output(ISocketMessageChannel channel, List<string> str) {
+        private void output(ISocketMessageChannel channel, List<string> str) {
             int count = 0;
             string output_string = "";
             foreach(string s in str) {
                 count += s.Length + 1;
                 if (count >= 2000) {
-                    await channel.SendMessageAsync(output_string);
+                    channel.SendMessageAsync(output_string);
                     count = s.Length;
                     output_string = s + System.Environment.NewLine;
                 } else {
                     output_string += s + System.Environment.NewLine;
                 }
             }
-            await channel.SendMessageAsync(output_string);
+            channel.SendMessageAsync(output_string);
         }
 
         private async Task output(ISocketMessageChannel channel, string str) {
@@ -62,19 +62,18 @@ namespace trillbot.Classes {
         }
 
         //Deal Cards
-        private async Task dealCards(SocketCommandContext Context)
+        private  void dealCards(SocketCommandContext Context)
         {
-            cards = this.generateDeck();
+            cards = generateDeck();
             foreach(racer r in racers) {
                 for(int i = 0; i < 8; i++) {
-                    if(cards.Count == 0) { cards = this.generateDeck(); }
+                    if(cards.Count == 0) { cards = generateDeck(); }
                     r.cards.Add(cards.Pop());
                 }
                 racer.update_racer(r);
                 var usr = Context.Guild.GetUser(r.player_discord_id);
-                await usr.SendMessageAsync(r.currentStatus());
+                usr.SendMessageAsync(r.currentStatus());
             }
-            //await Context.Channel.SendMessageAsync("Cards Dealt");
         }
 
         //Hazard Output
@@ -84,7 +83,7 @@ namespace trillbot.Classes {
         }
 
         //End of Turn Logic
-        private async Task endOfTurnLogic(SocketCommandContext Context, racer r, int i) { //Handle All Logic for Transitioning an End of Turn
+        private void endOfTurnLogic(SocketCommandContext Context, racer r, int i) { //Handle All Logic for Transitioning an End of Turn
             r.cards.RemoveAt(i);
             if(cards.Count == 0 ) cards = generateDeck();
             r.cards.Add(cards.Pop());
@@ -98,13 +97,13 @@ namespace trillbot.Classes {
             racer winner = checkWinner();
                 if(winner != null) {
                     SocketGuildUser usr = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
-                    await output(Context.Channel,usr.Mention + ", you have won the race!");
-                    await displayCurrentBoard(Context);
-                    await doReset(Context);
+                    output(Context.Channel,usr.Mention + ", you have won the race!");
+                    displayCurrentBoard(Context);
+                    doReset(Context);
                     return;
                 }
-            await displayCurrentBoard(Context);
-            await nextTurn(Context);
+            displayCurrentBoard(Context);
+            nextTurn(Context);
         }
 
         //Survival Checks
@@ -137,10 +136,10 @@ namespace trillbot.Classes {
         }
 
         //Increment Turn
-        private async Task nextTurn(SocketCommandContext Context) { //DM the next turn person
+        private void nextTurn(SocketCommandContext Context) { //DM the next turn person
             var usr = Context.Guild.GetUser(racers[position].player_discord_id);
             if (usr == null ) {
-                await Context.Channel.SendMessageAsync("Uhh boss, something went wrong.");
+                Context.Channel.SendMessageAsync("Uhh boss, something went wrong.");
                 return;
             }
             List<string> outOfRace = new List<string>();
@@ -152,19 +151,19 @@ namespace trillbot.Classes {
                     racer winner = checkWinner();
                     if(winner != null) {
                         var usr2 = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
-                        await Context.Channel.SendMessageAsync(usr2.Mention + ", you have won the race!");
-                        await doReset(Context);
+                        Context.Channel.SendMessageAsync(usr2.Mention + ", you have won the race!");
+                        doReset(Context);
                         return;
                     }
                     position -= racers.Count;
                     round++;
-                    await displayCurrentBoard(Context);
+                    displayCurrentBoard(Context);
                 }
                 usr = Context.Guild.GetUser(racers[position].player_discord_id);
             }
             if(outOfRace.Count != 0) {
                 string output_outOfRace = String.Join(System.Environment.NewLine,outOfRace);
-                await Context.Channel.SendMessageAsync(output_outOfRace);
+                Context.Channel.SendMessageAsync(output_outOfRace);
             }
 
             //Start of New Turn
@@ -178,19 +177,19 @@ namespace trillbot.Classes {
                     }
                 });
                 string crashed = String.Join(System.Environment.NewLine,str);
-                await Context.Channel.SendMessageAsync(crashed);
+                Context.Channel.SendMessageAsync(crashed);
                 racers[position].crash = false;
             }
 
             //DM Current Hand & Status
-            if (!(position == 0 && round == 1)) await usr.SendMessageAsync(racers[position].currentStatus());
+            if (!(position == 0 && round == 1)) usr.SendMessageAsync(racers[position].currentStatus());
 
             //Start Next Turn
-            await Context.Channel.SendMessageAsync(racers[position].name + " has the next turn.");
+            Context.Channel.SendMessageAsync(racers[position].name + " has the next turn.");
         }
 
         //Leaderboard Output
-        private async Task displayCurrentBoard(SocketCommandContext Context) {
+        private void displayCurrentBoard(SocketCommandContext Context) {
             List<string> str = new List<string>();
             str.Add("**Leaderboard!** Turn " + round + "." + (position+1));
             str.Add("```");
@@ -199,7 +198,7 @@ namespace trillbot.Classes {
             listRacer.ForEach(e=> str.Add(e.leader()));
             str.Add("```");
             string ouput_string = string.Join(System.Environment.NewLine, str);
-            await Context.Channel.SendMessageAsync(ouput_string);
+            Context.Channel.SendMessageAsync(ouput_string);
         }
 
         //One Player Still Alive?
@@ -249,12 +248,12 @@ namespace trillbot.Classes {
         }
 
         //Make New Deck of Shuffled Cards
-        private Stack<Card> generateDeck() {
+        private static Stack<Card> generateDeck() {
             return shuffleDeck(freshDeck());
         }
 
         //Make a fresh deck of cards
-        private List<Card> freshDeck() {
+        private static List<Card> freshDeck() {
             List<Card> c = new List<Card>();
             List<Card> temp = trillbot.Classes.Card.get_card();
 
@@ -268,7 +267,7 @@ namespace trillbot.Classes {
         }
 
         //Shuffle a deck of cards
-        private Stack<Card> shuffleDeck(List<Card> c) {
+        private static Stack<Card> shuffleDeck(List<Card> c) {
             Stack<Card> s = new Stack<Card>();
 
             while (c.Count > 0) {
@@ -281,36 +280,36 @@ namespace trillbot.Classes {
         }
 
         //Start Game
-        public async Task startGame(SocketCommandContext Context) {
-            await dealCards(Context); //Deal cards to all racers
+        public void startGame(SocketCommandContext Context) {
+            dealCards(Context); //Deal cards to all racers
             shuffleRacers(Context); //Randomize Turn Order
             runningGame = true;
-            await Context.Client.SetStatusAsync (UserStatus.Online);
-            await Context.Client.SetGameAsync ("The 86th Trilliant Grand Prix", null, StreamType.NotStreaming);
-            await displayCurrentBoard(Context);
-            await inGameAsync(Context);
-            await nextTurn(Context);
+            Context.Client.SetStatusAsync (UserStatus.Online);
+            Context.Client.SetGameAsync ("The 86th Trilliant Grand Prix", null, StreamType.NotStreaming);
+            displayCurrentBoard(Context);
+            inGameAsync(Context);
+            nextTurn(Context);
         }
 
         //Join Game
-        public async Task joinGame(SocketCommandContext Context) {
+        public void joinGame(SocketCommandContext Context) {
             racer racer = racer.get_racer(Context.Message.Author.Id);
             if (runningGame) {
-                await Context.Channel.SendMessageAsync("The game has already started");
+                Context.Channel.SendMessageAsync("The game has already started");
                 return;
             }
 
             if(racer == null) {
-                await Context.Channel.SendMessageAsync("No racer found for you, " + Context.User.Mention);
+                Context.Channel.SendMessageAsync("No racer found for you, " + Context.User.Mention);
                 return;
             } else {
                 if(racer.inGame) {
-                    await Context.Channel.SendMessageAsync("Hold up," +  Context.User.Mention + ", youcan only play in one game at a time!");
+                    Context.Channel.SendMessageAsync("Hold up," +  Context.User.Mention + ", youcan only play in one game at a time!");
                     return;
                 }
                 foreach (racer r in racers) {
                     if(r.ID == racer.ID) {
-                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you have already joined the game!");
+                        Context.Channel.SendMessageAsync(Context.User.Mention + ", you have already joined the game!");
                         return;
                     }
                 }
@@ -319,61 +318,61 @@ namespace trillbot.Classes {
                 racers.Add(racer);
             }
 
-            await Context.Channel.SendMessageAsync(Context.User.Mention + ", you have joined the game");
+            Context.Channel.SendMessageAsync(Context.User.Mention + ", you have joined the game");
         }
 
         //Discard a Card
-        public async Task discardAsync(SocketCommandContext Context, int i) {
+        public void discardAsync(SocketCommandContext Context, int i) {
             racer r = racers[position];
             if(r.player_discord_id != Context.Message.Author.Id) {
-                await Context.Channel.SendMessageAsync("It's not your turn!");
+                Context.Channel.SendMessageAsync("It's not your turn!");
                 return;
             }
             if (i < 1 && i > 8) {
-                await Context.Channel.SendMessageAsync("You only have 8 cards in your hand! Provide a number 1-8.");
+                Context.Channel.SendMessageAsync("You only have 8 cards in your hand! Provide a number 1-8.");
                 return;
             }
             Card c = r.cards[--i];
-            await Context.Channel.SendMessageAsync(r.name + " discarded " + c.title);
+            Context.Channel.SendMessageAsync(r.name + " discarded " + c.title);
             //Handle Survival Checks
             SurvivalChecks(Context, r);
             //IF Entire Turn Completed Successfully
-            await endOfTurnLogic(Context, r, i);
+            endOfTurnLogic(Context, r, i);
         }
 
         //Play a Card
-        public async Task playCardAsync(SocketCommandContext Context, int i, int racerID = -1, int hazardID = -1) {
+        public void playCardAsync(SocketCommandContext Context, int i, int racerID = -1, int hazardID = -1) {
             racer r = racers[position];
             if(r.player_discord_id != Context.Message.Author.Id) {
-                await Context.Channel.SendMessageAsync("It's not your turn!");
+                Context.Channel.SendMessageAsync("It's not your turn!");
                 return;
             }
             if (i < 1 && i > 8) {
-                await Context.Channel.SendMessageAsync("You only have 8 cards in your hand! Provide a number 1-8.");
+                Context.Channel.SendMessageAsync("You only have 8 cards in your hand! Provide a number 1-8.");
                 return;
             }
             Card c = r.cards[--i];
             switch(c.type) { 
                 case "Movement":
                     if(!r.canMove() && racerID != 1) {
-                        await Context.Channel.SendMessageAsync("You currently can't move. Try solving a hazard!");
+                        Context.Channel.SendMessageAsync("You currently can't move. Try solving a hazard!");
                         return;
                     }
                     if(c.value > 2 && r.maxMove2() && racerID != 1) {
-                        await Context.Channel.SendMessageAsync("You currently can't move more than 2 spaces. Try solving a hazard!");
+                        Context.Channel.SendMessageAsync("You currently can't move more than 2 spaces. Try solving a hazard!");
                         return;
                     }
                     switch(c.value) {
                         case 6:
                             if (racerID <= -1 || racerID > 1) {
-                                await Context.Channel.SendMessageAsync("You didn't indicate which version of this card to use.");
+                                Context.Channel.SendMessageAsync("You didn't indicate which version of this card to use.");
                                 return;
                             }
                             else if (racerID == 1) {
                                 c = Card.get_card(12);
                                 var h2 = r.hazards.Where(e=> e.item1.ID == remedy_to_hazards[(int)c.value].Item1 || e.item1.ID == remedy_to_hazards[(int)c.value].Item2 ).ToList();
                                 if (h2 == null) {
-                                    await Context.Channel.SendMessageAsync("You can't play this card. Try another.");
+                                    Context.Channel.SendMessageAsync("You can't play this card. Try another.");
                                     return;
                                 }
                                 string s2 = h2[0].item1.title;
@@ -385,16 +384,16 @@ namespace trillbot.Classes {
                                 h2.ForEach(e=> {
                                     r.hazards.Remove(e);
                                 });
-                                await Context.Channel.SendMessageAsync(r.name + " played " + c.title + " solving " + s2);
+                                Context.Channel.SendMessageAsync(r.name + " played " + c.title + " solving " + s2);
                                 break;
                             } else if (racerID == 0) {
                                 r.distance += c.value;
                                 if (r.distance > 24) {
                                     r.distance -= c.value;
-                                    await Context.Channel.SendMessageAsync("Woah there, you can't move past space 24! Try a different card.");
+                                    Context.Channel.SendMessageAsync("Woah there, you can't move past space 24! Try a different card.");
                                     return;
                                 }
-                                await Context.Channel.SendMessageAsync(r.name + " played a " + c.title + " spaces. They are now at a distance of " + r.distance + " units." );
+                                Context.Channel.SendMessageAsync(r.name + " played a " + c.title + " spaces. They are now at a distance of " + r.distance + " units." );
                             }
                             break;
                         case 1:
@@ -404,13 +403,13 @@ namespace trillbot.Classes {
                             r.distance += c.value;
                             if (r.distance > 24) {
                                 r.distance -= c.value;
-                                await Context.Channel.SendMessageAsync("Woah there, you can't move past space 24! Try a different card.");
+                                Context.Channel.SendMessageAsync("Woah there, you can't move past space 24! Try a different card.");
                                 return;
                             }
-                            await Context.Channel.SendMessageAsync(r.name + " played a " + c.title + " spaces. They are now at a distance of " + r.distance + " units." );
+                            Context.Channel.SendMessageAsync(r.name + " played a " + c.title + " spaces. They are now at a distance of " + r.distance + " units." );
                             break;
                         default:
-                            await Context.Channel.SendMessageAsync("Um boss, something went wrong. Let's try again!");
+                            Context.Channel.SendMessageAsync("Um boss, something went wrong. Let's try again!");
                             return;
                     }
                     break;
@@ -426,23 +425,23 @@ namespace trillbot.Classes {
                                 listRacer[j].addHazard(c);
                             }
                             string debreis = String.Join(", ",str);
-                            await Context.Channel.SendMessageAsync(debreis);
+                            Context.Channel.SendMessageAsync(debreis);
                         break;
                         case 1:
                             string ram = "";
                             if(!r.canMove()) {
-                                await Context.Channel.SendMessageAsync("Sorry, you can't move. Try a different card.");
+                                Context.Channel.SendMessageAsync("Sorry, you can't move. Try a different card.");
                                 return;
                             } 
                             if(r.maxMove2()) {
-                                await Context.Channel.SendMessageAsync("Sorry, you can't move this far! Try a different card");
+                                Context.Channel.SendMessageAsync("Sorry, you can't move this far! Try a different card");
                                 return;
                             }
                             var targets = racers.Where(e=>e.distance == r.distance+1).ToList();
                             r.distance += 3;
                             if (r.distance > 24) {
                                 r.distance -= 3;
-                                await Context.Channel.SendMessageAsync("Woah there, you can't move past space 24! Try a different card.");
+                                Context.Channel.SendMessageAsync("Woah there, you can't move past space 24! Try a different card.");
                                 return;
                             }
                             if(targets.Count == 0) {
@@ -457,25 +456,25 @@ namespace trillbot.Classes {
                                 ram = String.Join(", ",tar);
                                 ram += ". " + r.name + " moves forward 3 spaces to a distance of " + r.distance;
                             }
-                            await Context.Channel.SendMessageAsync(ram);
+                            Context.Channel.SendMessageAsync(ram);
                         break;
                         case 2:
                             if(!r.canMove()) {
-                                await Context.Channel.SendMessageAsync("Sorry, you can't move. Try a different card.");
+                                Context.Channel.SendMessageAsync("Sorry, you can't move. Try a different card.");
                                 return;
                             }
                             r.distance++;
                             if (r.distance > 24) {
                                 r.distance--;
-                                await Context.Channel.SendMessageAsync("Woah there, you can't move past space 24! Try a different card.");
+                                Context.Channel.SendMessageAsync("Woah there, you can't move past space 24! Try a different card.");
                                 return;
                             }
                             r.crash = true;
-                            await Context.Channel.SendMessageAsync(r.name + " plays a **CRASH** card. You don't want to be on their space at the start of their next turn!");
+                            Context.Channel.SendMessageAsync(r.name + " plays a **CRASH** card. You don't want to be on their space at the start of their next turn!");
                         break;
                         case 3:
                             if(!r.canMove()) {
-                                await Context.Channel.SendMessageAsync("You currently can't move. Try solving a hazard!");
+                                Context.Channel.SendMessageAsync("You currently can't move. Try solving a hazard!");
                                 return;
                             }
                             var listRacer2 = racers.OrderByDescending(e=> e.distance).ToList();
@@ -502,42 +501,42 @@ namespace trillbot.Classes {
                             }
                             r.distance++;
                             string debris = String.Join(", ",str3);
-                            await Context.Channel.SendMessageAsync(debris + ". " + r.name + " also moves one space.");
+                            Context.Channel.SendMessageAsync(debris + ". " + r.name + " also moves one space.");
                         break;
                     }
                     break;
                 case "THazard":
                     var target = racers.FirstOrDefault(e=>e.ID == racerID);
                     if(target == null) {
-                        await Context.Channel.SendMessageAsync("You didn't target a valid racer. Try again.");
+                        Context.Channel.SendMessageAsync("You didn't target a valid racer. Try again.");
                         return;
                     }
                     if (target == r) {
-                        await Context.Channel.SendMessageAsync("You can't target yourself...");
+                        Context.Channel.SendMessageAsync("You can't target yourself...");
                         return;
                     }
-                    await Context.Channel.SendMessageAsync(targetHazard(r,target,c));
+                    Context.Channel.SendMessageAsync(targetHazard(r,target,c));
                     racer.replace_racer(target);
                     break;
                 case "Remedy":
                     switch(c.value) {
                         case 3:
                         if(racerID < 0 || hazardID < 0) {
-                            await Context.Channel.SendMessageAsync("You need to provide two hazards to target. If you only have one provide a `0` as the other input.");
+                            Context.Channel.SendMessageAsync("You need to provide two hazards to target. If you only have one provide a `0` as the other input.");
                             return;
                         }
                         if(--racerID > r.hazards.Count || --hazardID > r.hazards.Count) {
-                            await Context.Channel.SendMessageAsync("One of your inputs is outside of acceptable limits. Please try again");
+                            Context.Channel.SendMessageAsync("One of your inputs is outside of acceptable limits. Please try again");
                             return;
                         }
                         if(racerID == -1) {
-                            await Context.Channel.SendMessageAsync(r.name + " played " + c.title.ToLower() + " solving " + r.hazards[hazardID].item1.title.ToLower());
+                            Context.Channel.SendMessageAsync(r.name + " played " + c.title.ToLower() + " solving " + r.hazards[hazardID].item1.title.ToLower());
                             r.hazards.RemoveAt(hazardID);
                         } else if (hazardID == -1) {
-                            await Context.Channel.SendMessageAsync(r.name + " played " + c.title.ToLower() + " solving " + r.hazards[racerID].item1.title.ToLower());
+                            Context.Channel.SendMessageAsync(r.name + " played " + c.title.ToLower() + " solving " + r.hazards[racerID].item1.title.ToLower());
                             r.hazards.RemoveAt(racerID);
                         } else {
-                            await Context.Channel.SendMessageAsync(r.name + " played " + c.title.ToLower() + " solving " + r.hazards[racerID].item1.title.ToLower() + " and " + r.hazards[hazardID].item1.title.ToLower());
+                            Context.Channel.SendMessageAsync(r.name + " played " + c.title.ToLower() + " solving " + r.hazards[racerID].item1.title.ToLower() + " and " + r.hazards[hazardID].item1.title.ToLower());
                             if(racerID > hazardID) {   
                                 r.hazards.RemoveAt(racerID);
                                 r.hazards.RemoveAt(hazardID);
@@ -551,7 +550,7 @@ namespace trillbot.Classes {
                         default:
                         var h = r.hazards.Where(e=> e.item1.ID == remedy_to_hazards[(int)c.value].Item1 || e.item1.ID == remedy_to_hazards[(int)c.value].Item2 ).ToList();
                         if (h.Count == 0) {
-                            await Context.Channel.SendMessageAsync("You can't play this card. Try another.");
+                            Context.Channel.SendMessageAsync("You can't play this card. Try another.");
                             return;
                         }
                         List<string> str = new List<string>();
@@ -560,30 +559,30 @@ namespace trillbot.Classes {
                             str.Add(e.item1.title.ToLower());
                         });
                         string solved = String.Join(", ",str);
-                        await Context.Channel.SendMessageAsync(r.name + " played " + c.title + " solving " + solved);
+                        Context.Channel.SendMessageAsync(r.name + " played " + c.title + " solving " + solved);
                         break;
                     }
                     break;
                 default:
-                    await Context.Channel.SendMessageAsync("Um boss, something went wrong. Let's try again!");
+                    Context.Channel.SendMessageAsync("Um boss, something went wrong. Let's try again!");
                     return;
             }
             //Handle Survival Checks
             SurvivalChecks(Context, r);
             //IF Entire Turn Completed Successfully
             if(oneAlive()) {
-                await endOfTurnLogic(Context, r, i);
+                endOfTurnLogic(Context, r, i);
             } else {
-                await Context.Channel.SendMessageAsync("All racers are dead. This ends the game.");
-                await doReset(Context);
+                Context.Channel.SendMessageAsync("All racers are dead. This ends the game.");
+                doReset(Context);
                 return;
             }
         }
         
         //Display Current players in the game
-        public async Task inGameAsync(SocketCommandContext Context) {
+        public void inGameAsync(SocketCommandContext Context) {
             if (racers.Count == 0) {
-                await Context.Channel.SendMessageAsync("No racers in game.");
+                Context.Channel.SendMessageAsync("No racers in game.");
                 return;
             }
             List<string> str = new List<string>();
@@ -596,25 +595,25 @@ namespace trillbot.Classes {
                 }
             }
             string output = String.Join(System.Environment.NewLine, str);
-            await Context.Channel.SendMessageAsync(output);
+            Context.Channel.SendMessageAsync(output);
         }
 
         //Mannually Reset a Game
-        public async Task doReset(SocketCommandContext Context) {
+        public void doReset(SocketCommandContext Context) {
             racers.ForEach(e=> {
                 e.reset();
                 racer.replace_racer(e);
             });
-            await Context.Channel.SendMessageAsync("Game Reset");
+            Context.Channel.SendMessageAsync("Game Reset");
         }
 
         //Ping the current players turn
-        public async Task whosTurnAsync(SocketCommandContext Context) { //Need to remind a person its there turn?
+        public void whosTurnAsync(SocketCommandContext Context) { //Need to remind a person its there turn?
             var usr = Context.Guild.GetUser(racers[position].player_discord_id);
             if (usr == null ) {
-                await Context.Channel.SendMessageAsync("Uhh boss, something went wrong.");
+                Context.Channel.SendMessageAsync("Uhh boss, something went wrong.");
             }
-            await Context.Channel.SendMessageAsync( "Hey " + usr.Mention + " It's your turn now!");
+            Context.Channel.SendMessageAsync( "Hey " + usr.Mention + " It's your turn now!");
         }
 
     }
