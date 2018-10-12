@@ -23,16 +23,23 @@ namespace trillbot.Classes {
         private int position = 0;
         private int round = 1;
         public string channelName { get; set; } = "";
-        private Dictionary<int, Tuple<int,int>> remedy_to_hazards = new Dictionary<int, Tuple<int,int>> {
+        private static Dictionary<int, Tuple<int,int>> remedy_to_hazards = new Dictionary<int, Tuple<int,int>> {
             {0,new Tuple<int, int>(5,6)},
             {1,new Tuple<int,int>(8,9)},
             {2,new Tuple<int,int>(10,11)}
         };
-        private Dictionary<int, string> target_hazard_output = new Dictionary<int, string> {
+        private static Dictionary<int, string> target_hazard_output = new Dictionary<int, string> {
             {0, ". They are unable to move until they remove this Hazard."},
             {1, ". They better not have any other Hazards applied!"},
             {2,". They have 3 turns to remove this Hazard."},
             {3, ". They are unable to move more than two spaces!"}
+        };
+        private static Dictionary<long,int> ability_to_save = new Dictionary<long, int> {
+            {2, 5},
+            {3, 6},
+            {4, 8},
+            {5, 9},
+            {6, 10}
         };
         private int[] lengths = {15, 8, 7, 15};
 
@@ -135,7 +142,7 @@ namespace trillbot.Classes {
                 r.stillIn = false;
                 str.Add(r.name + " subcumbs to Sabotage and their vehicle explodes!");
             }
-            pair remove = null;
+            List<pair> remove = new List<pair>();
             r.hazards.ForEach(e=>{
                 e.item2++;
                 if(e.item2 > 2)
@@ -145,11 +152,18 @@ namespace trillbot.Classes {
                 }
 
                 if(e.item1.ID == 16 && e.item2 > 0) {
-                    remove = e;
+                    remove.Add(e);
+                }
+                
+                if (1 < r.ability.ID && r.ability.ID < 7) {
+                    if(e.item1.ID == ability_to_save[r.ability.ID]) {
+                        str.Add(r.name + " uses their " + r.ability.Title + " to solve " + e.item1.title + ".");
+                        remove.Add(e);
+                    }
                 }
             });
-            if(remove != null) {
-                r.hazards.Remove(remove);
+            foreach(pair p in remove) {
+                r.hazards.Remove(p);
             }
             if (r.distance < 0) {
                 r.distance = 0;
@@ -157,7 +171,7 @@ namespace trillbot.Classes {
             return str;
         }
 
-        //Show ahdn
+        //Show hand
         public void showHand(SocketCommandContext Context) {
             var r = racers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);
             if(r == null) {
@@ -255,7 +269,15 @@ namespace trillbot.Classes {
         //Passive Movement
         private void endOfTurn(SocketCommandContext Context) {
             foreach (racer r in racers ) {
-                r.distance++;
+                if(r.ability.ID == 9 && r.hazards.ToList().FirstOrDefault(e=> e.item1.ID == 5) != null) {
+                    r.distance+=3;
+                } else if (r.ability.ID == 10 && r.hazards.ToList().FirstOrDefault(e=> e.item1.ID == 6) != null) {
+                    r.distance+=3;
+                } else if (r.ability.ID == 11 && r.hazards.ToList().FirstOrDefault(e=> e.item1.ID == 9) != null) {
+                    r.distance+=4;
+                } else {
+                    r.distance++;
+                }
                 if (r.distance > 24) {
                     r.distance = 24;
                 }
@@ -268,6 +290,9 @@ namespace trillbot.Classes {
                 if (r.distance == 24 && r.stillIn) {
                     return r;
                 }
+                if(r.distance == 24 && !r.stillIn && r.ability.ID == 8) {
+                    return r;
+                }
             }
             return null;
         }
@@ -278,6 +303,7 @@ namespace trillbot.Classes {
 
             while (racers.Count > 0) {
                 int num = trillbot.Program.rand.Next(0,racers.Count);
+                if(racers[num].ability.ID == 0) racers[num].distance=2;
                 temp.Add(racers[num]);
                 racers.RemoveAt(num);
             }
@@ -520,6 +546,7 @@ namespace trillbot.Classes {
                             List<string> str3 = new List<string>();
                             int z = 3;
                             bool foundR = false;
+                            string extra = "";
                             for(int j = 0; j < listRacer2.Count && j < z; j++) {
                                 if(listRacer2[j] == r) {
                                     foundR = true;
@@ -536,10 +563,14 @@ namespace trillbot.Classes {
                                         str3.Add(listRacer2[j].name);
                                         listRacer2[j].addHazard(c);
                                     }
+                                    if(listRacer2[j].ability.ID == 13) {
+                                        extra += ". " + listRacer2[j].name + " uses " + listRacer2[j].ability.Title + " back at " + r.name + " they get hit by Dazzle as well";
+                                        r.addHazard(c, -1);
+                                    }
                                 }
                             }
                             r.distance++;
-                            string debris = String.Join(", ",str3);
+                            string debris = String.Join(", ",str3) + extra;
                             Context.Channel.SendMessageAsync(debris + ". " + r.name + " also moves one space.").GetAwaiter().GetResult();
                         break;
                     }

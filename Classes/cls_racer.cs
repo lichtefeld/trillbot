@@ -30,11 +30,18 @@ namespace trillbot.Classes {
         public bool stillIn { get; set; } = true;
         public bool crash { get; set; } = false;
         public Ability ability = Ability.get_ability(1);
+        public bool abilityRemaining = true;
 
         public void addHazard(Card card) {
             var h = hazards.FirstOrDefault(e=>e.item1 == card);
             if (h == null) {
                 hazards.Add(new pair(card,0));
+            }
+        }
+        public void addHazard(Card card, int i) {
+            var h = hazards.FirstOrDefault(e=>e.item1 == card);
+            if (h == null) {
+                hazards.Add(new pair(card,i));
             }
         }
         public bool canMove() {
@@ -71,6 +78,7 @@ namespace trillbot.Classes {
             hazards = new List<pair>();
             cards = new List<Classes.Card>();
             inGame = false;
+            abilityRemaining = true;
         }
 
         public string nameID() {
