@@ -115,6 +115,27 @@ namespace trillbot.Commands
             await Context.User.SendMessageAsync(output_string);
         }
 
+        [Command("showcards")]
+        public async Task showCardsAsync() {
+            var cards = Card.get_card();
+            var str = new List<string>();
+            var count = 13;
+            str.Add("**Card List**");
+            for(int i = 0; i < cards.Count; i++) {
+                var s = "**" + cards[i].title + "** - " + cards[i].description;
+                count += s.Length;
+                if (count > 2000) {
+                    var temp_output_string = String.Join(System.Environment.NewLine,str);
+                    await Context.User.SendMessageAsync(temp_output_string);
+                    count = s.Length;
+                    str = new List<string>();
+                }
+                str.Add(s);
+            }
+            var output_string = String.Join(System.Environment.NewLine,str);
+            await Context.User.SendMessageAsync(output_string);
+        }
+
         [Command("deleteracer")]
         public async Task DeleteRacerAsync()
         {

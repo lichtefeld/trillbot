@@ -34,12 +34,35 @@ namespace trillbot.Classes {
             {2,". They have 3 turns to remove this Hazard."},
             {3, ". They are unable to move more than two spaces!"}
         };
+        private int[] lengths = {15, 8, 7, 15};
 
         //Private Helper Functions
+        //Leaderboard Centering Math
+        private void leaderCenter() {
+            foreach (racer r in racers) {
+                for(int i = 0; i < 4; i++) {
+                    switch (i) {
+                        case 0:
+                        if(r.nameID().Length > lengths[i]) lengths[i] = r.nameID().Length;
+                        break;
+                        case 2:
+                        if(r.faction.Length > lengths[i]) lengths[i] = r.nameID().Length;
+                        break;
+                        case 3:
+                        if(r.ability.Title.Length > lengths[i]) lengths[i] = r.ability.Title.Length;
+                        break;
+                        default:
+                        break;
+                    }
+                }
+            }
+        }
+
         //Output Function
         private void output(ISocketMessageChannel channel, List<string> str) {
             int count = 0;
             string output_string = "";
+            if (str.Count == 0) return; 
             foreach(string s in str) {
                 count += s.Length + 1;
                 if (count >= 2000) {
@@ -54,6 +77,7 @@ namespace trillbot.Classes {
         }
 
         private void output(ISocketMessageChannel channel, string str) {
+            if (str.Length == 0) return;
             if (str.Length > 2000) {
                 //Handle Being Passed a String longer than 2k characers
             } else {
@@ -203,7 +227,7 @@ namespace trillbot.Classes {
             str.Add("```");
             str.Add("Distance | Racer Name (ID) | Still In | Sponsor | Special Ability | Hazards ");
             var listRacer = racers.OrderByDescending(e=> e.distance).ToList();
-            listRacer.ForEach(e=> str.Add(e.leader()));
+            listRacer.ForEach(e=> str.Add(e.leader(lengths)));
             str.Add("```");
             string ouput_string = string.Join(System.Environment.NewLine, str);
             Context.Channel.SendMessageAsync(ouput_string).GetAwaiter().GetResult();
@@ -290,6 +314,7 @@ namespace trillbot.Classes {
         public void startGame(SocketCommandContext Context) {
             dealCards(Context); //Deal cards to all racers
             shuffleRacers(Context); //Randomize Turn Order
+            leaderCenter();
             runningGame = true;
             Context.Client.SetStatusAsync (UserStatus.Online).GetAwaiter().GetResult();
             Context.Client.SetGameAsync ("The 86th Trilliant Grand Prix", null, StreamType.NotStreaming).GetAwaiter().GetResult();
@@ -444,7 +469,7 @@ namespace trillbot.Classes {
                                 Context.Channel.SendMessageAsync("Sorry, you can't move this far! Try a different card").GetAwaiter().GetResult();
                                 return;
                             }
-                            var targets = racers.Where(e=>e.distance == r.distance+1).ToList();
+                            List<racer> targets = racers.Where(e=>e.distance == r.distance+1).ToList();
                             r.distance += 3;
                             if (r.distance > 24) {
                                 r.distance -= 3;
