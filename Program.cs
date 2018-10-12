@@ -30,9 +30,9 @@ namespace trillbot
         public async Task RunBotAsync()
         {
 
-            string file = "trillbot.json";
+            var file = "trillbot.json";
 
-            Dictionary<string, string> secrets = JsonConvert.DeserializeObject<Dictionary<string, string>>(System.IO.File.ReadAllText(file));
+            var secrets = JsonConvert.DeserializeObject<Dictionary<string, string>>(System.IO.File.ReadAllText(file));
 
             _client = new DiscordSocketClient();
             _commands = new CommandService();
@@ -75,26 +75,26 @@ namespace trillbot
 
             if (message.Content.Contains('“') || message.Content.Contains('”'))
             {
-                string msg = message.Content.Replace('“', '"').Replace('”', '"');
+                var msg = message.Content.Replace('“', '"').Replace('”', '"');
                 await message.ModifyAsync(e => e.Content = msg);
             }
 
-            string msg_prefix = message.Content.ToString().Substring(0, 3);
+            var msg_prefix = message.Content.ToString().Substring(0, 3);
 
             //if the prefix is in the list of valid prefixes, continue
             if (prefixes.Any(msg_prefix.Contains))
             {
                 //log that we have a command sent
-                string logmessage = String.Concat(message.Author, " sent command ", message.Content);
+                var logmessage = String.Concat(message.Author, " sent command ", message.Content);
 
                 await Log(new LogMessage(LogSeverity.Info, "VERBOSE", logmessage));
 
-                int argPosition = 0;
+                var argPosition = 0;
                 if (message.HasStringPrefix("ta!", ref argPosition) || message.HasMentionPrefix(_client.CurrentUser, ref argPosition))
                 {
                     var context = new SocketCommandContext(_client, message);
 
-                    string server_id = context.Guild.Id.ToString();
+                    var server_id = context.Guild.Id.ToString();
 
                     var result = await _commands.ExecuteAsync(context, argPosition, _services);
                     if (!result.IsSuccess)

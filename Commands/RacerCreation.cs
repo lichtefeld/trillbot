@@ -23,12 +23,12 @@ namespace trillbot.Commands
         [Command("createracer")]
         public async Task NewracerAsync(string name, string faction, int ID = -1)
         {
-            Classes.racer racer = racer.get_racer(Context.Message.Author.Id);
-            if(racer != null) {
+            var r = racer.get_racer(Context.Message.Author.Id);
+            if(r != null) {
                 await ReplyAsync("You already have a racer. Please use `ta!deleteracer` to remove your old one first");
                 return;
             }
-            SocketGuildUser usr = Context.Guild.GetUser(Context.Message.Author.Id);
+            var usr = Context.Guild.GetUser(Context.Message.Author.Id);
             if (name == null) {
                 name = usr.Nickname != null ? usr.Nickname : usr.Username;
             }
@@ -39,14 +39,14 @@ namespace trillbot.Commands
             else 
             {
                 if(ID == -1) {
-                    racer = new racer
+                    r = new racer
                     {
                         name = name,
                         faction = faction
                     };
                 } else {
-                    Ability a = Ability.get_ability(--ID);
-                    racer = new racer
+                    var a = Ability.get_ability(--ID);
+                    r = new racer
                     {
                         name = name,
                         faction = faction,
@@ -54,9 +54,9 @@ namespace trillbot.Commands
                     };
                 }
 
-                racer.player_discord_id = Context.Message.Author.Id;
+                r.player_discord_id = Context.Message.Author.Id;
 
-                racer.insert_racer(racer);
+                racer.insert_racer(r);
 
                 await ReplyAsync(name + ", You've got a racer!");
             }
@@ -65,79 +65,76 @@ namespace trillbot.Commands
 
         [Command("showracer")]
         public async Task showRacerAsync() {
-            Classes.racer racer = racer.get_racer(Context.Message.Author.Id);
-            if(racer == null) {
+            var r = racer.get_racer(Context.Message.Author.Id);
+            if(r == null) {
                 await ReplyAsync("You don't have a racer.");
             } else {
-                await ReplyAsync("",false,helpers.ObjToEmbed(racer,"name"),null);
+                await ReplyAsync("",false,helpers.ObjToEmbed(r,"name"),null);
             }
         }
 
         [Command("updateability")]
         public async Task UpdateAbilityAsync(int ID) {
-            Classes.racer racer = racer.get_racer(Context.Message.Author.Id);
+            var r = racer.get_racer(Context.Message.Author.Id);
 
-            if(racer == null) {
+            if(r == null) {
                 await ReplyAsync("No racer found for you");
             } else {
-                if (racer.inGame) {
+                if (r.inGame) {
                     await ReplyAsync("You can't modify your racer while racing!");
                     return;
                 }
-                Ability a = Ability.get_ability(--ID);
-                racer.ability = a;
+                var a = Ability.get_ability(--ID);
+                r.ability = a;
                 await ReplyAsync("Ability changed to " + a.Title);
             }
         }
 
         [Command("showabilities")]
         public async Task DisplayAbilitiesAsync() {
-            List<Classes.Ability> abilities = Ability.get_ability();
-            List<string> str = new List<string>();
-            int count = 21;
+            var abilities = Ability.get_ability();
+            var str = new List<string>();
+            var count = 21;
             str.Add("**Special Abilities**");
             for(int i = 0; i < abilities.Count; i++) {
-                string active = "Passive";
+                var active = "Passive";
                 if (abilities[i].Active){
                     active = "Active";
                 }
-                string s = "**#" + (i+1) + ":** " + abilities[i].Title + " (" + active + ") - *" +abilities[i].Description + "*";
+                var s = "**#" + (i+1) + ":** " + abilities[i].Title + " (" + active + ") - *" +abilities[i].Description + "*";
                 count += s.Length;
                 if (count > 2000) {
-                    string temp_output_string = String.Join(System.Environment.NewLine,str);
+                    var temp_output_string = String.Join(System.Environment.NewLine,str);
                     await Context.User.SendMessageAsync(temp_output_string);
                     count = s.Length;
                     str = new List<string>();
                 }
                 str.Add(s);
             }
-            string output_string = String.Join(System.Environment.NewLine,str);
+            var output_string = String.Join(System.Environment.NewLine,str);
             await Context.User.SendMessageAsync(output_string);
         }
 
         [Command("showhand")]
         public async Task DisplayRacerHandAsync() {
-            Classes.racer racer = racer.get_racer(Context.Message.Author.Id);
-
-            if(racer == null) {
+            var r = racer.get_racer(Context.Message.Author.Id);
+            if(r == null) {
                 await ReplyAsync("No racer found for you");
             } else {
-                await Context.User.SendMessageAsync(racer.currentStatus());
+                await Context.User.SendMessageAsync(r.currentStatus());
             }
         }
 
-        
-
         [Command("deleteracer")]
-        public async Task DeleteRacerAsync(params string[] args)
+        public async Task DeleteRacerAsync()
         {
-            Classes.racer racer = racer.get_racer(Context.Message.Author.Id);
+            var r = racer.get_racer(Context.Message.Author.Id);
 
-            if(racer == null) {
+            if(r == null) {
                 await ReplyAsync("No racer found for you");
             } else {
 
-                Classes.racer.delete_racer(racer);
+                Classes.racer.delete_racer(r);
                 await ReplyAsync("Racer Deleted.");
             }
         }
@@ -156,13 +153,15 @@ namespace trillbot.Commands
         [Command("listracers")]
         public async Task ListRacersAsync() //Need to make this DM & account for more than 2k characters. Using a list to build output strings.
         {
-            List<Classes.racer> racers = racer.get_racer();
-            string s = "Racers for the Grand Prix!" + System.Environment.NewLine + "```" + System.Environment.NewLine;
+            var racers = racer.get_racer();
+            var s = new List<string>();
+            s.Add("Racers for the Grand Prix!");
+            s.Add("```" );
             foreach(Classes.racer r in racers) {
-                s += "ID: #" + r.ID + " | " + r.name + System.Environment.NewLine;
+                s.Add("ID: #" + r.ID + " | " + r.name);
             }
-            s += "```";
-            await ReplyAsync(s);
+            s.Add("```");
+            await ReplyAsync(String.Join(System.Environment.NewLine,s));
         }
     }
 }

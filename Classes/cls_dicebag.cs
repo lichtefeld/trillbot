@@ -80,7 +80,7 @@ namespace trillbot.Classes.Utilities {
         /**
          * The default dice-rolling method. All methods link to this one.
          */
-        private int InternalRoll( uint dice ) {
+        private static int InternalRoll( uint dice ) {
             return 1 + Program.rand.Next( ( int )dice );
         }
 
@@ -89,7 +89,7 @@ namespace trillbot.Classes.Utilities {
         /// </summary>
         /// <param name="d">The d.</param>
         /// <returns>The Number rolled.</returns>
-        public int Roll( Dice d ) {
+        public static int Roll( Dice d ) {
             return InternalRoll( ( uint )d );
         }
 
@@ -100,7 +100,7 @@ namespace trillbot.Classes.Utilities {
         /// <param name="dice">The dice.</param>
         /// <param name="modifier">The modifier.</param>
         /// <returns></returns>
-        public int RollWithModifier( Dice dice , uint modifier ) {
+        public static int RollWithModifier( Dice dice , uint modifier ) {
             return InternalRoll( ( uint )dice ) + ( int )modifier;
         }
 
@@ -110,8 +110,8 @@ namespace trillbot.Classes.Utilities {
         /// <param name="d">The d.</param>
         /// <param name="times">The times.</param>
         /// <returns>A Collection Holding the dice rolls.</returns>
-        public List<int> RollQuantity( Dice d , uint times ) {
-            List<int> rolls = new List<int>();
+        public static List<int> RollQuantity( Dice d , uint times ) {
+            var rolls = new List<int>();
             for( int i = 0 ; i < times ; i++ ) {
                 rolls.Add( InternalRoll( ( uint )d ) );
             }

@@ -94,10 +94,10 @@ namespace trillbot.Classes {
                 position -= racers.Count;
                 round++;
             }
-            racer winner = checkWinner();
+            var winner = checkWinner();
                 if(winner != null) {
                     SocketGuildUser usr = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
-                    output(Context.Channel,usr.Mention + ", you have won the race!");
+                    Context.Channel.SendMessageAsync(usr.Mention + ", you have won the race!");
                     displayCurrentBoard(Context);
                     doReset(Context);
                     return;
