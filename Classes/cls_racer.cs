@@ -31,6 +31,7 @@ namespace trillbot.Classes {
         public bool crash { get; set; } = false;
         public Ability ability = Ability.get_ability(1);
         public bool abilityRemaining = true;
+        public racer coreSync = null;
 
         public void addHazard(Card card) {
             var h = hazards.FirstOrDefault(e=>e.item1 == card);

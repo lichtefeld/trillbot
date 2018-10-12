@@ -386,6 +386,159 @@ namespace trillbot.Classes {
             Context.Channel.SendMessageAsync(Context.User.Mention + ", you have joined the game").GetAwaiter().GetResult();
         }
 
+        public void playAbility(SocketCommandContext Context, int i = -1, int j = -1) {
+            racer r = racers[position];
+            if(r.player_discord_id != Context.Message.Author.Id) {
+                Context.Channel.SendMessageAsync("It's not your turn!").GetAwaiter().GetResult();
+                return;
+            }
+            if(!r.abilityRemaining) output(Context.Channel,"You've already used your special ability");
+            if(!r.ability.Active) output(Context.Channel,"You're ability isn't an active ability!");
+            Card c = new Card();
+            racer t = new racer();
+            List<racer> listRacer = new List<racer>();
+            switch(r.ability.ID) {
+                case 24:
+                    if(i<0) output(Context.Channel,"You didn't target a valid racer");
+                    t = racers.FirstOrDefault(e=> e.ID == i);
+                    if (t == null) output(Context.Channel,"You didn't target a valid racer");
+                    t.coreSync = r;
+                    r.coreSync = t;
+                    r.abilityRemaining = false;
+                    output(Context.Channel,r.name + " synchronized their core with " + t.name + ". If either of them die, the other will explode!");
+                break;
+                case 23:
+                    if(i < 0 || j < 0) output(Context.Channel,"You didn't provide two valid targets");
+                    racer t1 = racers.FirstOrDefault(e=> e.ID == i);
+                    racer t2 = racers.FirstOrDefault(e=> e.ID == j);
+                    if (t1 == null || t2 == null) output(Context.Channel,"You didn't provide two valid targets");
+                    c = Card.get_card(9);
+                    t1.addHazard(c);
+                    t2.addHazard(c);
+                    r.abilityRemaining = false;
+                    output(Context.Channel, r.name + " used " + r.ability.Title + " and played " + c.title + " against " + t1.name + " and " + t2.name);
+                break;
+                case 22:
+                    r.cards = new List<Card>();
+                    for(int k = 0; k < 8; k++) {
+                        if(cards.Count == 0) cards = generateDeck();
+                        r.cards.Add(cards.Pop());
+                    }
+                    Context.User.SendMessageAsync(r.currentStatus()).GetAwaiter().GetResult();
+                    r.abilityRemaining = false;
+                    output(Context.Channel,r.name + " used " + r.ability.Title + " and discarded their hand to draw a new one.");
+                break;
+                case 21:
+                listRacer = racers.OrderByDescending(e=> e.distance).ToList();
+                    for(int k = 0; k < listRacer.Count; k++) {
+                        if(listRacer[k] == r) {
+                            if (k == 0) {
+                                output(Context.Channel,"You can't use this, you are in first!");
+                                return;
+                            }
+                            t = listRacer[k-1];
+                        }
+                    }
+                    int x = 1 + Program.rand.Next(10);
+                    if (x < 4) {
+                        r.stillIn = false;
+                        r.abilityRemaining = false;
+                        output(Context.Channel,r.name + " actives their Grav-Sling and it explodes! Roll: " + x);
+                    } else {
+                        
+                        int dist = (int)t.distance;
+                        t.distance = r.distance;
+                        r.distance = t.distance;
+                        r.abilityRemaining = false;
+                        output(Context.Channel,r.name + " actives their " + r.ability.Title + " and moves to distance " + r.distance + " by switching locations with " + t.name + " who is now at a distance of " + t.distance);
+                    }
+                break;
+                case 20:
+                    if(i<0 || i > r.hazards.Count ) output(Context.Channel,"You didn't target a valid Hazard");
+                    output(Context.Channel,r.name + " took a " + r.ability.Title + " and fixed " + r.hazards[--i].item1.title);
+                    r.hazards.RemoveAt(i);
+                    r.abilityRemaining = false;
+                break;
+                case 19:
+                    if(i<0) output(Context.Channel,"You didn't target a valid racer");
+                    t = racers.FirstOrDefault(e=> e.ID == i);
+                    if (t == null) output(Context.Channel,"You didn't target a valid racer");
+                    c = Card.get_card(17);
+                    t.addHazard(c);
+                    r.abilityRemaining = false;
+                    output(Context.Channel,r.name + " used " + r.ability.Title + " and applied a " + c.title + " hazard to " + t.name);
+                break;
+                case 18:
+                    listRacer = racers.OrderByDescending(e=> e.distance).ToList();
+                    for(int k = 0; k < listRacer.Count; k++) {
+                        if(listRacer[k] == r) {
+                            if (k == 0) {
+                                output(Context.Channel,"You can't use this, you are in first!");
+                                return;
+                            }
+                            t = listRacer[k-1];
+                        }
+                    }
+                    r.distance = t.distance;
+                    r.abilityRemaining = false;
+                    output(Context.Channel,r.name + " uses " + r.ability.Title + " and matches pace with " + t.name + " on space " + r.distance);
+                break;
+                case 17:
+                    if(i<0) output(Context.Channel,"You didn't target a valid racer");
+                    t = racers.FirstOrDefault(e=> e.ID == i);
+                    if (t == null) output(Context.Channel,"You didn't target a valid racer");
+                    Context.User.SendMessageAsync(t.currentStatus()).GetAwaiter().GetResult();
+                    r.abilityRemaining = false;
+                    output(Context.Channel, r.name + " used " + r.ability.Title + " against " + t.name + " to take a look a their hand!");
+                break;
+                case 16:
+                    if(i<0) output(Context.Channel,"You didn't target a valid racer");
+                    t = racers.FirstOrDefault(e=> e.ID == i);
+                    if (t == null) output(Context.Channel,"You didn't target a valid racer");
+                    var temp = t.cards;
+                    t.cards = r.cards;
+                    r.cards = temp;
+                    r.abilityRemaining = false;
+                    Context.User.SendMessageAsync(r.currentStatus()).GetAwaiter().GetResult();
+                    Context.Guild.GetUser(t.player_discord_id).SendMessageAsync(t.currentStatus()).GetAwaiter().GetResult();
+                    output(Context.Channel, r.name + " used " + r.ability.Title + " against " + t.name + " to switch hands with them!");
+                break;
+                case 15:
+                    if(i<0) output(Context.Channel,"You didn't target a valid racer");
+                    t = racers.FirstOrDefault(e=> e.ID == i);
+                    if (t == null) output(Context.Channel,"You didn't target a valid racer");
+                    t.cards = new List<Card>();
+                    for(int k = 0; k < 8; k++) {
+                        if(cards.Count == 0) cards = generateDeck();
+                        t.cards.Add(cards.Pop());
+                    }
+                    r.abilityRemaining = false;
+                    Context.Guild.GetUser(t.player_discord_id).SendMessageAsync(t.currentStatus()).GetAwaiter().GetResult();
+                    output(Context.Channel,r.name + " used " + r.ability.Title + " against " + t.name + " causing them to redraw their entire hand!");
+                break;
+                case 14:
+                    if(i < 0 || i > 8 || j < 0 || j > 8) output(Context.Channel,"You haven't selected valid cards");
+                    if(r.cards[i].type != "Movement" || r.cards[j].type != "Movement") output(Context.Channel,"You haven't selected valid cards");
+                    int d = (int) (r.cards[i].value + r.cards[j].value);
+                    r.distance += d;
+                    if(r.distance > 24) {
+                        output(Context.Channel,"You can't move past space 24!");
+                        r.distance -= d;
+                    }
+                    r.abilityRemaining = false;
+                    output(Context.Channel,r.name + " moved to space " + r.distance);
+                break;
+                default:
+                    output(Context.Channel,"Something went wrong. Try again");
+                    return;
+            }
+
+            //Handle Survival Checks
+            output(Context.Channel,SurvivalChecks(Context, r));
+            //IF Entire Turn Completed Successfully
+            endOfTurnLogic(Context, r, i);
+        }
+
         //Discard a Card
         public void discardAsync(SocketCommandContext Context, int i) {
             racer r = racers[position];
