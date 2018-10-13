@@ -246,11 +246,28 @@ namespace trillbot.Classes {
             str2.Add(helpers.center("Sponsor",lengths[2]));
             str2.Add(helpers.center("Special Ability", lengths[3]));
             str2.Add("Hazards");
-            str.Add(String.Join(" | ",str2));
+            string title = String.Join(" | ",str2);
+            int count = 33;
+            count += title.Length;
+            str.Add(title);
+            string ouput_string = "";
             var listRacer = racers.OrderByDescending(e=> e.distance).ToList();
-            listRacer.ForEach(e=> str.Add(e.leader(lengths)));
+            foreach(racer r in listRacer) {
+                string s = r.leader();
+                count += s.Length;
+                if(count >= 1990) {
+                    str.Add("```");
+                    ouput_string = string.Join(System.Environment.NewLine, str);
+                    Context.Channel.SendMessageAsync(ouput_string).GetAwaiter().GetResult();
+                    str = new List<string>();
+                    count = title.Length + s.Length +3;
+                    str.Add("```");
+                    str.Add(title);
+                }
+                str.Add(s);
+            }
             str.Add("```");
-            string ouput_string = string.Join(System.Environment.NewLine, str);
+            ouput_string = string.Join(System.Environment.NewLine, str);
             Context.Channel.SendMessageAsync(ouput_string).GetAwaiter().GetResult();
         }
 
@@ -269,12 +286,23 @@ namespace trillbot.Classes {
         //Passive Movement
         private void endOfTurn(SocketCommandContext Context) {
             foreach (racer r in racers ) {
-                if(r.ability.ID == 9 && r.hazards.ToList().FirstOrDefault(e=> e.item1.ID == 5) != null) {
-                    r.distance+=3;
-                } else if (r.ability.ID == 10 && r.hazards.ToList().FirstOrDefault(e=> e.item1.ID == 6) != null) {
-                    r.distance+=3;
-                } else if (r.ability.ID == 11 && r.hazards.ToList().FirstOrDefault(e=> e.item1.ID == 9) != null) {
-                    r.distance+=4;
+                if(r.ability.ID == 9 && r.hazards.ToList().FirstOrDefault(e=> e.item1.ID == 5) != null && r.abilityRemaining) {
+                    r.distance+=2;
+                    r.abilityRemaining = false;
+                } else if (r.ability.ID == 10 && r.hazards.ToList().FirstOrDefault(e=> e.item1.ID == 6) != null && r.abilityRemaining) {
+                    r.distance+=2;
+                    r.abilityRemaining = false;
+                } else if (r.ability.ID == 11 && r.hazards.ToList().FirstOrDefault(e=> e.item1.ID == 9) != null && r.abilityRemaining) {
+                    r.distance+=2;
+                    r.abilityRemaining = false;
+                } else  if (r.ability.ID == 7 && r.hazards.Count == 0) {
+                    int x = 1 + Program.rand.Next(2);
+                    if (x == 2) {
+                        r.distance+=3;
+                        output(Context.Channel,r.name + " test's their luck and rolls a " + x + ".");
+                    } else {
+                        output(Context.Channel,r.name + " test's their luck and rolls a " + x + ".");
+                    }
                 } else {
                     r.distance++;
                 }
