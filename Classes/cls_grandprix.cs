@@ -97,9 +97,13 @@ namespace trillbot.Classes {
         {
             cards = generateDeck();
             foreach(racer r in racers) {
-                for(int i = 0; i < 8; i++) {
-                    if(cards.Count == 0) { cards = generateDeck(); }
-                    r.cards.Add(cards.Pop());
+                if(r.ability.ID == 1) {
+
+                } else {
+                    for(int i = 0; i < 8; i++) {
+                        if(cards.Count == 0) { cards = generateDeck(); }
+                        r.cards.Add(cards.Pop());
+                    }
                 }
                 var usr = Context.Guild.GetUser(r.player_discord_id);
                 usr.SendMessageAsync(r.currentStatus()).GetAwaiter().GetResult();
@@ -149,6 +153,10 @@ namespace trillbot.Classes {
                 {
                     r.stillIn = false;
                     str.Add(r.name + " subcumbs to " + e.item1.title + " and their vehicle explodes!");
+                    if(r.coreSync != null) {
+                        r.coreSync.stillIn = false;
+                        str.Add(r.coreSync.name + "'s core fails in tangent with " + r.name + " as their racer goes up in smoke!");
+                    }
                 }
 
                 if(e.item1.ID == 16 && e.item2 > 0) {
@@ -855,6 +863,7 @@ namespace trillbot.Classes {
                 racer.replace_racer(e);
             });
             Context.Channel.SendMessageAsync("Game Reset").GetAwaiter().GetResult();
+            Program.games.Remove(Context.Channel.Id);
         }
 
         //Ping the current players turn

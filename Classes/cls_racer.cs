@@ -144,31 +144,33 @@ namespace trillbot.Classes {
 
         public string currentStatus() {
             var str2 = new List<string>();
-                //Cards
-                str2.Add("**Current Cards**");
-                if (this.cards.Count == 0) { 
-                    str2.Add("No Cards");
-                } else {
-                    for(int i = 0; i < this.cards.Count; i++) {
-                        str2.Add("#" + (i+1) + ": " + this.cards[i].ToString());
-                    }
+            str2.Add(" ");
+            str2.Add("-- -- -- -- -- -- -- -- -- --");
+            //Special Ability
+            var active = "Passive";
+            if (this.ability.Active){
+                active = "Active";
+            }
+            str2.Add("**Special Ability:** " + this.ability.Title + " (" + active + ") - " + this.ability.Description);
+            //Cards
+           str2.Add("**Current Cards**");
+            if (this.cards.Count == 0) { 
+                str2.Add("No Cards");
+            } else {
+                for(int i = 0; i < this.cards.Count; i++) {
+                    str2.Add("#" + (i+1) + ": " + this.cards[i].ToString());
                 }
-                //Hazards
-                str2.Add("-- -- -- -- --");
-                str2.Add("**Current Hazards** - If any Hazard is applied for 3 full turns, you will explode.");
-                if (this.hazards.Count == 0) str2.Add("None");
-                var j = 0;
-                foreach (pair p in this.hazards) {
-                    str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + (p.item2+1) + " turns. " + id_to_condition[p.item1.ID]);
-                }
-                //Special Ability
-                str2.Add("-- -- -- -- --");
-                var active = "Passive";
-                if (this.ability.Active){
-                    active = "Active";
-                }
-                str2.Add("**Special Ability:** " + this.ability.Title + " (" + active + ") - " + this.ability.Description);   
-                return String.Join(System.Environment.NewLine, str2);
+            }
+            //Hazards
+            str2.Add("--");
+            str2.Add("**Current Hazards** - If any Hazard is applied for 3 full turns, you will explode.");
+            if (this.hazards.Count == 0) str2.Add("None");
+            var j = 0;
+            foreach (pair p in this.hazards) {
+                str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + (p.item2+1) + " turns. " + id_to_condition[p.item1.ID]);
+            }
+            str2.Add("-- -- -- -- -- -- -- -- -- --");
+            return String.Join(System.Environment.NewLine, str2);
         }
 
         private Dictionary<int, string> id_to_condition = new Dictionary<int, string> {
