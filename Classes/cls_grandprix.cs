@@ -98,7 +98,10 @@ namespace trillbot.Classes {
             cards = generateDeck();
             foreach(racer r in racers) {
                 if(r.ability.ID == 1) {
-
+                    int[] cardIDs = {1, 2, 3, 4, 14, 15, 16, 9};
+                    foreach(int i in cardIDs) {
+                        r.cards.Add(Card.get_card(cardIDs[i]));
+                    }
                 } else {
                     for(int i = 0; i < 8; i++) {
                         if(cards.Count == 0) { cards = generateDeck(); }
