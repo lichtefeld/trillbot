@@ -86,8 +86,10 @@ namespace trillbot.Commands
                 }
                 var a = Ability.get_ability(--ID);
                 r.ability = a;
+                racer.replace_racer(r);
                 await ReplyAsync("Ability changed to " + a.Title);
             }
+            
         }
 
         [Command("showabilities")]

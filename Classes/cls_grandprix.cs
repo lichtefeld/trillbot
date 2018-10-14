@@ -41,7 +41,8 @@ namespace trillbot.Classes {
             {5, 9},
             {6, 10}
         };
-        private int[] lengths = {15, 8, 7, 15};
+        private int[] lengths = {15, 8, 7, 15}; // Center Leadboard Values
+        private static int[] wealthyIDs = {1, 2, 3, 4, 14, 15, 16, 9}; // Card IDs for Wealthy Sponsor
 
         //Private Helper Functions
         //Leaderboard Centering Math
@@ -53,7 +54,7 @@ namespace trillbot.Classes {
                         if(r.nameID().Length > lengths[i]) lengths[i] = r.nameID().Length;
                         break;
                         case 2:
-                        if(r.faction.Length > lengths[i]) lengths[i] = r.nameID().Length;
+                        if(r.faction.Length > lengths[i]) lengths[i] = r.faction.Length;
                         break;
                         case 3:
                         if(r.ability.Title.Length > lengths[i]) lengths[i] = r.ability.Title.Length;
@@ -98,9 +99,8 @@ namespace trillbot.Classes {
             cards = generateDeck();
             foreach(racer r in racers) {
                 if(r.ability.ID == 1) {
-                    int[] cardIDs = {1, 2, 3, 4, 14, 15, 16, 9};
-                    foreach(int i in cardIDs) {
-                        r.cards.Add(Card.get_card(cardIDs[i]));
+                    foreach(int i in wealthyIDs) {
+                        r.cards.Add(Card.get_card(wealthyIDs[i]));
                     }
                 } else {
                     for(int i = 0; i < 8; i++) {
