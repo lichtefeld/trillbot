@@ -144,7 +144,7 @@ namespace trillbot.Classes {
 
         public string currentStatus() {
             var str2 = new List<string>();
-            str2.Add(" ");
+            str2.Add(this.name + "'s Hand");
             str2.Add("-- -- -- -- -- -- -- -- -- --");
             //Special Ability
             var active = "Passive";

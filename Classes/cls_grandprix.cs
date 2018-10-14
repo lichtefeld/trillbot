@@ -42,7 +42,7 @@ namespace trillbot.Classes {
             {6, 10}
         };
         private int[] lengths = {15, 8, 7, 15}; // Center Leadboard Values
-        private static int[] wealthyIDs = {1, 2, 3, 4, 14, 15, 16, 9}; // Card IDs for Wealthy Sponsor
+        private static int[] wealthyIDs = {1, 2, 3, 4, 14, 15, 16, 9}; // Card IDs for Wealthy Sponsor 1, 2, 3, 4, 14, 15, 16, 6
 
         //Private Helper Functions
         //Leaderboard Centering Math
@@ -99,7 +99,7 @@ namespace trillbot.Classes {
             cards = generateDeck();
             foreach(racer r in racers) {
                 if(r.ability.ID == 1) {
-                    foreach(int i in wealthyIDs) {
+                    for(int i = 0; i < wealthyIDs.Length; i++) {
                         r.cards.Add(Card.get_card(wealthyIDs[i]));
                     }
                 } else {
@@ -121,9 +121,11 @@ namespace trillbot.Classes {
 
         //End of Turn Logic
         private void endOfTurnLogic(SocketCommandContext Context, racer r, int i) { //Handle All Logic for Transitioning an End of Turn
-            r.cards.RemoveAt(i);
-            if(cards.Count == 0 ) cards = generateDeck();
-            r.cards.Add(cards.Pop());
+            if(i > -1) {
+                r.cards.RemoveAt(i);
+                if(cards.Count == 0 ) cards = generateDeck();
+                r.cards.Add(cards.Pop());
+            }
             position++;
             if(position == racers.Count) {
                 endOfTurn(Context); //Handle Passive Movement
@@ -145,10 +147,6 @@ namespace trillbot.Classes {
         //Survival Checks
         private static List<string> SurvivalChecks(SocketCommandContext Context, racer r) { 
             var str = new List<string>();
-            if(r.sab() && r.hazards.Count > 1) {
-                r.stillIn = false;
-                str.Add(r.name + " subcumbs to Sabotage and their vehicle explodes!");
-            }
             List<pair> remove = new List<pair>();
             r.hazards.ForEach(e=>{
                 e.item2++;
@@ -173,6 +171,14 @@ namespace trillbot.Classes {
                     }
                 }
             });
+            if(r.sab() && r.hazards.Count > 1) {
+                r.stillIn = false;
+                str.Add(r.name + " subcumbs to Sabotage and their vehicle explodes!");
+                if(r.coreSync != null) {
+                    r.coreSync.stillIn = false;
+                    str.Add(r.coreSync.name + "'s core fails in tangent with " + r.name + " as their racer goes up in smoke!");
+                }
+            }
             foreach(pair p in remove) {
                 r.hazards.Remove(p);
             }
@@ -299,12 +305,15 @@ namespace trillbot.Classes {
             foreach (racer r in racers ) {
                 if(r.ability.ID == 9 && r.hazards.ToList().FirstOrDefault(e=> e.item1.ID == 5) != null && r.abilityRemaining) {
                     r.distance+=2;
+                    output(Context.Channel,r.name + "'s " + r.ability.Title + " activates causing them to passively move an extra space!");
                     r.abilityRemaining = false;
                 } else if (r.ability.ID == 10 && r.hazards.ToList().FirstOrDefault(e=> e.item1.ID == 6) != null && r.abilityRemaining) {
                     r.distance+=2;
+                    output(Context.Channel,r.name + "'s " + r.ability.Title + " activates causing them to passively move an extra space!");
                     r.abilityRemaining = false;
                 } else if (r.ability.ID == 11 && r.hazards.ToList().FirstOrDefault(e=> e.item1.ID == 9) != null && r.abilityRemaining) {
                     r.distance+=2;
+                    output(Context.Channel,r.name + "'s " + r.ability.Title + " activates causing them to passively move an extra space!");
                     r.abilityRemaining = false;
                 } else  if (r.ability.ID == 7 && r.hazards.Count == 0) {
                     int x = 1 + Program.rand.Next(2);
@@ -431,26 +440,48 @@ namespace trillbot.Classes {
                 Context.Channel.SendMessageAsync("It's not your turn!").GetAwaiter().GetResult();
                 return;
             }
-            if(!r.abilityRemaining) output(Context.Channel,"You've already used your special ability");
-            if(!r.ability.Active) output(Context.Channel,"You're ability isn't an active ability!");
+            if(!r.abilityRemaining) {
+                output(Context.Channel,"You've already used your special ability");
+                return;
+            }
+            if(!r.ability.Active) {
+                output(Context.Channel,"You're ability isn't an active ability!");
+                return;
+            }
             Card c = new Card();
             racer t = new racer();
             List<racer> listRacer = new List<racer>();
             switch(r.ability.ID) {
                 case 24:
-                    if(i<0) output(Context.Channel,"You didn't target a valid racer");
+                    if(i<0) {
+                        output(Context.Channel,"You didn't target a valid racer");
+                        return;
+                    }
                     t = racers.FirstOrDefault(e=> e.ID == i);
-                    if (t == null) output(Context.Channel,"You didn't target a valid racer");
+                    if (t == null) {
+                        output(Context.Channel,"You didn't target a valid racer");
+                        return;
+                    }
                     t.coreSync = r;
                     r.coreSync = t;
                     r.abilityRemaining = false;
                     output(Context.Channel,r.name + " synchronized their core with " + t.name + ". If either of them die, the other will explode!");
                 break;
                 case 23:
-                    if(i < 0 || j < 0) output(Context.Channel,"You didn't provide two valid targets");
+                    if(i < 0 || j < 0) {
+                        output(Context.Channel,"You didn't provide two valid targets");
+                        return;
+                    }
                     racer t1 = racers.FirstOrDefault(e=> e.ID == i);
                     racer t2 = racers.FirstOrDefault(e=> e.ID == j);
-                    if (t1 == null || t2 == null) output(Context.Channel,"You didn't provide two valid targets");
+                    if (t1 == null || t2 == null) {
+                        output(Context.Channel,"You didn't provide two valid targets");
+                        return;
+                    }
+                    if(t1 == r || t2 == r) {
+                        output(Context.Channel,"You can't target yourself");
+                        return;
+                    }
                     c = Card.get_card(9);
                     t1.addHazard(c);
                     t2.addHazard(c);
@@ -487,21 +518,30 @@ namespace trillbot.Classes {
                         
                         int dist = (int)t.distance;
                         t.distance = r.distance;
-                        r.distance = t.distance;
+                        r.distance = dist;
                         r.abilityRemaining = false;
-                        output(Context.Channel,r.name + " actives their " + r.ability.Title + " and moves to distance " + r.distance + " by switching locations with " + t.name + " who is now at a distance of " + t.distance);
+                        output(Context.Channel,r.name + " actives their " + r.ability.Title + " (Roll: " + x + ") and moves to distance " + r.distance + " by switching locations with " + t.name + " who is now at a distance of " + t.distance);
                     }
                 break;
                 case 20:
-                    if(i<0 || i > r.hazards.Count ) output(Context.Channel,"You didn't target a valid Hazard");
-                    output(Context.Channel,r.name + " took a " + r.ability.Title + " and fixed " + r.hazards[--i].item1.title);
+                    if(i<0 || i > r.hazards.Count ) {
+                        output(Context.Channel,"You didn't target a valid Hazard");
+                        return;
+                    }
+                    output(Context.Channel,r.name + " had a " + r.ability.Title + " and fixed " + r.hazards[--i].item1.title);
                     r.hazards.RemoveAt(i);
                     r.abilityRemaining = false;
                 break;
                 case 19:
-                    if(i<0) output(Context.Channel,"You didn't target a valid racer");
+                    if(i<0) { 
+                        output(Context.Channel,"You didn't target a valid racer");
+                        return;
+                    }
                     t = racers.FirstOrDefault(e=> e.ID == i);
-                    if (t == null) output(Context.Channel,"You didn't target a valid racer");
+                    if (t == null) {
+                        output(Context.Channel,"You didn't target a valid racer");
+                        return;
+                    }
                     c = Card.get_card(17);
                     t.addHazard(c);
                     r.abilityRemaining = false;
@@ -523,17 +563,29 @@ namespace trillbot.Classes {
                     output(Context.Channel,r.name + " uses " + r.ability.Title + " and matches pace with " + t.name + " on space " + r.distance);
                 break;
                 case 17:
-                    if(i<0) output(Context.Channel,"You didn't target a valid racer");
+                    if(i<0) {
+                        output(Context.Channel,"You didn't target a valid racer");
+                        return;
+                    }
                     t = racers.FirstOrDefault(e=> e.ID == i);
-                    if (t == null) output(Context.Channel,"You didn't target a valid racer");
+                    if (t == null) {
+                        output(Context.Channel,"You didn't target a valid racer");
+                        return;
+                    }
                     Context.User.SendMessageAsync(t.currentStatus()).GetAwaiter().GetResult();
                     r.abilityRemaining = false;
                     output(Context.Channel, r.name + " used " + r.ability.Title + " against " + t.name + " to take a look a their hand!");
                 break;
                 case 16:
-                    if(i<0) output(Context.Channel,"You didn't target a valid racer");
+                    if(i<0) {
+                        output(Context.Channel,"You didn't target a valid racer");
+                        return;
+                    }
                     t = racers.FirstOrDefault(e=> e.ID == i);
-                    if (t == null) output(Context.Channel,"You didn't target a valid racer");
+                    if (t == null) {
+                        output(Context.Channel,"You didn't target a valid racer");
+                        return;
+                    }
                     var temp = t.cards;
                     t.cards = r.cards;
                     r.cards = temp;
@@ -543,9 +595,19 @@ namespace trillbot.Classes {
                     output(Context.Channel, r.name + " used " + r.ability.Title + " against " + t.name + " to switch hands with them!");
                 break;
                 case 15:
-                    if(i<0) output(Context.Channel,"You didn't target a valid racer");
+                    if(i<0) {
+                        output(Context.Channel,"You didn't target a valid racer");
+                        return;
+                    }
                     t = racers.FirstOrDefault(e=> e.ID == i);
-                    if (t == null) output(Context.Channel,"You didn't target a valid racer");
+                    if (t == null) {
+                        output(Context.Channel,"You didn't target a valid racer");
+                        return;
+                    }
+                    if (t == r) {
+                        output(Context.Channel,"You can't scramble yourself!");
+                        return;
+                    }
                     t.cards = new List<Card>();
                     for(int k = 0; k < 8; k++) {
                         if(cards.Count == 0) cards = generateDeck();
@@ -556,8 +618,14 @@ namespace trillbot.Classes {
                     output(Context.Channel,r.name + " used " + r.ability.Title + " against " + t.name + " causing them to redraw their entire hand!");
                 break;
                 case 14:
-                    if(i < 0 || i > 8 || j < 0 || j > 8) output(Context.Channel,"You haven't selected valid cards");
-                    if(r.cards[i].type != "Movement" || r.cards[j].type != "Movement") output(Context.Channel,"You haven't selected valid cards");
+                    if(i < 0 || i > 8 || j < 0 || j > 8) {
+                        output(Context.Channel,"You haven't selected valid cards");
+                        return;
+                    }
+                    if(r.cards[--i].type != "Movement" || r.cards[--j].type != "Movement") {
+                        output(Context.Channel,"You haven't selected valid cards");
+                        return;
+                    }
                     int d = (int) (r.cards[i].value + r.cards[j].value);
                     r.distance += d;
                     if(r.distance > 24) {
@@ -565,7 +633,18 @@ namespace trillbot.Classes {
                         r.distance -= d;
                     }
                     r.abilityRemaining = false;
-                    output(Context.Channel,r.name + " moved to space " + r.distance);
+                    output(Context.Channel,r.name + " moved to space " + r.distance + " using " + r.ability.Title + " to play both a " + r.cards[i].title + " and " + r.cards[j].title);
+                    if(j < i) {
+                        r.cards.RemoveAt(i);
+                        r.cards.RemoveAt(j);
+                        if(cards.Count == 0) cards = generateDeck();
+                        r.cards.Add(cards.Pop());
+                    } else {
+                        r.cards.RemoveAt(j);
+                        r.cards.RemoveAt(i);
+                        if(cards.Count == 0) cards = generateDeck();
+                        r.cards.Add(cards.Pop());
+                    }
                 break;
                 default:
                     output(Context.Channel,"Something went wrong. Try again");
@@ -575,7 +654,7 @@ namespace trillbot.Classes {
             //Handle Survival Checks
             output(Context.Channel,SurvivalChecks(Context, r));
             //IF Entire Turn Completed Successfully
-            endOfTurnLogic(Context, r, i);
+            endOfTurnLogic(Context, r, -1);
         }
 
         //Discard a Card
@@ -604,8 +683,8 @@ namespace trillbot.Classes {
                 Context.Channel.SendMessageAsync("It's not your turn!").GetAwaiter().GetResult();
                 return;
             }
-            if (i < 1 && i > 8) {
-                Context.Channel.SendMessageAsync("You only have 8 cards in your hand! Provide a number 1-8.").GetAwaiter().GetResult();
+            if (i < 1 && i > r.cards.Count) {
+                Context.Channel.SendMessageAsync("You only have 8 cards in your hand! Provide a number 1-" + r.cards.Count + ".").GetAwaiter().GetResult();
                 return;
             }
             Card c = r.cards[--i];
@@ -694,8 +773,8 @@ namespace trillbot.Classes {
                                 Context.Channel.SendMessageAsync("Sorry, you can't move this far! Try a different card").GetAwaiter().GetResult();
                                 return;
                             }
-                            List<racer> targets = racers.Where(e=>e.distance == r.distance+1).ToList();
                             r.distance += 3;
+                            List<racer> targets = racers.Where(e=>e.distance == r.distance+1).ToList();
                             if (r.distance > 24) {
                                 r.distance -= 3;
                                 Context.Channel.SendMessageAsync("Woah there, you can't move past space 24! Try a different card.").GetAwaiter().GetResult();
@@ -705,7 +784,8 @@ namespace trillbot.Classes {
                                 ram = r.name + " plays RAM and doesn't hit any other racers! They move forward 3 spaces to a distance of " + r.distance;
                             } else {
                                 List<string> tar = new List<string>();
-                                tar.Add(r.name + " plays " + c.title + " against " + targets[0]);
+                                tar.Add(r.name + " plays " + c.title + " against " + targets[0].name);
+                                targets[0].addHazard(c);
                                 for(int j = 1; j < targets.Count; j++ ) {
                                     targets[j].addHazard(c);
                                     tar.Add(targets[j].name);

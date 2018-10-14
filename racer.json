@@ -2,10 +2,10 @@
   "racer": [
     {
       "ability": {
-        "id": 1,
-        "title": "Wealthy Sponsor",
-        "description": "You start the race with a custom set of cards.",
-        "active": false
+        "id": 24,
+        "title": "Core Synchronization",
+        "description": "Target another racer, if one of you dies the other also dies.",
+        "active": true
       },
       "abilityRemaining": true,
       "coreSync": null,
@@ -22,9 +22,9 @@
     },
     {
       "ability": {
-        "id": 16,
-        "title": "Tactical Hacking",
-        "description": "Target another racer and switch hands with them.",
+        "id": 23,
+        "title": "Seasoned Trickster",
+        "description": "Target 2 other racers, apply the Sabotage Hazard to both of them.",
         "active": true
       },
       "abilityRemaining": true,
@@ -36,7 +36,7 @@
       "cards": [],
       "distance": 0,
       "hazards": [],
-      "inGame": false,
+      "inGame": true,
       "stillIn": true,
       "crash": false
     },
@@ -182,9 +182,9 @@
     },
     {
       "ability": {
-        "id": 0,
-        "title": "Jump Start",
-        "description": "You start the race 2 spaces ahead of the starting line.",
+        "id": 5,
+        "title": "Immaculate Engine",
+        "description": "You are immune  to the Sabotage Hazard",
         "active": false
       },
       "abilityRemaining": true,

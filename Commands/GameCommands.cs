@@ -117,5 +117,15 @@ namespace trillbot.Commands
                 prix.Value.showHand(Context);
             }
         }
+
+        [Command("playability")]
+        public async Task playAbilityAsync(int i = -1, int j = -1) {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
+                await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else { 
+                prix.Value.playAbility(Context, i, j);
+            }
+        }
     }
 }
