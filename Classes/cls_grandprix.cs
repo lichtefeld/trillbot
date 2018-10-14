@@ -23,10 +23,10 @@ namespace trillbot.Classes {
         private int position = 0;
         private int round = 1;
         public string channelName { get; set; } = "";
-        private static Dictionary<int, Tuple<int,int>> remedy_to_hazards = new Dictionary<int, Tuple<int,int>> {
-            {0,new Tuple<int, int>(5,6)},
-            {1,new Tuple<int,int>(8,9)},
-            {2,new Tuple<int,int>(10,11)}
+        private static Dictionary<int, Tuple<int,int,int>> remedy_to_hazards = new Dictionary<int, Tuple<int,int,int>> {
+            {0,new Tuple<int,int,int>(5,6,-1)},
+            {1,new Tuple<int,int,int>(8,9,17)},
+            {2,new Tuple<int,int,int>(10,11,-1)}
         };
         private static Dictionary<int, string> target_hazard_output = new Dictionary<int, string> {
             {0, ". They are unable to move until they remove this Hazard."},
@@ -153,6 +153,14 @@ namespace trillbot.Classes {
                 if(e.item2 > 2)
                 {
                     r.stillIn = false;
+                    str.Add(r.name + " subcumbs to " + e.item1.title + " and their vehicle explodes!");
+                    if(r.coreSync != null) {
+                        r.coreSync.stillIn = false;
+                        str.Add(r.coreSync.name + "'s core fails in tangent with " + r.name + " as their racer goes up in smoke!");
+                    }
+                }
+
+                if(e.item1.ID == 17 && e.item2 > 1) {
                     str.Add(r.name + " subcumbs to " + e.item1.title + " and their vehicle explodes!");
                     if(r.coreSync != null) {
                         r.coreSync.stillIn = false;
@@ -889,7 +897,7 @@ namespace trillbot.Classes {
                         r.distance-=2;
                         break;
                         default:
-                        var h = r.hazards.Where(e=> e.item1.ID == remedy_to_hazards[(int)c.value].Item1 || e.item1.ID == remedy_to_hazards[(int)c.value].Item2 ).ToList();
+                        var h = r.hazards.Where(e=> e.item1.ID == remedy_to_hazards[(int)c.value].Item1 || e.item1.ID == remedy_to_hazards[(int)c.value].Item2 || e.item1.ID == remedy_to_hazards[(int)c.value].Item3 ).ToList();
                         if (h.Count == 0) {
                             Context.Channel.SendMessageAsync("You can't play this card. Try another.").GetAwaiter().GetResult();
                             return;

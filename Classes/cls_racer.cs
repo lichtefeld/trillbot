@@ -180,7 +180,8 @@ namespace trillbot.Classes {
             {9, "Can be removed by a Tech Savvy card. If you end your turn with both Sabotage and another Hazard, you explode."},
             {10, "Can be removed by a Cyber Healthcare card."},
             {11, "You cannot play Movement cards higher than 2. Can be removed by a Cyber Healthcare card."},
-            {16, "You can not move this turn. Does not need a remedy to clear."}
+            {16, "You can not move this turn. Does not need a remedy to clear."},
+            {17, "Can be removed by a Tech Savvy Card. You have 2 turns to solve this issue or you die."}
         };
 
         public static List<racer> get_racer () {

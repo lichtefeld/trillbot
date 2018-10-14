@@ -2,10 +2,10 @@
   "racer": [
     {
       "ability": {
-        "id": 24,
-        "title": "Core Synchronization",
-        "description": "Target another racer, if one of you dies the other also dies.",
-        "active": true
+        "id": 1,
+        "title": "Wealthy Sponsor",
+        "description": "You start the race with a custom set of cards.",
+        "active": false
       },
       "abilityRemaining": true,
       "coreSync": null,
@@ -22,9 +22,9 @@
     },
     {
       "ability": {
-        "id": 23,
-        "title": "Seasoned Trickster",
-        "description": "Target 2 other racers, apply the Sabotage Hazard to both of them.",
+        "id": 19,
+        "title": "Precision Laser",
+        "description": "Target another racer and apply the **Pierced Engine** Hazard to them. Pierced engine can be removed with Tech Savvy. If Pierced engine is applied for 2 full turns, they will explode.",
         "active": true
       },
       "abilityRemaining": true,
