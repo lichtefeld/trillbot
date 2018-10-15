@@ -125,6 +125,10 @@ namespace trillbot.Classes {
                 r.cards.RemoveAt(i);
                 if(cards.Count == 0 ) cards = generateDeck();
                 r.cards.Add(cards.Pop());
+                if(r.cards.Count == 0) {
+                    if(cards.Count == 0 ) cards = generateDeck();
+                    r.cards.Add(cards.Pop());
+                }
             }
             position++;
             if(position == racers.Count) {
@@ -189,6 +193,12 @@ namespace trillbot.Classes {
             }
             foreach(pair p in remove) {
                 r.hazards.Remove(p);
+            }
+            if(r.ability.ID == 12 && r.abilityRemaining) {
+                str.Add("An escape pod launches from " + r.name + "'s racer allowing them to continue to struggle along!");
+                r.stillIn = true;
+                r.abilityRemaining = false;
+                r.cards = new List<Card>();
             }
             if (r.distance < 0) {
                 r.distance = 0;
@@ -298,14 +308,11 @@ namespace trillbot.Classes {
 
         //One Player Still Alive?
         private bool oneAlive() {
-            bool alive = false;
-            foreach(racer r in racers) {
-                if(r.stillIn) { 
-                    alive = true;
-                    break;
-                }
+            foreach (racer r in racers) {
+                if(r.stillIn) return true;
+                if(!r.stillIn && r.ability.ID == 8) return true;
             }
-            return alive;
+            return false;
         }
 
         //Passive Movement
@@ -662,7 +669,13 @@ namespace trillbot.Classes {
             //Handle Survival Checks
             output(Context.Channel,SurvivalChecks(Context, r));
             //IF Entire Turn Completed Successfully
-            endOfTurnLogic(Context, r, -1);
+            if(oneAlive()) {
+                endOfTurnLogic(Context, r, -1);
+            } else {
+                Context.Channel.SendMessageAsync("All racers are dead. This ends the game.").GetAwaiter().GetResult();
+                doReset(Context);
+                return;
+            }
         }
 
         //Discard a Card
@@ -681,7 +694,13 @@ namespace trillbot.Classes {
             //Handle Survival Checks
             output(Context.Channel,SurvivalChecks(Context, r));
             //IF Entire Turn Completed Successfully
-            endOfTurnLogic(Context, r, i);
+            if(oneAlive()) {
+                endOfTurnLogic(Context, r, i);
+            } else {
+                Context.Channel.SendMessageAsync("All racers are dead. This ends the game.").GetAwaiter().GetResult();
+                doReset(Context);
+                return;
+            }
         }
 
         //Play a Card
