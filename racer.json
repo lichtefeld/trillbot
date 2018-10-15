@@ -2,9 +2,9 @@
   "racer": [
     {
       "ability": {
-        "id": 1,
-        "title": "Wealthy Sponsor",
-        "description": "You start the race with a custom set of cards.",
+        "id": 8,
+        "title": "Marionette Circuit",
+        "description": "You can win the race even if you die.",
         "active": false
       },
       "abilityRemaining": true,
@@ -16,7 +16,7 @@
       "cards": [],
       "distance": 0,
       "hazards": [],
-      "inGame": true,
+      "inGame": false,
       "stillIn": true,
       "crash": false
     },
@@ -82,9 +82,9 @@
     },
     {
       "ability": {
-        "id": 0,
-        "title": "Jump Start",
-        "description": "You start the race 2 spaces ahead of the starting line.",
+        "id": 12,
+        "title": "Escape Pod",
+        "description": "If you are killed, you can keep racing in your escape pod. While in the escape pod, your maximum hand size is 1.",
         "active": false
       },
       "abilityRemaining": true,

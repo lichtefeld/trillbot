@@ -121,14 +121,13 @@ namespace trillbot.Classes {
 
         //End of Turn Logic
         private void endOfTurnLogic(SocketCommandContext Context, racer r, int i) { //Handle All Logic for Transitioning an End of Turn
-            if(i > -1) {
+            if(r.cards.Count == 0) {
+                if(cards.Count == 0 ) cards = generateDeck();
+                r.cards.Add(cards.Pop());
+            } else if(i > -1) {
                 r.cards.RemoveAt(i);
                 if(cards.Count == 0 ) cards = generateDeck();
                 r.cards.Add(cards.Pop());
-                if(r.cards.Count == 0) {
-                    if(cards.Count == 0 ) cards = generateDeck();
-                    r.cards.Add(cards.Pop());
-                }
             }
             position++;
             if(position == racers.Count) {
@@ -137,13 +136,13 @@ namespace trillbot.Classes {
                 round++;
             }
             var winner = checkWinner();
-                if(winner != null) {
-                    SocketGuildUser usr = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
-                    Context.Channel.SendMessageAsync(usr.Mention + ", you have won the race!").GetAwaiter().GetResult();
-                    displayCurrentBoard(Context);
-                    doReset(Context);
-                    return;
-                }
+            if(winner != null) {
+                SocketGuildUser usr = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
+                Context.Channel.SendMessageAsync(usr.Mention + ", you have won the race!").GetAwaiter().GetResult();
+                displayCurrentBoard(Context);
+                doReset(Context);
+                return;
+            }
             displayCurrentBoard(Context);
             nextTurn(Context);
         }
@@ -194,11 +193,12 @@ namespace trillbot.Classes {
             foreach(pair p in remove) {
                 r.hazards.Remove(p);
             }
-            if(r.ability.ID == 12 && r.abilityRemaining) {
-                str.Add("An escape pod launches from " + r.name + "'s racer allowing them to continue to struggle along!");
+            if(!r.stillIn && r.ability.ID == 12 && r.abilityRemaining) {
+                str.Add("An escape pod launches from " + r.name + "'s lightrunner, giving them another chance to struggle along!");
                 r.stillIn = true;
                 r.abilityRemaining = false;
                 r.cards = new List<Card>();
+                r.hazards = new List<pair>();
             }
             if (r.distance < 0) {
                 r.distance = 0;
