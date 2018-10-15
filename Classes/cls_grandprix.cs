@@ -440,10 +440,15 @@ namespace trillbot.Classes {
                         Context.Channel.SendMessageAsync(Context.User.Mention + ", you have already joined the game!").GetAwaiter().GetResult();
                         return;
                     }
+                    if(r.ability.ID == racer.ability.ID) {
+                        output(Context.Channel,Context.User.Mention + ", I'm sorry, " + r.name + " already has " + r.ability.Title + " in this game.");
+                        return;
+                    }
                 }
                 racer.inGame = true;
                 racer.replace_racer(racer);
                 racers.Add(racer);
+                
             }
 
             Context.Channel.SendMessageAsync(Context.User.Mention + ", you have joined the game").GetAwaiter().GetResult();
@@ -957,9 +962,9 @@ namespace trillbot.Classes {
             str.Add("**Current Racers**");
             for(int i = 0; i < racers.Count; i++) {
                 if(i == position) {
-                    str.Add("**#" + (i+1) + ": " + racers[i].nameID() + "**");
+                    str.Add("**#" + (i+1) + ": " + racers[i].nameID() + " | " + racers[i].ability.Title + "**");
                 } else {
-                    str.Add("#" + (i+1) + ": " + racers[i].nameID());
+                    str.Add("#" + (i+1) + ": " + racers[i].nameID() + " | " + racers[i].ability.Title);
                 }
             }
             string output = String.Join(System.Environment.NewLine, str);
