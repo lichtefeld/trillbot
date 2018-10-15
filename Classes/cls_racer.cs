@@ -152,6 +152,7 @@ namespace trillbot.Classes {
                 active = "Active";
             }
             str2.Add("**Special Ability:** " + this.ability.Title + " (" + active + ") - " + this.ability.Description);
+            str2.Add("Ability Use Remaining: " + this.abilityRemaining);
             //Cards
            str2.Add("**Current Cards**");
             if (this.cards.Count == 0) { 

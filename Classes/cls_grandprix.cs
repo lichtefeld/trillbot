@@ -129,13 +129,21 @@ namespace trillbot.Classes {
                 if(cards.Count == 0 ) cards = generateDeck();
                 r.cards.Add(cards.Pop());
             }
+            var winner = checkWinner();
+            if(winner != null) {
+                SocketGuildUser usr = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
+                Context.Channel.SendMessageAsync(usr.Mention + ", you have won the race!").GetAwaiter().GetResult();
+                displayCurrentBoard(Context);
+                doReset(Context);
+                return;
+            }
             position++;
             if(position == racers.Count) {
                 endOfTurn(Context); //Handle Passive Movement
                 position -= racers.Count;
                 round++;
             }
-            var winner = checkWinner();
+            winner = checkWinner();
             if(winner != null) {
                 SocketGuildUser usr = Context.Guild.Users.FirstOrDefault(e=>e.Id == winner.player_discord_id);
                 Context.Channel.SendMessageAsync(usr.Mention + ", you have won the race!").GetAwaiter().GetResult();
@@ -165,6 +173,7 @@ namespace trillbot.Classes {
 
                 if(e.item1.ID == 17 && e.item2 > 1) {
                     str.Add(r.name + " subcumbs to " + e.item1.title + " and their vehicle explodes!");
+                    r.stillIn = false;
                     if(r.coreSync != null) {
                         r.coreSync.stillIn = false;
                         str.Add(r.coreSync.name + "'s core fails in tangent with " + r.name + " as their racer goes up in smoke!");
@@ -182,6 +191,9 @@ namespace trillbot.Classes {
                     }
                 }
             });
+            foreach(pair p in remove) {
+                r.hazards.Remove(p);
+            }
             if(r.sab() && r.hazards.Count > 1) {
                 r.stillIn = false;
                 str.Add(r.name + " subcumbs to Sabotage and their vehicle explodes!");
@@ -189,9 +201,6 @@ namespace trillbot.Classes {
                     r.coreSync.stillIn = false;
                     str.Add(r.coreSync.name + "'s core fails in tangent with " + r.name + " as their racer goes up in smoke!");
                 }
-            }
-            foreach(pair p in remove) {
-                r.hazards.Remove(p);
             }
             if(!r.stillIn && r.ability.ID == 12 && r.abilityRemaining) {
                 str.Add("An escape pod launches from " + r.name + "'s lightrunner, giving them another chance to struggle along!");
@@ -299,7 +308,7 @@ namespace trillbot.Classes {
                     str.Add("```");
                     str.Add(title);
                 }
-                str.Add(s);
+                str.Add("      " + s);
             }
             str.Add("```");
             ouput_string = string.Join(System.Environment.NewLine, str);
