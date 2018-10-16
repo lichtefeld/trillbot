@@ -86,8 +86,10 @@ namespace trillbot.Commands
                 }
                 var a = Ability.get_ability(--ID);
                 r.ability = a;
-                await ReplyAsync("Ability changed to " + a.Title);
+                racer.replace_racer(r);
+                await ReplyAsync(Context.User.Mention + ", Ability changed to " + a.Title);
             }
+            
         }
 
         [Command("showabilities")]
@@ -148,6 +150,19 @@ namespace trillbot.Commands
                 Classes.racer.delete_racer(r);
                 await ReplyAsync("Racer Deleted.");
             }
+        }
+
+        [Command("resetracer")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task resetOneRacer(int i) {
+            var r = racer.get_racer(i);
+            if (r == null) {
+                await ReplyAsync("No racer with that ID");
+                return;
+            }
+            r.reset();
+            racer.replace_racer(r);
+            await ReplyAsync(r.nameID() + " has been reset");
         }
 
         [Command("resetracers")]
