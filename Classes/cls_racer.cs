@@ -86,7 +86,7 @@ namespace trillbot.Classes {
             return this.name + " (" + this.ID + ")";
         }
 
-        public string leader(int[] lengths = null) {
+        public string leader(int[] lengths) {
             var str = new List<string>();
             if(lengths == null) {
                 str.Add(this.twoDigitDistance());
