@@ -105,8 +105,8 @@
     {
       "id": 17,
       "title": "Psionic Probe",
-      "description": "Target another racer and look at their hands this turn.",
-      "active": true
+      "description": "At the start of every turn you see the the hand of the lead (living) racer. If you are in the lead, you instead see the hand of the (living) racer in second place.",
+      "active": false
     },
     {
       "id": 18,
