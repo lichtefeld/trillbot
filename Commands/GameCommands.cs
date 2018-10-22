@@ -137,5 +137,21 @@ namespace trillbot.Commands
                 prix.Value.playAbility(Context, i, k);
             }
         }
+
+        [Command("shuffleRacers")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task shuffleRacersAsync(int i) {
+            var names = new List<string>();
+            for(int j = 0; j < i; j++) {
+                names.Add("Racer " + i);
+            }
+            var shuffledNames = new List<string>();
+            while(names.Count != 0) {
+                int j = Program.rand.Next(names.Count);
+                shuffledNames.Add(names[j]);
+                names.RemoveAt(j);
+            }
+            await ReplyAsync(String.Join(System.Environment.NewLine, shuffledNames));
+        }
     }
 }
