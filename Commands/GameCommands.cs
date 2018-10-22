@@ -119,18 +119,23 @@ namespace trillbot.Commands
         }
 
         [Command("playability")]
-        public async Task playAbilityAsync(int i = -1, string[] j = null) {
+        public async Task playAbilityAsync(params string[] j) {
             var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
             if ( prix.Value == null) {
                 await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else {
-                int[] k = new int[j.Length];
-                for(int z = 0; z < j.Length; z++) {
-                    int l;
-                    if (Int32.TryParse(j[z],out l)) {
-                        k[z] = l;
+                int i;
+                if(!Int32.TryParse(j[0],out i)) { 
+                    await ReplyAsync("Failed to convert to integer");
+                    return;
+                }
+                var k = new List<int>();
+                for(int l = 1; l < j.Length; l++) {
+                    int o;
+                    if(Int32.TryParse(j[l],out o)) {
+                        k.Add(o);
                     } else {
-                        await Context.Channel.SendMessageAsync("You didn't pass in integers. Please try again");
+                        await ReplyAsync("Failed to convert to integer");
                         return;
                     }
                 }
@@ -143,7 +148,7 @@ namespace trillbot.Commands
         public async Task shuffleRacersAsync(int i) {
             var names = new List<string>();
             for(int j = 0; j < i; j++) {
-                names.Add("Racer " + i);
+                names.Add("Racer " + (j+1));
             }
             var shuffledNames = new List<string>();
             while(names.Count != 0) {

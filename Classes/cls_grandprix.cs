@@ -481,7 +481,7 @@ namespace trillbot.Classes {
             Context.Channel.SendMessageAsync(Context.User.Mention + ", you have joined the game").GetAwaiter().GetResult();
         }
 
-        public void playAbility(SocketCommandContext Context, int i = -1, int[] j = null) {
+        public void playAbility(SocketCommandContext Context, int i = -1, List<int> j = null) {
             racer r = racers[position];
             if(r.player_discord_id != Context.Message.Author.Id) {
                 Context.Channel.SendMessageAsync("It's not your turn!").GetAwaiter().GetResult();
@@ -515,7 +515,7 @@ namespace trillbot.Classes {
                     output(Context.Channel,r.name + " synchronized their core with " + t.name + ". If either of them die, the other will explode!");
                 break;
                 case 23:
-                    if(i < 0 || j == null || j.Length > 1 || j[0] < 0 || j[0] > 8) {
+                    if(i < 0 || j == null || j.Count > 1 || j[0] < 0 || j[0] > 8) {
                         output(Context.Channel,"You didn't provide two valid targets");
                         return;
                     }
@@ -620,7 +620,7 @@ namespace trillbot.Classes {
                         output(Context.Channel,"You didn't target a valid racer");
                         return;
                     }
-                    if(j == null || j.Length != 4) {
+                    if(j == null || j.Count != 4) {
                         output(Context.Channel,"You didn't select 4 cards!");
                         return;
                     }
@@ -679,7 +679,7 @@ namespace trillbot.Classes {
                     output(Context.Channel,r.name + " used " + r.ability.Title + " against " + t.name + " causing them to redraw four random cards!");
                 break;
                 case 14:
-                    if(i < 0 || i > 8 || j == null || j.Length > 1 || j[0] < 0 || j[0] > 8) {
+                    if(i < 0 || i > 8 || j == null || j.Count > 1 || j[0] < 0 || j[0] > 8) {
                         output(Context.Channel,"You haven't selected valid cards");
                         return;
                     }
