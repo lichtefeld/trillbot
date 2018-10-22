@@ -119,12 +119,22 @@ namespace trillbot.Commands
         }
 
         [Command("playability")]
-        public async Task playAbilityAsync(int i = -1, int[] j = null) {
+        public async Task playAbilityAsync(int i = -1, string[] j = null) {
             var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
             if ( prix.Value == null) {
                 await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
-            } else { 
-                prix.Value.playAbility(Context, i, j);
+            } else {
+                int[] k = new int[j.Length];
+                for(int z = 0; z < j.Length; z++) {
+                    int l;
+                    if (Int32.TryParse(j[z],out l)) {
+                        k[z] = l;
+                    } else {
+                        await Context.Channel.SendMessageAsync("You didn't pass in integers. Please try again");
+                        return;
+                    }
+                }
+                prix.Value.playAbility(Context, i, k);
             }
         }
     }
