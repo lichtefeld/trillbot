@@ -105,7 +105,7 @@ namespace trillbot.Commands
                 }
                 var s = "**#" + (i+1) + ":** " + abilities[i].Title + " (" + active + ") - *" +abilities[i].Description + "*";
                 count += s.Length;
-                if (count > 2000) {
+                if (count > 1950) {
                     var temp_output_string = String.Join(System.Environment.NewLine,str);
                     await Context.User.SendMessageAsync(temp_output_string);
                     count = s.Length;
