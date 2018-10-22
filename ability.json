@@ -9,7 +9,7 @@
     {
       "id": 1,
       "title": "Wealthy Sponsor",
-      "description": "You start the race with a custom set of cards.",
+      "description": "You start the race with 4 guaranteed cards.",
       "active": false
     },
     {
@@ -27,13 +27,13 @@
     {
       "id": 4,
       "title": "Nanite Repair Drones",
-      "description": "You are immune to the Mech Failure Hazard",
+      "description": "You are immune to the Mech Failure Hazard.",
       "active": false
     },
     {
       "id": 5,
       "title": "Immaculate Engine",
-      "description": "You are immune  to the Sabotage Hazard",
+      "description": "You are immune  to the Sabotage Hazard.",
       "active": false
     },
     {
@@ -57,31 +57,31 @@
     {
       "id": 9,
       "title": "Daredevil",
-      "description": "On the first turn you are affected by the Debris Hazard, your passive movement is 2.",
+      "description": "On the first turn you are affected by the Debris Hazard, your passive movement is 3.",
       "active": false
     },
     {
       "id": 10,
       "title": "Energy Siphon",
-      "description": "On the first turn you are affected by the Ramming Hazard, your passive movement is 2.",
+      "description": "On the first turn you are affected by the Ramming Hazard, your passive movement is 3.",
       "active": false
     },
     {
       "id": 11,
       "title": "Living on the Edge",
-      "description": "On the first turn you are affected by the Sabotage Hazard, your passive movement is 2.",
+      "description": "On the first turn you are affected by the Sabotage Hazard, your passive movement is 3.",
       "active": false
     },
     {
       "id": 12,
       "title": "Escape Pod",
-      "description": "If you are killed, you can keep racing in your escape pod. While in the escape pod, your maximum hand size is 1.",
+      "description": "If you are killed, you can keep racing in your escape pod and you are immune to all Hazards until your next turn. While in the escape pod, your maximum hand size is 1.",
       "active": false
     },
     {
       "id": 13,
       "title": "Trillwax",
-      "description": "If you are affected by the Dazzle Hazard, the racer who played the card is also affected by the Dazzle Hazard.",
+      "description": "You are immune to the Dazzle Hazard. If you are targeted by the Dazzle Hazard, the racer who played the card is affected by the Dazzle Hazard instead.",
       "active": false
     },
     {
@@ -93,20 +93,20 @@
     {
       "id": 15,
       "title": "Scrambler",
-      "description": "Target another racer, they discard and redraw their whole hand.",
+      "description": "Target another racer, they discard and redraw 4 random cards.",
       "active": true
     },
     {
       "id": 16,
       "title": "Tactical Hacking",
-      "description": "Target another racer and switch hands with them.",
+      "description": "Tactical Hacking (Active) - Target another racer and pick 4 of your cards, trade those cards for 4 random cards in that racer's hand.",
       "active": true
     },
     {
       "id": 17,
       "title": "Psionic Probe",
-      "description": "Target another racer and look at their hands this turn.",
-      "active": true
+      "description": "At the start of every turn you see the the hand of the lead (living) racer. If you are in the lead, you instead see the hand of the (living) racer in second place.",
+      "active": false
     },
     {
       "id": 18,
@@ -141,7 +141,7 @@
     {
       "id": 23,
       "title": "Seasoned Trickster",
-      "description": "Target 2 other racers, apply the Sabotage Hazard to both of them.",
+      "description": "Target 2 other racers, apply random Hazards to both of them.",
       "active": true
     },
     {

@@ -33,14 +33,12 @@ namespace trillbot.Classes
         }
 
         public static string center(string s, int i) {
-            bool odd = false;
             string spaces = "";
             int toCenter = i - s.Length;
-            if (toCenter % 2 == 1) odd = true;
             for(int j = 0; j < toCenter/2; j++) {
                 spaces += " ";
             }
-            if(odd) {
+            if(toCenter % 2 == 1) {
                 return " " + spaces + s + spaces;
             } else {
                 return spaces + s + spaces;
