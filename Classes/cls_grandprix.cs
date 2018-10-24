@@ -634,13 +634,13 @@ namespace trillbot.Classes {
                     var nums = new List<int>();
                     while(nums.Count != 4) {
                         int temp = Program.rand.Next(8);
-                        if(nums.Contains(temp)) continue;
-                        nums.Add(temp);
+                        if(!nums.Contains(temp)) nums.Add(temp);
                     }
+                    output(Context.Channel,String.Join(", ", nums)); //Testing output to Verify using 4 random cards
                     for(int k = 0; k < 4; k++) {
                         var swap = t.cards[nums[k]];
-                        t.cards[nums[k]] = r.cards[j[k]];
-                        r.cards[j[k]] = swap;
+                        t.cards[nums[k]] = r.cards[j[k]-1];
+                        r.cards[j[k]-1] = swap;
                     }
                     r.abilityRemaining = false;
                     Context.User.SendMessageAsync(r.currentStatus()).GetAwaiter().GetResult();
@@ -666,6 +666,7 @@ namespace trillbot.Classes {
                     for(int k = 0; k < 4; k++) {
                         var remove = t.cards[Program.rand.Next(t.cards.Count)];
                         str.Add(remove.title);
+                        t.cards.Remove(remove);
                     }
                     output(Context.Channel,String.Join(", ",str));
                     for(int k = 0; k < 4; k++) {

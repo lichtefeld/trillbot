@@ -2,10 +2,10 @@
   "racer": [
     {
       "ability": {
-        "id": 0,
-        "title": "Jump Start",
-        "description": "You start the race 2 spaces ahead of the starting line.",
-        "active": false
+        "id": 15,
+        "title": "Scrambler",
+        "description": "Target another racer, they discard and redraw 4 random cards.",
+        "active": true
       },
       "abilityRemaining": true,
       "coreSync": null,
