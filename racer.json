@@ -2,9 +2,9 @@
   "racer": [
     {
       "ability": {
-        "id": 8,
-        "title": "Marionette Circuit",
-        "description": "You can win the race even if you die.",
+        "id": 0,
+        "title": "Jump Start",
+        "description": "You start the race 2 spaces ahead of the starting line.",
         "active": false
       },
       "abilityRemaining": true,
@@ -16,15 +16,15 @@
       "cards": [],
       "distance": 0,
       "hazards": [],
-      "inGame": false,
+      "inGame": true,
       "stillIn": true,
       "crash": false
     },
     {
       "ability": {
-        "id": 19,
-        "title": "Precision Laser",
-        "description": "Target another racer and apply the **Pierced Engine** Hazard to them. Pierced engine can be removed with Tech Savvy. If Pierced engine is applied for 2 full turns, they will explode.",
+        "id": 16,
+        "title": "Tactical Hacking",
+        "description": "Tactical Hacking (Active) - Target another racer and pick 4 of your cards, trade those cards for 4 random cards in that racer's hand.",
         "active": true
       },
       "abilityRemaining": true,

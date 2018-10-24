@@ -323,7 +323,7 @@ namespace trillbot.Classes {
                     str.Add("```");
                     str.Add(title);
                 }
-                str.Add("      " + s);
+                str.Add(s);
             }
             str.Add("```");
             ouput_string = string.Join(System.Environment.NewLine, str);
@@ -620,6 +620,7 @@ namespace trillbot.Classes {
                         output(Context.Channel,"You didn't target a valid racer");
                         return;
                     }
+                    j.Distinct();
                     if(j == null || j.Count != 4) {
                         output(Context.Channel,"You didn't select 4 cards!");
                         return;
@@ -629,20 +630,17 @@ namespace trillbot.Classes {
                             output(Context.Channel,"You didn't select 4 valid cards!");
                             return;
                         }
-                        var temp = j.ToList();
-                        temp.Remove(k);
-                        if (temp.Contains(k)) {
-                            output(Context.Channel,"You didn't select 4 valid cards! No repeats!");
-                            return;
-                        }
                     }
-                    var swap = new Stack<Card>();
+                    var nums = new List<int>();
+                    while(nums.Count != 4) {
+                        int temp = Program.rand.Next(8);
+                        if(nums.Contains(temp)) continue;
+                        nums.Add(temp);
+                    }
                     for(int k = 0; k < 4; k++) {
-                        swap.Append(t.cards[Program.rand.Next(t.cards.Count)]);
-                    }
-                    foreach(int k in j) {
-                        t.cards.Add(r.cards[k-1]);
-                        r.cards[k-1] = swap.Pop();
+                        var swap = t.cards[nums[k]];
+                        t.cards[nums[k]] = r.cards[j[k]];
+                        r.cards[j[k]] = swap;
                     }
                     r.abilityRemaining = false;
                     Context.User.SendMessageAsync(r.currentStatus()).GetAwaiter().GetResult();
