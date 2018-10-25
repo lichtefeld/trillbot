@@ -860,10 +860,12 @@ namespace trillbot.Classes {
                             var listRacer = racers.OrderByDescending(e=> e.distance).ToList();
                             List<string> str = new List<string>();
                             str.Add(r.name + " causes debris to hit " + listRacer[0].name);
-                            listRacer[0].addHazard(c);
+                            if(listRacer[0] == r) listRacer[0].addHazard(c, -1);
+                            else listRacer[0].addHazard(c);
                             for(int j = 1; j < 5 && j < listRacer.Count; j++) {
                                 str.Add(listRacer[j].name);
-                                listRacer[j].addHazard(c);
+                                if (listRacer[j] == r) listRacer[j].addHazard(c, -1);
+                                else listRacer[j].addHazard(c);
                             }
                             string debreis = String.Join(", ",str);
                             Context.Channel.SendMessageAsync(debreis).GetAwaiter().GetResult();
