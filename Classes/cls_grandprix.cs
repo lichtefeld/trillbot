@@ -595,8 +595,7 @@ namespace trillbot.Classes {
                         r.stillIn = false;
                         r.abilityRemaining = false;
                         output(Context.Channel,r.name + " actives their Grav-Sling and it explodes! Roll: " + x);
-                    } else {
-                        
+                    } else {         
                         int dist = (int)t.distance;
                         t.distance = r.distance;
                         r.distance = dist;

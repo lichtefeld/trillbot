@@ -2,10 +2,10 @@
   "racer": [
     {
       "ability": {
-        "id": 15,
-        "title": "Scrambler",
-        "description": "Target another racer, they discard and redraw 4 random cards.",
-        "active": true
+        "id": 0,
+        "title": "Jump Start",
+        "description": "You start the race 2 spaces ahead of the starting line.",
+        "active": false
       },
       "abilityRemaining": true,
       "coreSync": null,
@@ -82,10 +82,10 @@
     },
     {
       "ability": {
-        "id": 12,
-        "title": "Escape Pod",
-        "description": "If you are killed, you can keep racing in your escape pod. While in the escape pod, your maximum hand size is 1.",
-        "active": false
+        "id": 21,
+        "title": "Experimental Grav-Sling ",
+        "description": "Attempt to switch position with the closest racer ahead of you. Roll a d10, if the result is less than 4, you explode.",
+        "active": true
       },
       "abilityRemaining": true,
       "coreSync": null,
@@ -96,7 +96,7 @@
       "cards": [],
       "distance": 0,
       "hazards": [],
-      "inGame": false,
+      "inGame": true,
       "stillIn": true,
       "crash": false
     },

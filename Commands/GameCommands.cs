@@ -124,10 +124,12 @@ namespace trillbot.Commands
             if ( prix.Value == null) {
                 await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else {
-                int i;
-                if(!Int32.TryParse(j[0],out i)) { 
-                    await ReplyAsync("Failed to convert to integer");
-                    return;
+                int i = -1;
+                if(j.Length > 0) {
+                    if(!Int32.TryParse(j[0],out i)) { 
+                        await ReplyAsync("Failed to convert to integer");
+                        return;
+                    }
                 }
                 var k = new List<int>();
                 for(int l = 1; l < j.Length; l++) {
