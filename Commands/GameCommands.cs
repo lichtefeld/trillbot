@@ -158,5 +158,37 @@ namespace trillbot.Commands
             }
             await ReplyAsync(String.Join(System.Environment.NewLine, shuffledNames));
         }
+
+        [Command("skip")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task skipRacerAsync() {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
+                await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else { 
+                prix.Value.skipTurn(Context);
+            }
+        }
+
+        [Command("leave")]
+        public async Task leaveAsync() {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
+                await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else { 
+                prix.Value.toggleDeath(Context);
+            }
+        }
+
+        [Command("kill")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task killAsync(int i) {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
+                await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else { 
+                prix.Value.adminDeath(Context, i);
+            }
+        }
     }
 }

@@ -446,6 +446,39 @@ namespace trillbot.Classes {
             nextTurn(Context);
         }
 
+        public void toggleDeath(SocketCommandContext Context, int ID = -1) {
+            var r = racers.FirstOrDefault(e=> e.player_discord_id == Context.User.Id);
+            if(r == null) {
+                output(Context.Channel,Context.User.Mention + " you don't have a racer in this game.");
+                return;
+            }
+            r.inGame = false;
+            output(Context.Channel,Context.User.Mention + " you have left this game. You are unable to join a new game until this game is finished.");
+        }
+        
+        public void adminDeath(SocketCommandContext Context, int ID) {
+            var r = racers.FirstOrDefault(e=> e.ID == ID);
+            if(r == null ) {
+                output(Context.Channel,Context.User.Mention + ", that racer ID doesn't exist in this race");
+                return;
+            }
+            r.inGame = false;
+            output(Context.Channel,r.nameID() + " has been removed from this game.");
+        }
+
+        public void skipTurn(SocketCommandContext Context) {
+            //Handle Survival Checks
+            output(Context.Channel,SurvivalChecks(Context, racers[position]));
+            //IF Entire Turn Completed Successfully
+            if(oneAlive()) {
+                endOfTurnLogic(Context, racers[position], -1);
+            } else {
+                Context.Channel.SendMessageAsync("All racers are dead. This ends the game.").GetAwaiter().GetResult();
+                doReset(Context);
+                return;
+            }
+        }
+
         //Join Game
         public void joinGame(SocketCommandContext Context) {
             racer racer = racer.get_racer(Context.Message.Author.Id);
