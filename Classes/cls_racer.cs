@@ -34,13 +34,13 @@ namespace trillbot.Classes {
         public racer coreSync = null;
 
         public void addHazard(Card card) {
-            var h = hazards.FirstOrDefault(e=>e.item1 == card);
+            var h = hazards.FirstOrDefault(e=>e.item1.ID == card.ID);
             if (h == null) {
                 hazards.Add(new pair(card,0));
             }
         }
         public void addHazard(Card card, int i) {
-            var h = hazards.FirstOrDefault(e=>e.item1 == card);
+            var h = hazards.FirstOrDefault(e=>e.item1.ID == card.ID);
             if (h == null) {
                 hazards.Add(new pair(card,i));
             }
