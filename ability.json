@@ -99,7 +99,7 @@
     {
       "id": 16,
       "title": "Tactical Hacking",
-      "description": "Tactical Hacking (Active) - Target another racer and pick 4 of your cards, trade those cards for 4 random cards in that racer's hand.",
+      "description": "Target another racer and pick 4 of your cards, trade those cards for 4 random cards in that racer's hand.",
       "active": true
     },
     {

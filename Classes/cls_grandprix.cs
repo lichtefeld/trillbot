@@ -452,7 +452,7 @@ namespace trillbot.Classes {
                 output(Context.Channel,Context.User.Mention + " you don't have a racer in this game.");
                 return;
             }
-            r.inGame = false;
+            r.stillIn = false;
             output(Context.Channel,Context.User.Mention + " you have left this game. You are unable to join a new game until this game is finished.");
         }
         
@@ -462,7 +462,7 @@ namespace trillbot.Classes {
                 output(Context.Channel,Context.User.Mention + ", that racer ID doesn't exist in this race");
                 return;
             }
-            r.inGame = false;
+            r.stillIn = false;
             output(Context.Channel,r.nameID() + " has been removed from this game.");
         }
 
@@ -548,7 +548,7 @@ namespace trillbot.Classes {
                     output(Context.Channel,r.name + " synchronized their core with " + t.name + ". If either of them die, the other will explode!");
                 break;
                 case 23:
-                    if(i < 0 || j == null || j.Count > 1 || j[0] < 0 || j[0] > 8) {
+                    if(i < 0 || j == null || j.Count > 1 || j[0] < 0) {
                         output(Context.Channel,"You didn't provide two valid targets");
                         return;
                     }

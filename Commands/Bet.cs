@@ -27,7 +27,7 @@ namespace trillbot.Commands
 
             if (character == null)
             {
-                await ReplyAsync("Account not found. Please create one before proceeding via `tb!registeraccount`");
+                await ReplyAsync("Account not found. Please create one before proceeding via `ta!registeraccount`");
                 return;
             }
 
@@ -59,7 +59,7 @@ namespace trillbot.Commands
 
             if (character == null)
             {
-                await ReplyAsync("Account not found. Please create one before proceeding via `tb!registeraccount`");
+                await ReplyAsync("Account not found. Please create one before proceeding via `ta!registeraccount`");
                 return;
             }
 
@@ -97,7 +97,7 @@ namespace trillbot.Commands
 
             if (character == null)
             {
-                await ReplyAsync("Account not found. Please create one before proceeding via `tb!registeraccount`");
+                await ReplyAsync("Account not found. Please create one before proceeding via `ta!registeraccount`");
                 return;
             }
 
@@ -110,7 +110,7 @@ namespace trillbot.Commands
                 }
             }
 
-            await ReplyAsync("Bet not found. You can see the list of bets you've made with `tb!displaybets`");
+            await ReplyAsync("Bet not found. You can see the list of bets you've made with `ta!displaybets`");
             return;
         }
 
