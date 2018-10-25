@@ -46,7 +46,7 @@ namespace trillbot.Commands
             character.bets.Add(b);
             character.balance -= amount;
             Character.update_character(character);
-            await ReplyAsync(name + ", you have placed the following bet: " + System.Environment.NewLine + b.ToString());
+            await ReplyAsync(usr.Mention + ", you have placed the following bet: " + System.Environment.NewLine + b.ToString());
 
         }
 
@@ -105,7 +105,8 @@ namespace trillbot.Commands
                 if (bet.Id == ID) {
                     character.balance += bet.Amount;
                     character.bets.Remove(bet);
-                    await ReplyAsync("Bet with ID: " + ID + "has been cancled.");
+                    await ReplyAsync("Bet with ID: " + ID + " has been cancled.");
+                    Character.update_character(character);
                     return;
                 }
             }
