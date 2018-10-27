@@ -62,15 +62,8 @@ namespace trillbot.Commands
                 await ReplyAsync("Account not found. Please create one before proceeding via `ta!registeraccount`");
                 return;
             }
-
-            var output = new List<string>();
-            output.Add("**" +character.name + " Bets** ```");
-            foreach (trillbot.Classes.Bet bet in character.bets) {
-                output.Add(bet.ToString());
-            }
-            output.Add("```");
-            var output_string = String.Join(System.Environment.NewLine,output);
-            await Context.User.SendMessageAsync(output_string);
+            
+            await Context.User.SendMessageAsync(helpers.formatBets(character));
         }
 
         [Command("displaybalance")]
@@ -115,6 +108,15 @@ namespace trillbot.Commands
             return;
         }
 
-        
+        [Command("allbets")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task allBetsAsync() {
+            var chars = Character.get_character();
+            var strings = new List<string>();
+            foreach(Character c in chars) {
+                strings.Add(helpers.formatBets(c));
+            }
+            helpers.output(Context.Channel,strings);
+        }
     }
 }
