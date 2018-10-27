@@ -32,6 +32,16 @@ namespace trillbot.Commands
             await Context.Channel.SendMessageAsync("Game started and bound to this channel use `ta!joingame` in this channel to join.");
         }
 
+        [Command("exitgame")]
+        public async Task exitGameAsync() {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
+                await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else {
+                prix.Value.exitGame(Context); //Consider checking for a player to be in the game, rather than the Administrator node
+            }
+        }
+
         [Command("startgame")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task startGame() {

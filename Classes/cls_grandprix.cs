@@ -406,6 +406,20 @@ namespace trillbot.Classes {
             return s;
         }
 
+        public void exitGame(SocketCommandContext Context) {
+            if(runningGame) {
+                helpers.output(Context.Channel,"You can't exit the game while it is running. Use `ta!leave`");
+                return;
+            }
+            racer racer = racer.get_racer(Context.Message.Author.Id);
+            if(racer == null) {
+                helpers.output(Context.Channel,"You aren't in this game. You can't exit it!");
+                return;
+            }
+            racers.Remove(racer);
+            helpers.output(Context.Channel,Context.User.Mention + ", you have left this game");
+        }
+
         //Start Game
         public void startGame(SocketCommandContext Context) {
             dealCards(Context); //Deal cards to all racers
