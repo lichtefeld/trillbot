@@ -41,7 +41,7 @@ namespace trillbot.Commands
                 return;
             }
 
-            var b = new trillbot.Classes.Bet(r.name,amount);
+            var b = new trillbot.Classes.Bet(r.bets.Count,r.name,amount);
 
             character.bets.Add(b);
             character.balance -= amount;
