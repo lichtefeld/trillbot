@@ -417,6 +417,8 @@ namespace trillbot.Classes {
                 return;
             }
             racers.Remove(racer);
+            racer.inGame = false;
+            trillbot.Classes.racer.update_racer(racer);
             helpers.output(Context.Channel,Context.User.Mention + ", you have left this game");
         }
 
