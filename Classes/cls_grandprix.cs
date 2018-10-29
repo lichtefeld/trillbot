@@ -411,7 +411,7 @@ namespace trillbot.Classes {
                 helpers.output(Context.Channel,"You can't exit the game while it is running. Use `ta!leave`");
                 return;
             }
-            racer racer = racer.get_racer(Context.Message.Author.Id);
+            racer racer = trillbot.Commands.RacerCreation.allRacers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);//racer.get_racer(Context.Message.Author.Id);
             if(racer == null) {
                 helpers.output(Context.Channel,"You aren't in this game. You can't exit it!");
                 return;
@@ -470,7 +470,7 @@ namespace trillbot.Classes {
 
         //Join Game
         public void joinGame(SocketCommandContext Context) {
-            racer racer = racer.get_racer(Context.Message.Author.Id);
+            racer racer = trillbot.Commands.RacerCreation.allRacers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);//racer.get_racer(Context.Message.Author.Id);
             if (runningGame) {
                 Context.Channel.SendMessageAsync("The game has already started").GetAwaiter().GetResult();
                 return;

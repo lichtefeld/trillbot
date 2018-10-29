@@ -20,10 +20,44 @@ namespace trillbot.Commands
 {
     public class RacerCreation : ModuleBase<SocketCommandContext>
     {
+
+        public static List<racer> allRacers = new List<racer>();
+        private static Dictionary<int, string> racer_to_Image = new Dictionary<int, string>() {
+            {1, "https://vignette.wikia.nocookie.net/far-verona/images/d/d1/VladHumble.png/revision/latest?cb=20181029143832"},
+            {2, "https://vignette.wikia.nocookie.net/far-verona/images/1/11/Franciszek.png/revision/latest?cb=20181025131015"},
+            {3, "https://vignette.wikia.nocookie.net/far-verona/images/1/12/StrixVulpine.png/revision/latest?cb=20181025131654"},
+            {4, "https://vignette.wikia.nocookie.net/far-verona/images/9/90/PhasTee.png/revision/latest?cb=20181027151400"},
+            {5, ""}, //Anthony
+            {6, "https://vignette.wikia.nocookie.net/far-verona/images/2/26/DulaImay.png/revision/latest?cb=20181025125348"},
+            {7,"https://vignette.wikia.nocookie.net/far-verona/images/7/73/CocoCobra.png/revision/latest?cb=20181025133404"},
+            {8, ""}, //Crux Kresler
+            {9, "https://vignette.wikia.nocookie.net/far-verona/images/8/81/RutileVenus.png/revision/latest?cb=20181025132952"},
+            {10, "https://vignette.wikia.nocookie.net/far-verona/images/7/7c/SJacobson.png/revision/latest?cb=20181025125606"},
+            {11, "https://vignette.wikia.nocookie.net/far-verona/images/6/61/DeciusTulliusCrispus.png/revision/latest?cb=20181025131248"},
+            {12, "https://vignette.wikia.nocookie.net/far-verona/images/0/03/RacerIX.png/revision/latest?cb=20181025133954"},
+            {13, "https://vignette.wikia.nocookie.net/far-verona/images/d/d5/DeciusCato.png/revision/latest?cb=20181025131900"},
+            {14, "https://vignette.wikia.nocookie.net/far-verona/images/c/c5/LionoPanthra.png/revision/latest?cb=20181025132105"},
+            {15, "https://vignette.wikia.nocookie.net/far-verona/images/1/17/JaxtonBenson.png/revision/latest?cb=20181029144044"},
+            {16, "https://vignette.wikia.nocookie.net/far-verona/images/0/01/Amber.png/revision/latest?cb=20181025134236"},
+            {17, "https://vignette.wikia.nocookie.net/far-verona/images/3/38/TheMoose.png/revision/latest?cb=20181025133616"},
+            {18, "https://vignette.wikia.nocookie.net/far-verona/images/4/43/CruxPanda.png/revision/latest?cb=20181025131452"},
+            {19, "https://vignette.wikia.nocookie.net/far-verona/images/6/6e/TyrenePrayla.png/revision/latest?cb=20181025132657"},
+            {20, "https://vignette.wikia.nocookie.net/far-verona/images/a/a4/RhodesBiggles.png/revision/latest?cb=20181025132247"},
+            {21, "https://vignette.wikia.nocookie.net/far-verona/images/6/63/MongrelJimTimo.png/revision/latest?cb=20181025195613"},
+            {22, "https://vignette.wikia.nocookie.net/far-verona/images/a/ac/RichieSteel.png/revision/latest?cb=20181025132505"},
+            {23, ""}, //Vela
+            {24, "https://vignette.wikia.nocookie.net/far-verona/images/6/63/GuillaumeValls.png/revision/latest?cb=20181025130707"},
+            {25, "https://vignette.wikia.nocookie.net/far-verona/images/5/54/Nikita.png/revision/latest?cb=20181025130043"}
+        };
+
+        private static Dictionary<int, string> racer_to_Description = new Dictionary<int, string>() {
+
+        };
+
         [Command("createracer")]
         public async Task NewracerAsync(string name, string faction, int ID = -1)
         {
-            var r = racer.get_racer(Context.Message.Author.Id);
+            var r = allRacers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);//racer.get_racer(Context.Message.Author.Id);
             if(r != null) {
                 await ReplyAsync("You already have a racer. Please use `ta!deleteracer` to remove your old one first");
                 return;
@@ -55,8 +89,8 @@ namespace trillbot.Commands
                 }
 
                 r.player_discord_id = Context.Message.Author.Id;
-
-                racer.insert_racer(r);
+                allRacers.Add(r);
+                //racer.insert_racer(r);
 
                 await ReplyAsync(name + ", You've got a racer!");
             }
@@ -64,18 +98,26 @@ namespace trillbot.Commands
         }
 
         [Command("showracer")]
-        public async Task showRacerAsync() {
-            var r = racer.get_racer(Context.Message.Author.Id);
-            if(r == null) {
-                await ReplyAsync("You don't have a racer.");
-            } else {
-                await ReplyAsync("",false,helpers.ObjToEmbed(r,"name"),null);
+        public async Task showRacerAsync(int i = -1) {
+            racer r = new racer();
+            if (i < 0) r = allRacers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);//racer.get_racer(Context.Message.Author.Id);
+            else r = allRacers[i];
+            var embed = new EmbedBuilder();
+
+            embed.Title = "Grand Prix Racer: " + r.name;
+            if (r.ID <= 25 && r.ID != 0) {
+                embed.WithImageUrl(racer_to_Image[r.ID]);
+                embed.Description = racer_to_Description[r.ID];
             }
+            embed.AddField("Sponsor",r.faction,true);
+            embed.AddField("Ability: " + r.ability.Title, r.ability.Description, true);
+            embed.Build();
+            await Context.Channel.SendMessageAsync("", false, embed, null);
         }
 
         [Command("updateability")]
         public async Task UpdateAbilityAsync(int ID) {
-            var r = racer.get_racer(Context.Message.Author.Id);
+            var r = allRacers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);//racer.get_racer(Context.Message.Author.Id);
 
             if(r == null) {
                 await ReplyAsync("No racer found for you");
@@ -141,7 +183,7 @@ namespace trillbot.Commands
         [Command("deleteracer")]
         public async Task DeleteRacerAsync()
         {
-            var r = racer.get_racer(Context.Message.Author.Id);
+            var r = allRacers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);//racer.get_racer(Context.Message.Author.Id);
 
             if(r == null) {
                 await ReplyAsync("No racer found for you");
