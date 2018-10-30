@@ -51,7 +51,8 @@ namespace trillbot.Commands
         };
 
         private static Dictionary<int, string> racer_to_Description = new Dictionary<int, string>() {
-
+            {1, "The ninth child of the infamous and un-killable mercenary Dimi of the Deathless, Vlad is pumped full of gene mods and ego. He has an unhealthy confidence in his virility and physique and is not ashamed to let everyone know it; \"humble\" he certainly is not. We all know that muscles, boasts and gene mods don't win races but as a racer in this year Prix, Dimi's son does have one thing to brag about: he is an extraordinary precog trained on Hroa. Most years the Prix sees large numbers of precogs enter the lists as their reaction times and predictive driving techniques prove incredibly advantageous when traveling in the shrapnel filled Lightway at ludicrous speeds. This year however, the only precog openly advertising themselves is Vlad Humble himself, it may be that the race this year is stacked with precogs too clever to out themselves publicly, but who can say. Vlad claims to have been told his whole life that he is absolutely perfect in every way: physically, mentally and emotionally; perhaps he has been treated with favoritism due to his father's deadly fame but maybe Vlad truly has nothing to be humble about. Is Vlad practically perfect in every way? Will Dimi find you and kill you if you say otherwise? Get your betting money ready and find out!"},
+            {2,""}
         };
 
         [Command("createracer")]
@@ -90,7 +91,7 @@ namespace trillbot.Commands
 
                 r.player_discord_id = Context.Message.Author.Id;
                 allRacers.Add(r);
-                //racer.insert_racer(r);
+                racer.insert_racer(r);
 
                 await ReplyAsync(name + ", You've got a racer!");
             }
@@ -106,8 +107,8 @@ namespace trillbot.Commands
 
             embed.Title = "Grand Prix Racer: " + r.name;
             if (r.ID <= 25 && r.ID != 0) {
-                embed.WithImageUrl(racer_to_Image[r.ID]);
-                embed.Description = racer_to_Description[r.ID];
+                embed.WithThumbnailUrl(racer_to_Image[r.ID]);
+                embed.WithDescription(racer_to_Description[r.ID]);
             }
             embed.AddField("Sponsor",r.faction,true);
             embed.AddField("Ability: " + r.ability.Title, r.ability.Description, true);
@@ -190,6 +191,7 @@ namespace trillbot.Commands
             } else {
 
                 Classes.racer.delete_racer(r);
+                allRacers.Remove(r);
                 await ReplyAsync("Racer Deleted.");
             }
         }
@@ -197,7 +199,7 @@ namespace trillbot.Commands
         [Command("resetracer")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task resetOneRacer(int i) {
-            var r = racer.get_racer(i);
+            var r = allRacers.FirstOrDefault(e=> e.ID == i);
             if (r == null) {
                 await ReplyAsync("No racer with that ID");
                 return;
@@ -210,22 +212,20 @@ namespace trillbot.Commands
         [Command("resetracers")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task resetAllRacers() {
-            var racers = racer.get_racer();
-            racers.ForEach(e=> {
+            allRacers.ForEach(e=> {
                 e.reset();
-                racer.replace_racer(e);
             });
+            helpers.UpdateRacersDatabase();            
             await ReplyAsync("All Racers Reset");
         }
 
         [Command("listracers")]
         public async Task ListRacersAsync() //Need to make this DM & account for more than 2k characters. Using a list to build output strings.
         {
-            var racers = racer.get_racer();
             var s = new List<string>();
             s.Add("Racers for the Grand Prix!");
             s.Add("```" );
-            foreach(Classes.racer r in racers) {
+            foreach(Classes.racer r in allRacers) {
                 s.Add("ID: #" + r.ID + " | " + r.name);
             }
             s.Add("```");

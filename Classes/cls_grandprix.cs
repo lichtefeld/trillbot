@@ -472,7 +472,7 @@ namespace trillbot.Classes {
         public void joinGame(SocketCommandContext Context) {
             racer racer = trillbot.Commands.RacerCreation.allRacers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);//racer.get_racer(Context.Message.Author.Id);
             if (runningGame) {
-                Context.Channel.SendMessageAsync("The game has already started").GetAwaiter().GetResult();
+                helpers.output(Context.Channel,"The game has already started");
                 return;
             }
 
