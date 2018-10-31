@@ -126,6 +126,12 @@ namespace trillbot.Commands
             racer r = new racer();
             if (i < 0) r = allRacers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);//racer.get_racer(Context.Message.Author.Id);
             else r = allRacers[i];
+
+            if ( r == null ) {
+                await ReplyAsync(Context.User.Mention + ", you don't have a current racer");
+                return;
+            }
+            
             var embed = new EmbedBuilder();
 
             embed.Title = "Grand Prix Racer: " + r.name;
@@ -133,8 +139,15 @@ namespace trillbot.Commands
                 embed.WithThumbnailUrl(racer_to_Image[r.ID]);
                 embed.WithDescription(racer_to_Description[r.ID]);
             }
-            embed.AddField("Sponsor",r.faction,true);
+            embed.AddField("Sponsor",r.faction, true);
             embed.AddField("Ability: " + r.ability.Title, r.ability.Description, true);
+            embed.AddField("ID",r.ID.ToString(),true);
+            if( i < 0 ) {
+                embed.AddField("Player",Context.User);
+            } else {
+                var usr = Context.Guild.GetUser(r.player_discord_id);
+                embed.AddField("Player",usr);
+            }
             embed.Build();
             await Context.Channel.SendMessageAsync("", false, embed, null);
         }
