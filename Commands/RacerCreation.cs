@@ -131,7 +131,7 @@ namespace trillbot.Commands
                 await ReplyAsync(Context.User.Mention + ", you don't have a current racer");
                 return;
             }
-            
+
             var embed = new EmbedBuilder();
 
             embed.Title = "Grand Prix Racer: " + r.name;
@@ -143,10 +143,10 @@ namespace trillbot.Commands
             embed.AddField("Ability: " + r.ability.Title, r.ability.Description, true);
             embed.AddField("ID",r.ID.ToString(),true);
             if( i < 0 ) {
-                embed.AddField("Player",Context.User);
+                embed.AddField("Player",Context.User.Mention,true);
             } else {
                 var usr = Context.Guild.GetUser(r.player_discord_id);
-                embed.AddField("Player",usr);
+                embed.AddField("Player",usr.Mention,true);
             }
             embed.Build();
             await Context.Channel.SendMessageAsync("", false, embed, null);
@@ -280,6 +280,13 @@ namespace trillbot.Commands
             s.Add("```");
             await ReplyAsync(String.Join(System.Environment.NewLine,s));
             return;
+        }
+
+        [Command("updatelist")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task updateListAsync() {
+            allRacers = racer.get_racer();
+            await ReplyAsync("List Updated)");
         }
     }
 }
