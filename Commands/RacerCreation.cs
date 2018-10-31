@@ -285,7 +285,7 @@ namespace trillbot.Commands
         [Command("updatelist")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task updateListAsync() {
-            allRacers = racer.get_racer();
+            allRacers = racer.get_racer().OrderBy(e=>e.ID).ToList();
             await ReplyAsync("List Updated)");
         }
     }
