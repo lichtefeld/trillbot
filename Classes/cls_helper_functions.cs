@@ -67,7 +67,7 @@ namespace trillbot.Classes
         }
 
         public static void UpdateRacersList() {
-            trillbot.Commands.RacerCreation.allRacers = racer.get_racer();
+            trillbot.Commands.RacerCreation.allRacers = racer.get_racer().OrderBy(e=>e.ID).ToList();;
         }
 
         public static void output(ISocketMessageChannel channel, string str) {
