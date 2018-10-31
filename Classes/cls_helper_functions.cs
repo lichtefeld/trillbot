@@ -66,6 +66,10 @@ namespace trillbot.Classes
             Serialize.ToJson(trillbot.Commands.RacerCreation.allRacers.ToArray());
         }
 
+        public static void UpdateRacersList() {
+            trillbot.Commands.RacerCreation.allRacers = racer.get_racer();
+        }
+
         public static void output(ISocketMessageChannel channel, string str) {
             if (str.Length == 0) return;
             if (str.Length > 2000) {

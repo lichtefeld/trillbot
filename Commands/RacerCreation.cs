@@ -242,6 +242,19 @@ namespace trillbot.Commands
             await ReplyAsync("All Racers Reset");
         }
 
+        [Command("grandprix")]
+        public async Task ListGrandPrixRacersAsync() {
+            var s = new List<string>();
+            s.Add("Racers for the Grand Prix!");
+            s.Add("```Name (ID) | Ability" );
+            for(int i = 1; i <= 25; i++) {
+                s.Add(allRacers[i].nameID() + " | " + allRacers[i].ability.Title);
+            }
+            s.Add("```");
+            await ReplyAsync(String.Join(System.Environment.NewLine,s));
+            return;
+        }
+
         [Command("listracers")]
         public async Task ListRacersAsync() //Need to make this DM & account for more than 2k characters. Using a list to build output strings.
         {
