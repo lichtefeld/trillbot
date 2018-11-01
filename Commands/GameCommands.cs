@@ -38,7 +38,7 @@ namespace trillbot.Commands
             if ( prix.Value == null) {
                 await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else {
-                prix.Value.exitGame(Context); //Consider checking for a player to be in the game, rather than the Administrator node
+                prix.Value.exitGame(Context);
             }
         }
 
