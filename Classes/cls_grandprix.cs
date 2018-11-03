@@ -66,36 +66,6 @@ namespace trillbot.Classes {
             }
         }
 
-<<<<<<< HEAD
-        //Output Function
-        private void output(ISocketMessageChannel channel, List<string> str) {
-            int count = 0;
-            string output_string = "";
-            if (str.Count == 0) return; 
-            foreach(string s in str) {
-                count += s.Length + 1;
-                if (count >= 2000) {
-                    channel.SendMessageAsync(output_string).GetAwaiter().GetResult();
-                    count = s.Length;
-                    output_string = s + System.Environment.NewLine;
-                } else {
-                    output_string += s + System.Environment.NewLine;
-                }
-            }
-            channel.SendMessageAsync(output_string).GetAwaiter().GetResult();
-        }
-
-        private void output(ISocketMessageChannel channel, string str) {
-            if (str.Length == 0) return;
-            if (str.Length > 2000) {
-                //Handle Being Passed a String longer than 2k characers
-            } else {
-                channel.SendMessageAsync(str).GetAwaiter().GetResult();
-            }
-        }
-
-=======
->>>>>>> development
         //Deal Cards
         private  void dealCards(SocketCommandContext Context)
         {
