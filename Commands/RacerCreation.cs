@@ -90,35 +90,31 @@ namespace trillbot.Commands
             if (name == null) {
                 name = usr.Nickname != null ? usr.Nickname : usr.Username;
             }
-            if(usr.Roles.FirstOrDefault(e=>e.Name == "Racer") == null) 
+            /* if(usr.Roles.FirstOrDefault(e=>e.Name == "Racer") == null) 
             { 
                 await ReplyAsync(name + ", Please contact a moderator if you should be a racer");
-            } 
-            else 
-            {
-                if(ID == -1) {
-                    r = new racer
-                    {
-                        name = name,
-                        faction = faction
-                    };
-                } else {
-                    var a = Ability.get_ability(--ID);
-                    r = new racer
-                    {
-                        name = name,
-                        faction = faction,
-                        ability = a
-                    };
-                }
-
-                r.player_discord_id = Context.Message.Author.Id;
-                allRacers.Add(r);
-                racer.insert_racer(r);
-
-                await ReplyAsync(name + ", You've got a racer!");
+                return;
+            } */
+            if(ID == -1) {
+                r = new racer
+                {
+                    name = name,
+                    faction = faction
+                };
+            } else {
+                var a = Ability.get_ability(--ID);
+                r = new racer
+                {
+                    name = name,
+                    faction = faction,
+                    ability = a
+                };
             }
+            r.player_discord_id = Context.Message.Author.Id;
+            allRacers.Add(r);
+            racer.insert_racer(r);
 
+            await ReplyAsync(name + ", You've got a racer!");
         }
 
         [Command("showracer")]

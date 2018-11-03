@@ -552,15 +552,18 @@ namespace trillbot.Classes {
                         return;
                     }
                     var c1 = Card.get_card(Program.rand.Next(7)+5);
+                    while (c1.ID == 7) c1 = Card.get_card(Program.rand.Next(7)+5);
                     var c2 = Card.get_card(Program.rand.Next(7)+5);
+                    while (c2.ID == 7) c2 = Card.get_card(Program.rand.Next(7)+5);
                     t1.addHazard(c1);
                     t2.addHazard(c2);
                     r.abilityRemaining = false;
                     helpers.output(Context.Channel, r.name + " used " + r.ability.Title + " and played " + c1.title + " against " + t1.name + " and " + c2.title + " against " + t2.name);
                 break;
                 case 22:
+                    int size = r.cards.Count;
                     r.cards = new List<Card>();
-                    for(int k = 0; k < 8; k++) {
+                    for(int k = 0; k < size; k++) {
                         if(cards.Count == 0) cards = generateDeck();
                         r.cards.Add(cards.Pop());
                     }
@@ -641,6 +644,10 @@ namespace trillbot.Classes {
                         helpers.output(Context.Channel,"You didn't target a valid racer");
                         return;
                     }
+                    if(t.cards.count < 4) {
+                        helpers.output(Context.Channel,"You can't target this racers as they have less than 4 cards.");
+                        return;
+                    }
                     j.Distinct();
                     if(j == null || j.Count != 4) {
                         helpers.output(Context.Channel,"You didn't select 4 cards!");
@@ -657,7 +664,7 @@ namespace trillbot.Classes {
                         int temp = Program.rand.Next(8);
                         if(!nums.Contains(temp)) nums.Add(temp);
                     }
-                    helpers.output(Context.Channel,String.Join(", ", nums)); //Testing output to Verify using 4 random cards
+                    //helpers.output(Context.Channel,String.Join(", ", nums)); //Testing output to Verify using 4 random cards
                     for(int k = 0; k < 4; k++) {
                         var swap = t.cards[nums[k]];
                         t.cards[nums[k]] = r.cards[j[k]-1];
@@ -682,21 +689,31 @@ namespace trillbot.Classes {
                         helpers.output(Context.Channel,"You can't scramble yourself!");
                         return;
                     }
-                    var str = new List<string>();
-                    str.Add(t.name + " losses the following cards: ");
-                    for(int k = 0; k < 4; k++) {
-                        var remove = t.cards[Program.rand.Next(t.cards.Count)];
-                        str.Add(remove.title);
-                        t.cards.Remove(remove);
-                    }
-                    helpers.output(Context.Channel,String.Join(", ",str));
-                    for(int k = 0; k < 4; k++) {
+                    if(t.cards.Count == 1) { 
+                        helpers.output(Context.Channel,t.name + " losses the following card: " + t.cards[0].title);
+                        t.cards.RemoveAt(0);
                         if(cards.Count == 0) cards = generateDeck();
                         t.cards.Add(cards.Pop());
+                        r.abilityRemaining = false;
+                        ontext.Guild.GetUser(t.player_discord_id).SendMessageAsync(t.currentStatus()).GetAwaiter().GetResult();
+                        helpers.output(Context.Channel,r.name + " used " + r.ability.Title + " against " + t.name + " causing them to redraw their only card!");
+                    } else {
+                        var str = new List<string>();
+                        str.Add(t.name + " losses the following cards: ");
+                        for(int k = 0; k < 4; k++) {
+                            var remove = t.cards[Program.rand.Next(t.cards.Count)];
+                            str.Add(remove.title);
+                            t.cards.Remove(remove);
+                        }
+                        helpers.output(Context.Channel,String.Join(", ",str));
+                        for(int k = 0; k < 4; k++) {
+                            if(cards.Count == 0) cards = generateDeck();
+                            t.cards.Add(cards.Pop());
+                        }
+                        r.abilityRemaining = false;
+                        ontext.Guild.GetUser(t.player_discord_id).SendMessageAsync(t.currentStatus()).GetAwaiter().GetResult();
+                        helpers.output(Context.Channel,r.name + " used " + r.ability.Title + " against " + t.name + " causing them to redraw four random cards!");
                     }
-                    r.abilityRemaining = false;
-                    Context.Guild.GetUser(t.player_discord_id).SendMessageAsync(t.currentStatus()).GetAwaiter().GetResult();
-                    helpers.output(Context.Channel,r.name + " used " + r.ability.Title + " against " + t.name + " causing them to redraw four random cards!");
                 break;
                 case 14:
                     if(i < 0 || i > 8 || j == null || j.Count > 1 || j[0] < 0 || j[0] > 8) {
