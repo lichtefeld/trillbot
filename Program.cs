@@ -41,6 +41,8 @@ namespace trillbot
             //event subscriptions
             _client.Log += Log;
 
+            trillbot.Commands.RacerCreation.allRacers = trillbot.Classes.racer.get_racer().OrderBy(e=>e.ID).ToList();
+
             await RegisterCommandAsync();
 
             await _client.LoginAsync(TokenType.Bot, secrets["bot_code"]);

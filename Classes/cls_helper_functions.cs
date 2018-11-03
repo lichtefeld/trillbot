@@ -33,18 +33,70 @@ namespace trillbot.Classes
         }
 
         public static string center(string s, int i) {
-            bool odd = false;
             string spaces = "";
             int toCenter = i - s.Length;
-            if (toCenter % 2 == 1) odd = true;
             for(int j = 0; j < toCenter/2; j++) {
                 spaces += " ";
             }
-            if(odd) {
+            if(toCenter % 2 == 1) {
                 return " " + spaces + s + spaces;
             } else {
                 return spaces + s + spaces;
             }
+        }
+
+        public static void output(ISocketMessageChannel channel, List<string> str) {
+            int count = 0;
+            string output_string = "";
+            if (str.Count == 0) return; 
+            foreach(string s in str) {
+                count += s.Length + 1;
+                if (count >= 2000) {
+                    channel.SendMessageAsync(output_string);
+                    count = s.Length;
+                    output_string = s + System.Environment.NewLine;
+                } else {
+                    output_string += s + System.Environment.NewLine;
+                }
+            }
+            channel.SendMessageAsync(output_string).GetAwaiter().GetResult();
+        }
+
+        public static void UpdateRacersDatabase() {
+            Serialize.ToJson(trillbot.Commands.RacerCreation.allRacers.ToArray());
+        }
+
+        public static void UpdateRacersList() {
+            trillbot.Commands.RacerCreation.allRacers = racer.get_racer().OrderBy(e=>e.ID).ToList();;
+        }
+
+        public static void output(ISocketMessageChannel channel, string str) {
+            if (str.Length == 0) return;
+            if (str.Length > 2000) {
+                int split = 0;
+                for(int i = 2000; i > 0; i--) {
+                    if(str[i] == ' ') {
+                        split = i;
+                        break;
+                    }
+                }
+                string output = str.Remove(split);
+                helpers.output(channel, output);
+                str = str.Remove(0,split);
+                helpers.output(channel,str);
+            } else {
+                channel.SendMessageAsync(str).GetAwaiter().GetResult();
+            }
+        }
+
+        public static string formatBets(Character character) {
+            var output = new List<string>();
+            output.Add("**" +character.name + " Bets** ```");
+            foreach (trillbot.Classes.Bet bet in character.bets) {
+                output.Add(bet.ToString());
+            }
+            output.Add("```");
+            return String.Join(System.Environment.NewLine,output);
         }
     }
 

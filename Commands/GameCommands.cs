@@ -32,6 +32,16 @@ namespace trillbot.Commands
             await Context.Channel.SendMessageAsync("Game started and bound to this channel use `ta!joingame` in this channel to join.");
         }
 
+        [Command("exitgame")]
+        public async Task exitGameAsync() {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
+                await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else {
+                prix.Value.exitGame(Context);
+            }
+        }
+
         [Command("startgame")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task startGame() {
@@ -119,12 +129,77 @@ namespace trillbot.Commands
         }
 
         [Command("playability")]
-        public async Task playAbilityAsync(int i = -1, int j = -1) {
+        public async Task playAbilityAsync(params string[] j) {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
+                await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else {
+                int i = -1;
+                if(j.Length > 0) {
+                    if(!Int32.TryParse(j[0],out i)) { 
+                        await ReplyAsync("Failed to convert to integer");
+                        return;
+                    }
+                }
+                var k = new List<int>();
+                for(int l = 1; l < j.Length; l++) {
+                    int o;
+                    if(Int32.TryParse(j[l],out o)) {
+                        k.Add(o);
+                    } else {
+                        await ReplyAsync("Failed to convert to integer");
+                        return;
+                    }
+                }
+                prix.Value.playAbility(Context, i, k);
+            }
+        }
+
+        [Command("shuffleRacers")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task shuffleRacersAsync(int i) {
+            var names = new List<string>();
+            for(int j = 0; j < i; j++) {
+                names.Add("Racer " + (j+1));
+            }
+            var shuffledNames = new List<string>();
+            while(names.Count != 0) {
+                int j = Program.rand.Next(names.Count);
+                shuffledNames.Add(names[j]);
+                names.RemoveAt(j);
+            }
+            await ReplyAsync(String.Join(System.Environment.NewLine, shuffledNames));
+        }
+
+        [Command("skip")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task skipRacerAsync() {
             var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
             if ( prix.Value == null) {
                 await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else { 
-                prix.Value.playAbility(Context, i, j);
+                prix.Value.skipTurn(Context);
+            }
+        }
+
+        [Command("leave")]
+        public async Task leaveAsync() {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
+                await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else { 
+                prix.Value.toggleDeath(Context);
+            }
+        }
+
+        [Command("kill")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task killAsync(int i) {
+            var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
+            if ( prix.Value == null) {
+                await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
+            } else { 
+                prix.Value.adminDeath(Context, i);
             }
         }
     }
