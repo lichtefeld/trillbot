@@ -644,7 +644,7 @@ namespace trillbot.Classes {
                         helpers.output(Context.Channel,"You didn't target a valid racer");
                         return;
                     }
-                    if(t.cards.count < 4) {
+                    if(t.cards.Count < 4) {
                         helpers.output(Context.Channel,"You can't target this racers as they have less than 4 cards.");
                         return;
                     }
@@ -695,7 +695,7 @@ namespace trillbot.Classes {
                         if(cards.Count == 0) cards = generateDeck();
                         t.cards.Add(cards.Pop());
                         r.abilityRemaining = false;
-                        ontext.Guild.GetUser(t.player_discord_id).SendMessageAsync(t.currentStatus()).GetAwaiter().GetResult();
+                        Context.Guild.GetUser(t.player_discord_id).SendMessageAsync(t.currentStatus()).GetAwaiter().GetResult();
                         helpers.output(Context.Channel,r.name + " used " + r.ability.Title + " against " + t.name + " causing them to redraw their only card!");
                     } else {
                         var str = new List<string>();
@@ -711,7 +711,7 @@ namespace trillbot.Classes {
                             t.cards.Add(cards.Pop());
                         }
                         r.abilityRemaining = false;
-                        ontext.Guild.GetUser(t.player_discord_id).SendMessageAsync(t.currentStatus()).GetAwaiter().GetResult();
+                        Context.Guild.GetUser(t.player_discord_id).SendMessageAsync(t.currentStatus()).GetAwaiter().GetResult();
                         helpers.output(Context.Channel,r.name + " used " + r.ability.Title + " against " + t.name + " causing them to redraw four random cards!");
                     }
                 break;

@@ -52,7 +52,7 @@ namespace trillbot.Commands
         {
             var usr = Context.Guild.GetUser(Context.Message.Author.Id);
             var character = Classes.Character.get_character(Context.Message.Author.Id);
-            var r = racer.get_racer(ID);
+            var r = racer.get_racer(emote_to_ID[s].Item1);
             var name = usr.Nickname != null ? usr.Nickname : usr.Username;
 
             if (character == null)
