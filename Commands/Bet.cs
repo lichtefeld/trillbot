@@ -85,6 +85,10 @@ namespace trillbot.Commands
                 await ReplyAsync("Non-valid bet type. Only `win` and `death` accepted");
                 return;
             }
+            if(character.balance-amount<0) {
+                await ReplyAsync("You can't go into a negative balance");
+                return;
+            }
             var emotesList = Context.Guild.Emotes.ToList();
             var em = emotesList.FirstOrDefault(e=> e.Name == betInfo.Item1.Substring(1,betInfo.Item1.Length-2));
             var b = new trillbot.Classes.Bet(character.bets.Count,betInfo.Item5,amount,type,em.Name);
