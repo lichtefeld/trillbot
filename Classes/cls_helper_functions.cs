@@ -13,6 +13,11 @@ namespace trillbot.Classes
     public class helpers
 
     {
+        public static string parseEmote(string s) {
+            var temp = s.Substring(s.IndexOf(":")+1);
+            return temp.Substring(0,s.IndexOf(":"));
+        }
+
         public static object GetPropValue(object src, string propName)
         {
             return src.GetType().GetProperty(propName).GetValue(src, null);

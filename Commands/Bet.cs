@@ -54,7 +54,8 @@ namespace trillbot.Commands
             var usr = Context.Guild.GetUser(Context.Message.Author.Id);
             var name = usr.Nickname != null ? usr.Nickname : usr.Username;
             var character = Classes.Character.get_character(Context.Message.Author.Id);
-            var betInfo = emote_to_ID.FirstOrDefault(e=> e.Item1 == s);
+            var emoteName = helpers.parseEmote(s);
+            var betInfo = emote_to_ID.FirstOrDefault(e=> e.Item1 == emoteName);
 
             if(betInfo == null) {
                 await ReplyAsync("Please submit input of a racer using an emote");
