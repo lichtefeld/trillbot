@@ -47,21 +47,27 @@ namespace trillbot.Classes {
             var store = new DataStore ("card.json");
 
             // Get employee collection
-            return store.GetCollection<Card> ().AsQueryable ().ToList();
+            var rtrner = store.GetCollection<Card> ().AsQueryable ().ToList();
+            store.Dispose();
+            return rtrner;
         }
 
         public static Card get_card (int id) {
             var store = new DataStore ("card.json");
 
             // Get employee collection
-            return store.GetCollection<Card> ().AsQueryable ().FirstOrDefault (e => e.ID == id);
+            var rtrner = store.GetCollection<Card> ().AsQueryable ().FirstOrDefault (e => e.ID == id);
+            store.Dispose();
+            return rtrner;
         }
 
         public static Card get_card (string name) {
             var store = new DataStore ("card.json");
 
             // Get employee collection
-            return store.GetCollection<Card> ().AsQueryable ().FirstOrDefault (e => e.title == name);
+            var rtrner = store.GetCollection<Card> ().AsQueryable ().FirstOrDefault (e => e.title == name);
+            store.Dispose();
+            return rtrner;
         }
 
         public static void insert_card (Card card) {

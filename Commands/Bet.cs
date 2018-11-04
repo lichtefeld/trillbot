@@ -19,41 +19,51 @@ namespace trillbot.Commands
     {
         public static Boolean acceptBets = true;
 
-        private static readonly Dictionary<string,Tuple<int,int,double>> emote_to_ID = new Dictionary<string, Tuple<int,int,double>>() {
-            {":vlad:",new Tuple<int, int, double>(1,28,45.0)},
-            {":franz:",new Tuple<int, int, double>(2,44,2.0)},
-            {":sportivox:",new Tuple<int, int, double>(3,4,31.0)},
-            {":phastee:",new Tuple<int, int, double>(4,18,50.0)},
-            {":anthony:",new Tuple<int, int, double>(5,25,40.0)},
-            {":dula:",new Tuple<int, int, double>(6,42,21.0)},
-            {":coco:",new Tuple<int, int, double>(7,9,25.0)},
-            {":tiyamike:",new Tuple<int, int, double>(8,29,8.0)},
-            {":rutile:",new Tuple<int, int, double>(9,29,15.0)},
-            {":jacobson:",new Tuple<int, int, double>(10,39,25.0)},
-            {":decius:",new Tuple<int, int, double>(11,3,27.0)},
-            {":racerIX:",new Tuple<int, int, double>(12,37,5.0)},
-            {":cato:",new Tuple<int, int, double>(13,45,15.0)},
-            {":liono:",new Tuple<int, int, double>(14,48,7.0)},
-            {":jaxton:",new Tuple<int, int, double>(15,16,10.0)},
-            {":amber:",new Tuple<int, int, double>(16,32,31.0)},
-            {":moose:",new Tuple<int, int, double>(17,11,5.0)},
-            {":panda:",new Tuple<int, int, double>(18,25,35.0)},
-            {":prayla:",new Tuple<int, int, double>(19,16,44.0)},
-            {":biggles:",new Tuple<int, int, double>(20,10,5.0)},
-            {":jim:",new Tuple<int, int, double>(21,14,21.0)},
-            {":steel:",new Tuple<int, int, double>(22,45,30.0)},
-            {":fuschia:",new Tuple<int, int, double>(23,42,1.5)},
-            {":valls:",new Tuple<int, int, double>(24,8,46.0)},
-            {":nikita:",new Tuple<int, int, double>(25,40,7.0)}
+        public static readonly List<Tuple<string,int,int,double,string>> emote_to_ID = new List<Tuple<string,int,int,double,string>>() {
+            //Emote String, ID, Winning, Death, Name
+            {new Tuple<string,int, int, double, string>(":vlad:",1,28,45.0,"Vlad \"Humble\" Antonovich")},
+            {new Tuple<string,int, int, double, string>(":franz:",2,44,2.0,"Franciszek the Knight-Errant")},
+            {new Tuple<string,int, int, double, string>(":sportivox:",3,4,31.0,"Sportivox Eridanus Strix Vulpine")},
+            {new Tuple<string,int, int, double, string>(":phastee:",4,18,50.0,"Mister Phas'Tee")},
+            {new Tuple<string,int, int, double, string>(":anthony:",5,25,40.0,"Anthony Gonzales")},
+            {new Tuple<string,int, int, double, string>(":dula:",6,42,21.0,"Dula Imay")},
+            {new Tuple<string,int, int, double, string>(":coco:",7,9,25.0,"Coco Cobra")},
+            {new Tuple<string,int, int, double, string>(":tiyamike:",8,29,8.0,"Kreigsherr Crux Kesler Tiyamike")},
+            {new Tuple<string,int, int, double, string>(":rutile:",9,29,15.0,"Rutile Venus")},
+            {new Tuple<string,int, int, double, string>(":jacobson:",10,39,25.0,"S. Jacobson")},
+            {new Tuple<string,int, int, double, string>(":decius:",11,3,27.0,"Decius Tullius Crispus")},
+            {new Tuple<string,int, int, double, string>(":racerIX:",12,37,5.0,"Racer IX")},
+            {new Tuple<string,int, int, double, string>(":cato:",13,45,15.0,"Princeps Fornax Decius Cato")},
+            {new Tuple<string,int, int, double, string>(":liono:",14,48,7.0,"Xeper Lyra Liono Panthra")},
+            {new Tuple<string,int, int, double, string>(":jaxton:",15,16,10.0,"Jaxton Benson")},
+            {new Tuple<string,int, int, double, string>(":amber:",16,32,31.0,"Amber")},
+            {new Tuple<string,int, int, double, string>(":moose:",17,11,5.0,"The Moose")},
+            {new Tuple<string,int, int, double, string>(":panda:",18,25,35.0,"Crux Panda")},
+            {new Tuple<string,int, int, double, string>(":prayla:",19,16,44.0,"Prayla Tyrene, MO, Cybernetics")},
+            {new Tuple<string,int, int, double, string>(":biggles:",20,10,5.0,"Echo Pyxis Rhodes Biggles")},
+            {new Tuple<string,int, int, double, string>(":jim:",21,14,21.0,"\"Mongrel\" Jim Timo")},
+            {new Tuple<string,int, int, double, string>(":steel:",22,45,30.0,"Richie Steel")},
+            {new Tuple<string,int, int, double, string>(":fuschia:",23,42,1.5,"Shamshir Vela Fadi “Fuschia” Cadis")},
+            {new Tuple<string,int, int, double, string>(":valls:",24,8,46.0,"PFC Guillaume \"Useless\" Valls")},
+            {new Tuple<string,int, int, double, string>(":nikita:",25,40,7.0,"Nikita")}
         };
 
         [Command("bet")]
-        public async Task BetAsync(string s, int amount)
+        public async Task BetAsync(string type, string s, int amount)
         {
             var usr = Context.Guild.GetUser(Context.Message.Author.Id);
-            var character = Classes.Character.get_character(Context.Message.Author.Id);
-            var r = racer.get_racer(ID);
             var name = usr.Nickname != null ? usr.Nickname : usr.Username;
+            var character = Classes.Character.get_character(Context.Message.Author.Id);
+            var emoteName = helpers.parseEmote(s);
+            //await ReplyAsync(emoteName);
+            var betInfo = emote_to_ID.FirstOrDefault(e=> e.Item1 == emoteName);
+
+            if(betInfo == null) {
+                await ReplyAsync("Please submit input of a racer using an emote");
+                return;
+            }
+
+            var r = racer.get_racer(betInfo.Item2);
 
             if (character == null)
             {
@@ -70,13 +80,23 @@ namespace trillbot.Commands
                 await ReplyAsync("You can't make a negative bet!");
                 return;
             }
-
-            var b = new trillbot.Classes.Bet(r.name,amount);
+            type = type.ToLower();
+            if (type != "win" && type != "death") {
+                await ReplyAsync("Non-valid bet type. Only `win` and `death` accepted");
+                return;
+            }
+            if(character.balance-amount<0) {
+                await ReplyAsync("You can't go into a negative balance");
+                return;
+            }
+            var emotesList = Context.Guild.Emotes.ToList();
+            var em = emotesList.FirstOrDefault(e=> e.Name == betInfo.Item1.Substring(1,betInfo.Item1.Length-2));
+            var b = new trillbot.Classes.Bet(character.bets.Count,betInfo.Item5,amount,type,em.Name);
 
             character.bets.Add(b);
             character.balance -= amount;
             Character.update_character(character);
-            await ReplyAsync(usr.Mention + ", you have placed the following bet: " + System.Environment.NewLine + b.ToString());
+            await ReplyAsync(usr.Mention + ", you have placed the following bet: " + System.Environment.NewLine + b.display(Context.Guild));
 
         }
 
@@ -93,7 +113,7 @@ namespace trillbot.Commands
                 return;
             }
             
-            await Context.User.SendMessageAsync(helpers.formatBets(character));
+            await Context.User.SendMessageAsync(helpers.formatBets(character, Context.Guild));
         }
 
         [Command("displaybalance")]
@@ -138,15 +158,53 @@ namespace trillbot.Commands
             return;
         }
 
+        [Command("odds")]
+        public async Task displayRacerOdds(bool channel = false) {
+            var strings = new List<string>();
+            var serverEmotes = Context.Guild.Emotes.ToList();
+            strings.Add("ID) Name | Emote Title | Winning Bet");
+            foreach(var k in emote_to_ID) {
+                var emote = serverEmotes.FirstOrDefault(e=> e.Name == k.Item1.Substring(1,k.Item1.Length-2));
+                strings.Add(k.Item2 +") "+k.Item5+" | " + emote + " `"+k.Item1+"` | 1 to "+k.Item3);
+            }
+            int count = 0;
+            string output_string = "";
+            foreach(string s in strings) {
+                count += s.Length + 1;
+                if (count >= 2000) {
+                    if (channel) await ReplyAsync(output_string);
+                    await Context.User.SendMessageAsync(output_string);
+                    count = s.Length;
+                    output_string = s + System.Environment.NewLine;
+                } else {
+                    output_string += s + System.Environment.NewLine;
+                }
+            }
+            if (channel) await ReplyAsync(output_string);
+            await Context.User.SendMessageAsync(output_string);
+        }
+
         [Command("allbets")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task allBetsAsync() {
             var chars = Character.get_character();
             var strings = new List<string>();
             foreach(Character c in chars) {
-                strings.Add(helpers.formatBets(c));
+                strings.Add(helpers.formatBets(c, Context.Guild));
             }
-            helpers.output(Context.Channel,strings);
+            int count = 0;
+            string output_string = "";
+            foreach(string s in strings) {
+                count += s.Length + 1;
+                if (count >= 2000) {
+                    await ReplyAsync(output_string);
+                    count = s.Length;
+                    output_string = s + System.Environment.NewLine;
+                } else {
+                    output_string += s + System.Environment.NewLine;
+                }
+            }
+            await ReplyAsync(output_string);
         }
     }
 }

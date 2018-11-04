@@ -28,28 +28,36 @@ namespace trillbot.Classes {
             var store = new DataStore ("character.json");
 
             // Get employee collection
-            return store.GetCollection<Character> ().AsQueryable ().ToList();
+            var rtrner = store.GetCollection<Character> ().AsQueryable ().ToList();
+            store.Dispose();
+            return rtrner;
         }
 
         public static Character get_character (int id) {
             var store = new DataStore ("character.json");
 
             // Get employee collection
-            return store.GetCollection<Character> ().AsQueryable ().FirstOrDefault (e => e.ID == id);
+            var rtrner = store.GetCollection<Character> ().AsQueryable ().FirstOrDefault (e => e.ID == id);
+            store.Dispose();
+            return rtrner;
         }
 
         public static Character get_character (string name) {
             var store = new DataStore ("character.json");
 
             // Get employee collection
-            return store.GetCollection<Character> ().AsQueryable ().FirstOrDefault (e => e.name == name);
+            var rtrner = store.GetCollection<Character> ().AsQueryable ().FirstOrDefault (e => e.name == name);
+            store.Dispose();
+            return rtrner;
         }
 
         public static Character get_character (ulong player_id) {
             var store = new DataStore ("character.json");
 
             // Get employee collection
-            return store.GetCollection<Character> ().AsQueryable ().FirstOrDefault (e => e.player_discord_id == player_id);
+            var rtrner = store.GetCollection<Character> ().AsQueryable ().FirstOrDefault (e => e.player_discord_id == player_id);
+            store.Dispose();
+            return rtrner;
         }
 
         public static void insert_character (Character character) {
