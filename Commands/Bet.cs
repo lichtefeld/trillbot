@@ -49,12 +49,19 @@ namespace trillbot.Commands
         };
 
         [Command("bet")]
-        public async Task BetAsync(string s, int amount)
+        public async Task BetAsync(string type, string s, int amount)
         {
             var usr = Context.Guild.GetUser(Context.Message.Author.Id);
-            var character = Classes.Character.get_character(Context.Message.Author.Id);
-            var r = racer.get_racer(emote_to_ID.FirstOrDefault(e=> e.Item1 == s).Item2);
             var name = usr.Nickname != null ? usr.Nickname : usr.Username;
+            var character = Classes.Character.get_character(Context.Message.Author.Id);
+            var betInfo = emote_to_ID.FirstOrDefault(e=> e.Item1 == s);
+
+            if(betInfo == null) {
+                await ReplyAsync("Please submit input of a racer using an emote");
+                return;
+            }
+
+            var r = racer.get_racer(betInfo.Item2);
 
             if (character == null)
             {
@@ -71,8 +78,14 @@ namespace trillbot.Commands
                 await ReplyAsync("You can't make a negative bet!");
                 return;
             }
-
-            var b = new trillbot.Classes.Bet(character.bets.Count,r.name,amount);
+            type = type.ToLower();
+            if (type != "win" || type != "death") {
+                await ReplyAsync("Non-valid bet type. Only `win` and `death` accepted");
+                return;
+            }
+            var emotesList = Context.Guild.Emotes.ToList();
+            var em = emotesList.FirstOrDefault(e=> e.Name == betInfo.Item1.Substring(1,betInfo.Item1.Length-2));
+            var b = new trillbot.Classes.Bet(character.bets.Count,betInfo.Item5,amount,type,em);
 
             character.bets.Add(b);
             character.balance -= amount;
@@ -140,12 +153,38 @@ namespace trillbot.Commands
         }
 
         [Command("odds")]
-        public async Task displayRacerOdds() {
+        public async Task displayRacerOdds(bool channel = false) {
             var strings = new List<string>();
-            //var serverEmotes = Context.
+            var serverEmotes = Context.Guild.Emotes.ToList();
             strings.Add("ID) Name | Emote Title | Winning Bet");
             foreach(var k in emote_to_ID) {
-                strings.Add(k.Item2 +")" + "" + " `"+k.Item5+"` | "+k.Item1+" | "+k.Item3);
+                var emote = serverEmotes.FirstOrDefault(e=> e.Name == k.Item1.Substring(1,k.Item1.Length-2));
+                strings.Add(k.Item2 +") "+k.Item5+" | " + emote + " `"+k.Item1+"` | 1 to "+k.Item3);
+            }
+            int count = 0;
+            string output_string = "";
+            foreach(string s in strings) {
+                count += s.Length + 1;
+                if (count >= 2000) {
+                    if (channel) await ReplyAsync(output_string);
+                    await Context.User.SendMessageAsync(output_string);
+                    count = s.Length;
+                    output_string = s + System.Environment.NewLine;
+                } else {
+                    output_string += s + System.Environment.NewLine;
+                }
+            }
+            if (channel) await ReplyAsync(output_string);
+            await Context.User.SendMessageAsync(output_string);
+        }
+
+        [Command("allbets")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task allBetsAsync() {
+            var chars = Character.get_character();
+            var strings = new List<string>();
+            foreach(Character c in chars) {
+                strings.Add(helpers.formatBets(c));
             }
             int count = 0;
             string output_string = "";
@@ -160,17 +199,6 @@ namespace trillbot.Commands
                 }
             }
             await ReplyAsync(output_string);
-        }
-
-        [Command("allbets")]
-        [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task allBetsAsync() {
-            var chars = Character.get_character();
-            var strings = new List<string>();
-            foreach(Character c in chars) {
-                strings.Add(helpers.formatBets(c));
-            }
-            helpers.output(Context.Channel,strings);
         }
     }
 }

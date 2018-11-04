@@ -16,14 +16,22 @@ namespace trillbot.Classes {
         [JsonProperty ("Amount")]
         public int Amount { get; set; }
 
-        public Bet(int i, string rn, int a) {
+        [JsonProperty("Type")]
+        public string Type { get; set; }
+
+        [JsonProperty("Emote")]
+        public Discord.Emote Emote { get; set; }
+
+        public Bet(int i, string rn, int a, string type, Discord.Emote emote) {
             Id = i;
             RacerName = rn;
             Amount = a;
+            Type = type;
+            Emote = emote;
         }
 
         public override string ToString() {
-            return "Bet ID: " + Id + " | Racer Name: " + RacerName + " | Amount: " + Amount;
+            return "Bet ID: " + Id + " | Racer Name: " + RacerName + Emote + "| Type " + Type + " | Amount: " + Amount;
         }
 
     }
