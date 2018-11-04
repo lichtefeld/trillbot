@@ -257,10 +257,11 @@ namespace trillbot.Commands
         [Command("grandprix")]
         public async Task ListGrandPrixRacersAsync() {
             var s = new List<string>();
+            var GrandPrixRacers = allRacers.Where(e=> e.ID <26 && e.ID > 0).ToList().OrderBy(e=>e.ID);
             s.Add("Racers for the Grand Prix!");
             s.Add("```Name (ID) | Ability" );
-            for(int i = 1; i <= 25; i++) {
-                s.Add(allRacers[i].nameID() + " | " + allRacers[i].ability.Title);
+            foreach(var r in GrandPrixRacers) {
+                s.Add(r.nameID() + " | " + r.ability.Title);
             }
             s.Add("```");
             await ReplyAsync(String.Join(System.Environment.NewLine,s));
