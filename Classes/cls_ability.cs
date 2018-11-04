@@ -37,22 +37,29 @@ namespace trillbot.Classes
         public static List<Ability> get_ability () {
             var store = new DataStore ("ability.json");
 
+            var rtrnr = store.GetCollection<Ability> ().AsQueryable ().ToList();
+            store.Dispose();
+
             // Get employee collection
-            return store.GetCollection<Ability> ().AsQueryable ().ToList();
+            return rtrnr;
         }
 
         public static Ability get_ability (int id) {
             var store = new DataStore ("ability.json");
 
             // Get employee collection
-            return store.GetCollection<Ability> ().AsQueryable ().FirstOrDefault (e => e.ID == id);
+            var rtrnr = store.GetCollection<Ability> ().AsQueryable ().FirstOrDefault (e => e.ID == id);
+            store.Dispose();
+            return rtrnr;
         }
 
         public static Ability get_ability (string name) {
             var store = new DataStore ("ability.json");
 
             // Get employee collection
-            return store.GetCollection<Ability> ().AsQueryable ().FirstOrDefault (e => e.Title == name);
+            var rtrnr = store.GetCollection<Ability> ().AsQueryable ().FirstOrDefault (e => e.Title == name);
+            store.Dispose();
+            return rtrnr;
         }
 
         public static void insert_ability (Ability ability) {

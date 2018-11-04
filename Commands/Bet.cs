@@ -72,7 +72,7 @@ namespace trillbot.Commands
                 return;
             }
 
-            var b = new trillbot.Classes.Bet(r.bets.Count,r.name,amount);
+            var b = new trillbot.Classes.Bet(character.bets.Count,r.name,amount);
 
             character.bets.Add(b);
             character.balance -= amount;
@@ -142,9 +142,10 @@ namespace trillbot.Commands
         [Command("odds")]
         public async Task displayRacerOdds() {
             var strings = new List<string>();
-            strings.Add("ID) Name | Emote Title | Winning Bet | Death Bet");
+            //var serverEmotes = Context.
+            strings.Add("ID) Name | Emote Title | Winning Bet");
             foreach(var k in emote_to_ID) {
-                strings.Add(k.Item2 +") "+k.Item5+" | "+k.Item1+" | "+k.Item3+" | "+k.Item4);
+                strings.Add(k.Item2 +")" + "" + " `"+k.Item5+"` | "+k.Item1+" | "+k.Item3);
             }
             int count = 0;
             string output_string = "";

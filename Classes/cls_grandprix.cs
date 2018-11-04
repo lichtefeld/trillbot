@@ -91,7 +91,7 @@ namespace trillbot.Classes {
         }
 
         //Hazard Output
-        private string targetHazard(racer racer, racer target, Card card) {
+        private static string targetHazard(racer racer, racer target, Card card) {
             target.addHazard(card);
             return (racer.name + " played a " + card.title + " against " + target.name + target_hazard_output[(int)card.value]);
         }
