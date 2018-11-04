@@ -14,8 +14,8 @@ namespace trillbot.Classes
 
     {
         public static string parseEmote(string s) {
-            var temp = s.Substring(s.IndexOf(":")+1);
-            return temp.Substring(0,s.IndexOf(":"));
+            string temp = s.Substring(s.IndexOf(":")+1);
+            return ":" + temp.Substring(0,temp.IndexOf(":")+1);
         }
 
         public static object GetPropValue(object src, string propName)
@@ -94,13 +94,12 @@ namespace trillbot.Classes
             }
         }
 
-        public static string formatBets(Character character) {
+        public static string formatBets(Character character, IGuild Guild) {
             var output = new List<string>();
-            output.Add("**" +character.name + " Bets** ```");
+            output.Add("**" +character.name + " Bets**");
             foreach (trillbot.Classes.Bet bet in character.bets) {
-                output.Add(bet.ToString());
+                output.Add(bet.display(Guild));
             }
-            output.Add("```");
             return String.Join(System.Environment.NewLine,output);
         }
     }

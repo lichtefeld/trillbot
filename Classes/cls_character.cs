@@ -55,7 +55,9 @@ namespace trillbot.Classes {
             var store = new DataStore ("character.json");
 
             // Get employee collection
-            return store.GetCollection<Character> ().AsQueryable ().FirstOrDefault (e => e.player_discord_id == player_id);
+            var rtrner = store.GetCollection<Character> ().AsQueryable ().FirstOrDefault (e => e.player_discord_id == player_id);
+            store.Dispose();
+            return rtrner;
         }
 
         public static void insert_character (Character character) {

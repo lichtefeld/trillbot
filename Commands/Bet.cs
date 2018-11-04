@@ -55,6 +55,7 @@ namespace trillbot.Commands
             var name = usr.Nickname != null ? usr.Nickname : usr.Username;
             var character = Classes.Character.get_character(Context.Message.Author.Id);
             var emoteName = helpers.parseEmote(s);
+            await ReplyAsync(emoteName);
             var betInfo = emote_to_ID.FirstOrDefault(e=> e.Item1 == emoteName);
 
             if(betInfo == null) {
@@ -80,18 +81,18 @@ namespace trillbot.Commands
                 return;
             }
             type = type.ToLower();
-            if (type != "win" || type != "death") {
+            if (type != "win" && type != "death") {
                 await ReplyAsync("Non-valid bet type. Only `win` and `death` accepted");
                 return;
             }
             var emotesList = Context.Guild.Emotes.ToList();
             var em = emotesList.FirstOrDefault(e=> e.Name == betInfo.Item1.Substring(1,betInfo.Item1.Length-2));
-            var b = new trillbot.Classes.Bet(character.bets.Count,betInfo.Item5,amount,type,em);
+            var b = new trillbot.Classes.Bet(character.bets.Count,betInfo.Item5,amount,type,em.Name);
 
             character.bets.Add(b);
             character.balance -= amount;
             Character.update_character(character);
-            await ReplyAsync(usr.Mention + ", you have placed the following bet: " + System.Environment.NewLine + b.ToString());
+            await ReplyAsync(usr.Mention + ", you have placed the following bet: " + System.Environment.NewLine + b.display(Context.Guild));
 
         }
 
@@ -108,7 +109,7 @@ namespace trillbot.Commands
                 return;
             }
             
-            await Context.User.SendMessageAsync(helpers.formatBets(character));
+            await Context.User.SendMessageAsync(helpers.formatBets(character, Context.Guild));
         }
 
         [Command("displaybalance")]
@@ -185,7 +186,7 @@ namespace trillbot.Commands
             var chars = Character.get_character();
             var strings = new List<string>();
             foreach(Character c in chars) {
-                strings.Add(helpers.formatBets(c));
+                strings.Add(helpers.formatBets(c, Context.Guild));
             }
             int count = 0;
             string output_string = "";
