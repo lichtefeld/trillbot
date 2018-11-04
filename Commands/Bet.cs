@@ -15,6 +15,7 @@ using trillbot.Classes;
 
 namespace trillbot.Commands
 {
+    
     public class Bet : ModuleBase<SocketCommandContext>
     {
         public static Boolean acceptBets = true;
@@ -205,6 +206,33 @@ namespace trillbot.Commands
                 }
             }
             await ReplyAsync(output_string);
+        }
+    }
+
+    public class fuck_tuples
+    {
+        public string emote {get;set;}
+        public int int1 {get;set;}
+        public int int2 {get;set;}
+        public double doub1 {get;set;}
+        public string racername {get;set;}
+
+        public fuck_tuples(Tuple<string,int,int,double,string> tup)
+        {
+            this.emote = tup.Item1;
+            this.int1 = tup.Item2;
+            this.int2 = tup.Item3;
+            this.doub1 = tup.Item4;
+            this.racername = tup.Item5;
+        }
+
+        public static List<fuck_tuples> initialize_list()
+        {
+            List<fuck_tuples> rtner = new List<fuck_tuples>();
+
+            Bet.emote_to_ID.ForEach(e=>rtner.Add(new fuck_tuples(e)));
+
+            return rtner;
         }
     }
 }
