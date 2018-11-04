@@ -406,6 +406,22 @@ namespace trillbot.Classes {
             return s;
         }
 
+        public void exitGame(SocketCommandContext Context) {
+            if(runningGame) {
+                helpers.output(Context.Channel,"You can't exit the game while it is running. Use `ta!leave`");
+                return;
+            }
+            racer racer = trillbot.Commands.RacerCreation.allRacers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);//racer.get_racer(Context.Message.Author.Id);
+            if(racer == null) {
+                helpers.output(Context.Channel,"You aren't in this game. You can't exit it!");
+                return;
+            }
+            racers.Remove(racer);
+            racer.inGame = false;
+            trillbot.Classes.racer.update_racer(racer);
+            helpers.output(Context.Channel,Context.User.Mention + ", you have left this game");
+        }
+
         //Start Game
         public void startGame(SocketCommandContext Context) {
             dealCards(Context); //Deal cards to all racers
@@ -454,9 +470,9 @@ namespace trillbot.Classes {
 
         //Join Game
         public void joinGame(SocketCommandContext Context) {
-            racer racer = racer.get_racer(Context.Message.Author.Id);
+            racer racer = trillbot.Commands.RacerCreation.allRacers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);//racer.get_racer(Context.Message.Author.Id);
             if (runningGame) {
-                Context.Channel.SendMessageAsync("The game has already started").GetAwaiter().GetResult();
+                helpers.output(Context.Channel,"The game has already started");
                 return;
             }
 
@@ -536,15 +552,18 @@ namespace trillbot.Classes {
                         return;
                     }
                     var c1 = Card.get_card(Program.rand.Next(7)+5);
+                    while (c1.ID == 7) c1 = Card.get_card(Program.rand.Next(7)+5);
                     var c2 = Card.get_card(Program.rand.Next(7)+5);
+                    while (c2.ID == 7) c2 = Card.get_card(Program.rand.Next(7)+5);
                     t1.addHazard(c1);
                     t2.addHazard(c2);
                     r.abilityRemaining = false;
                     helpers.output(Context.Channel, r.name + " used " + r.ability.Title + " and played " + c1.title + " against " + t1.name + " and " + c2.title + " against " + t2.name);
                 break;
                 case 22:
+                    int size = r.cards.Count;
                     r.cards = new List<Card>();
-                    for(int k = 0; k < 8; k++) {
+                    for(int k = 0; k < size; k++) {
                         if(cards.Count == 0) cards = generateDeck();
                         r.cards.Add(cards.Pop());
                     }
@@ -625,6 +644,10 @@ namespace trillbot.Classes {
                         helpers.output(Context.Channel,"You didn't target a valid racer");
                         return;
                     }
+                    if(t.cards.Count < 4) {
+                        helpers.output(Context.Channel,"You can't target this racers as they have less than 4 cards.");
+                        return;
+                    }
                     j.Distinct();
                     if(j == null || j.Count != 4) {
                         helpers.output(Context.Channel,"You didn't select 4 cards!");
@@ -641,7 +664,7 @@ namespace trillbot.Classes {
                         int temp = Program.rand.Next(8);
                         if(!nums.Contains(temp)) nums.Add(temp);
                     }
-                    helpers.output(Context.Channel,String.Join(", ", nums)); //Testing output to Verify using 4 random cards
+                    //helpers.output(Context.Channel,String.Join(", ", nums)); //Testing output to Verify using 4 random cards
                     for(int k = 0; k < 4; k++) {
                         var swap = t.cards[nums[k]];
                         t.cards[nums[k]] = r.cards[j[k]-1];
@@ -666,21 +689,31 @@ namespace trillbot.Classes {
                         helpers.output(Context.Channel,"You can't scramble yourself!");
                         return;
                     }
-                    var str = new List<string>();
-                    str.Add(t.name + " losses the following cards: ");
-                    for(int k = 0; k < 4; k++) {
-                        var remove = t.cards[Program.rand.Next(t.cards.Count)];
-                        str.Add(remove.title);
-                        t.cards.Remove(remove);
-                    }
-                    helpers.output(Context.Channel,String.Join(", ",str));
-                    for(int k = 0; k < 4; k++) {
+                    if(t.cards.Count == 1) { 
+                        helpers.output(Context.Channel,t.name + " losses the following card: " + t.cards[0].title);
+                        t.cards.RemoveAt(0);
                         if(cards.Count == 0) cards = generateDeck();
                         t.cards.Add(cards.Pop());
+                        r.abilityRemaining = false;
+                        Context.Guild.GetUser(t.player_discord_id).SendMessageAsync(t.currentStatus()).GetAwaiter().GetResult();
+                        helpers.output(Context.Channel,r.name + " used " + r.ability.Title + " against " + t.name + " causing them to redraw their only card!");
+                    } else {
+                        var str = new List<string>();
+                        str.Add(t.name + " losses the following cards: ");
+                        for(int k = 0; k < 4; k++) {
+                            var remove = t.cards[Program.rand.Next(t.cards.Count)];
+                            str.Add(remove.title);
+                            t.cards.Remove(remove);
+                        }
+                        helpers.output(Context.Channel,String.Join(", ",str));
+                        for(int k = 0; k < 4; k++) {
+                            if(cards.Count == 0) cards = generateDeck();
+                            t.cards.Add(cards.Pop());
+                        }
+                        r.abilityRemaining = false;
+                        Context.Guild.GetUser(t.player_discord_id).SendMessageAsync(t.currentStatus()).GetAwaiter().GetResult();
+                        helpers.output(Context.Channel,r.name + " used " + r.ability.Title + " against " + t.name + " causing them to redraw four random cards!");
                     }
-                    r.abilityRemaining = false;
-                    Context.Guild.GetUser(t.player_discord_id).SendMessageAsync(t.currentStatus()).GetAwaiter().GetResult();
-                    helpers.output(Context.Channel,r.name + " used " + r.ability.Title + " against " + t.name + " causing them to redraw four random cards!");
                 break;
                 case 14:
                     if(i < 0 || i > 8 || j == null || j.Count > 1 || j[0] < 0 || j[0] > 8) {
@@ -1023,10 +1056,10 @@ namespace trillbot.Classes {
         public void doReset(SocketCommandContext Context) {
             racers.ForEach(e=> {
                 e.reset();
-                racer.replace_racer(e);
             });
             Context.Channel.SendMessageAsync("Game Reset").GetAwaiter().GetResult();
             Program.games.Remove(Context.Channel.Id);
+            if(Program.games.Count == 0) Context.Client.SetGameAsync(null, null, StreamType.NotStreaming).GetAwaiter().GetResult();
         }
 
         //Ping the current players turn
