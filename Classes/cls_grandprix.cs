@@ -1056,10 +1056,10 @@ namespace trillbot.Classes {
         public void doReset(SocketCommandContext Context) {
             racers.ForEach(e=> {
                 e.reset();
-                racer.replace_racer(e);
             });
             Context.Channel.SendMessageAsync("Game Reset").GetAwaiter().GetResult();
             Program.games.Remove(Context.Channel.Id);
+            if(Program.games.Count == 0) Context.Client.SetGameAsync(null, null, StreamType.NotStreaming).GetAwaiter().GetResult();
         }
 
         //Ping the current players turn

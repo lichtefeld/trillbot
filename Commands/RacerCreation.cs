@@ -121,10 +121,10 @@ namespace trillbot.Commands
         public async Task showRacerAsync(int i = -1) {
             racer r = new racer();
             if (i < 0) r = allRacers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);//racer.get_racer(Context.Message.Author.Id);
-            else r = allRacers[i];
+            else r = allRacers.FirstOrDefault(e=>e.ID == i);
 
             if ( r == null ) {
-                await ReplyAsync(Context.User.Mention + ", you don't have a current racer");
+                await ReplyAsync(Context.User.Mention + ", you don't have a current racer or this racer doesn't exist in the database.");
                 return;
             }
 
@@ -134,6 +134,9 @@ namespace trillbot.Commands
             if (r.ID <= 25 && r.ID != 0) {
                 embed.WithThumbnailUrl(racer_to_Image[r.ID]);
                 embed.WithDescription(racer_to_Description[r.ID]);
+                embed.AddField("Payout on Win",Bet.emote_to_ID.FirstOrDefault(e=>e.Item2 == r.ID).Item3.ToString(),true);
+                embed.AddField("Payout on Death",Bet.emote_to_ID.FirstOrDefault(e=>e.Item2 == r.ID).Item4.ToString(),true);
+                embed.AddField("Emote",Bet.emote_to_ID.FirstOrDefault(e=>e.Item2 == r.ID).Item1,true);
             }
             embed.AddField("Sponsor",r.faction, true);
             embed.AddField("Ability: " + r.ability.Title, r.ability.Description, true);
@@ -282,7 +285,7 @@ namespace trillbot.Commands
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task updateListAsync() {
             allRacers = racer.get_racer().OrderBy(e=>e.ID).ToList();
-            await ReplyAsync("List Updated)");
+            await ReplyAsync("List Updated!");
         }
     }
 }

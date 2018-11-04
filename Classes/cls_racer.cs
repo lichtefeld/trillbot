@@ -181,36 +181,52 @@ namespace trillbot.Classes {
             {9, "Can be removed by a Tech Savvy card. If you end your turn with both Sabotage and another Hazard, you explode."},
             {10, "Can be removed by a Cyber Healthcare card."},
             {11, "You cannot play Movement cards higher than 2. Can be removed by a Cyber Healthcare card."},
-            {16, "You can not move this turn. Does not need a remedy to clear."},
+            {16, "You can not move this turn. Automatically clears after this turn without a remedy."},
             {17, "Can be removed by a Tech Savvy Card. You have 2 turns to solve this issue or you die."}
         };
 
         public static List<racer> get_racer () {
             var store = new DataStore ("racer.json");
 
+            var rtner = store.GetCollection<racer> ().AsQueryable ().ToList();
+
+            store.Dispose();
+
             // Get employee collection
-            return store.GetCollection<racer> ().AsQueryable ().ToList();
+            return rtner;
         }
 
         public static racer get_racer (int id) {
             var store = new DataStore ("racer.json");
 
             // Get employee collection
-            return store.GetCollection<racer> ().AsQueryable ().FirstOrDefault (e => e.ID == id);
+            var rtner = store.GetCollection<racer> ().AsQueryable ().FirstOrDefault (e => e.ID == id);
+            store.Dispose();
+
+            // Get employee collection
+            return rtner;
         }
 
         public static racer get_racer (string name) {
             var store = new DataStore ("racer.json");
 
             // Get employee collection
-            return store.GetCollection<racer> ().AsQueryable ().FirstOrDefault (e => e.name == name);
+            var rtner = store.GetCollection<racer> ().AsQueryable ().FirstOrDefault (e => e.name == name);
+            store.Dispose();
+
+            // Get employee collection
+            return rtner;
         }
 
         public static racer get_racer (ulong player_id) {
             var store = new DataStore ("racer.json");
 
             // Get employee collection
-            return store.GetCollection<racer> ().AsQueryable ().FirstOrDefault (e => e.player_discord_id == player_id);
+            var rtner = store.GetCollection<racer> ().AsQueryable ().FirstOrDefault (e => e.player_discord_id == player_id);
+            store.Dispose();
+
+            // Get employee collection
+            return rtner;
         }
 
         public static void insert_racer (racer racer) {
