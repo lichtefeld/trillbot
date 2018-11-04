@@ -55,7 +55,7 @@ namespace trillbot.Commands
             var name = usr.Nickname != null ? usr.Nickname : usr.Username;
             var character = Classes.Character.get_character(Context.Message.Author.Id);
             var emoteName = helpers.parseEmote(s);
-            await ReplyAsync(emoteName);
+            //await ReplyAsync(emoteName);
             var betInfo = emote_to_ID.FirstOrDefault(e=> e.Item1 == emoteName);
 
             if(betInfo == null) {
