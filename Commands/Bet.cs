@@ -96,12 +96,16 @@ namespace trillbot.Commands
             character.bets.Add(b);
             character.balance -= amount;
             Character.update_character(character);
-            await ReplyAsync(usr.Mention + ", you have placed the following bet: " + System.Environment.NewLine + b.display(Context.Guild));
 
+            if(type == "death") {
+                await ReplyAsync("Thank you " + usr.Mention + "! Your donation will support Hong Lu's Orphans!" + System.Environment.NewLine + "you have placed the following bet: " + System.Environment.NewLine + b.display(Context.Guild));
+            } else {
+                await ReplyAsync(usr.Mention + ", you have placed the following bet: " + System.Environment.NewLine + b.display(Context.Guild));
+            }
         }
 
         [Command("displaybets")]
-        public async Task DisplaybetsAsync()
+        public async Task DisplaybetsAsync(IUser User = null)
         {
             //Display bets to the User in a DM?
             var usr = Context.Guild.GetUser(Context.Message.Author.Id);
@@ -206,5 +210,6 @@ namespace trillbot.Commands
             }
             await ReplyAsync(output_string);
         }
+
     }
 }

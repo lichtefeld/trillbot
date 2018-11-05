@@ -26,6 +26,7 @@ namespace trillbot
         };
 
         public static Dictionary<ulong,Classes.GrandPrix> games = new Dictionary<ulong, Classes.GrandPrix>(); //For future multi-game system
+        public static Dictionary<ulong,Classes.slotMachine> slots = new Dictionary<ulong, Classes.slotMachine>(); //Multichannel Slot Machine
 
         public async Task RunBotAsync()
         {

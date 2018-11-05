@@ -284,6 +284,7 @@ namespace trillbot.Classes {
             str.Add(title);
             string ouput_string = "";
             var listRacer = racers.OrderByDescending(e=> e.distance).ToList();
+            string crash = "";
             foreach(racer r in listRacer) {
                 string s = r.leader(lengths);
                 count += s.Length;
@@ -297,10 +298,14 @@ namespace trillbot.Classes {
                     str.Add(title);
                 }
                 str.Add(s);
+                if(r.crash) {
+                    crash += r.name + " will cause a crash on space " + r.distance + " at the start of their next turn!" + System.Environment.NewLine;
+                }
             }
             str.Add("```");
             ouput_string = string.Join(System.Environment.NewLine, str);
             Context.Channel.SendMessageAsync(ouput_string).GetAwaiter().GetResult();
+            helpers.output(Context.Channel, crash);
         }
 
         //One Player Still Alive?

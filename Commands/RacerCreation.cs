@@ -163,6 +163,10 @@ namespace trillbot.Commands
                     return;
                 }
                 var a = Ability.get_ability(--ID);
+                if(a == null) {
+                    await ReplyAsync(Context.User.Mention + ", you didn't give a valid ID.");
+                    return;
+                }
                 r.ability = a;
                 racer.replace_racer(r);
                 await ReplyAsync(Context.User.Mention + ", Ability changed to " + a.Title);
