@@ -135,7 +135,7 @@ namespace trillbot.Commands
                 embed.WithThumbnailUrl(racer_to_Image[r.ID]);
                 embed.WithDescription(racer_to_Description[r.ID]);
                 embed.AddField("Payout on Win",Bet.emote_to_ID.FirstOrDefault(e=>e.Item2 == r.ID).Item3.ToString(),true);
-                embed.AddField("Payout on Death",Bet.emote_to_ID.FirstOrDefault(e=>e.Item2 == r.ID).Item4.ToString(),true);
+                //embed.AddField("Payout on Death",Bet.emote_to_ID.FirstOrDefault(e=>e.Item2 == r.ID).Item4.ToString(),true);
                 embed.AddField("Emote",Bet.emote_to_ID.FirstOrDefault(e=>e.Item2 == r.ID).Item1,true);
             }
             embed.AddField("Sponsor",r.faction, true);

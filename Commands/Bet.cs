@@ -58,6 +58,11 @@ namespace trillbot.Commands
             //await ReplyAsync(emoteName);
             var betInfo = emote_to_ID.FirstOrDefault(e=> e.Item1 == emoteName);
 
+            if(!acceptBets) {
+                await ReplyAsync("Sorry, we are no longer accepting bets!");
+                return;
+            }
+
             if(betInfo == null) {
                 await ReplyAsync("Please submit input of a racer using an emote");
                 return;
@@ -209,6 +214,13 @@ namespace trillbot.Commands
                 }
             }
             await ReplyAsync(output_string);
+        }
+
+        [Command("togglebets")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task toggleBetsAsync() {
+            acceptBets = !acceptBets;
+            await ReplyAsync("Betting acceptance toggled to: " + acceptBets);
         }
 
     }
