@@ -45,6 +45,19 @@ namespace trillbot.Commands
             await Context.Channel.SendMessageAsync("Slot machine removed.");
         }
 
+        [Command("security")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task securityAsync(int i) {
+            var slot = Program.slots.ToList()[i];
+            if (slot.Value == null) {
+                await Context.Channel.SendMessageAsync("Whoah, that slot Machine isn't in the dictonary");
+                return;
+            }
+            slot.Value.ChannelID = Context.Channel.Id;
+            slotMachine.update_slotMachine(slot.Value);
+            await Context.Channel.SendMessageAsync("Channel set to security");
+        }
+
         [Command("payouts")]
         public async Task payoutsAsync() {
             var slot = Program.slots.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
@@ -71,12 +84,13 @@ namespace trillbot.Commands
                 await Context.Channel.SendMessageAsync("You can't make a bet that brings you to a negative balance.");
                 return;
             }
-            if(bet < 0 || bet > slot.Value.maxBet) {
+            if(bet < 1 || bet > slot.Value.maxBet) {
                 await Context.Channel.SendMessageAsync("You can't make a bet larger than this machines max bet OR a negative bet.");
                 return;
             }
             character.balance -= bet;
-            await ReplyAsync(slot.Value.rollSlot(character, bet));
+            await ReplyAsync(slot.Value.rollSlot(character, bet, Context));
+            Character.update_character(character);
         }
     }
 }

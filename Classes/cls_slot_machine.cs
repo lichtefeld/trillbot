@@ -33,6 +33,8 @@ namespace trillbot.Classes {
         public List<List<int>> Weights { get; set; } = new List<List<int>>();
         [JsonProperty("Payouts")]
         public List<int> Payouts { get; set; } = new List<int>();
+        [JsonProperty("Channel")]
+        public ulong ChannelID {get; set;}
 
         private string displayReel(int i, int j, int k ) {
             if (i < 0 || i > reels.Count || j < 0 || j > reels.Count || k < 0 || k > reels.Count) {
@@ -42,7 +44,7 @@ namespace trillbot.Classes {
             }
         }
 
-        public string rollSlot(Character c, int bet) {
+        public string rollSlot(Character c, int bet, ICommandContext Context) {
             List<string> str = new List<string>();
             str.Add("**" + this.name + "**");
             int[] rolls = new int[3];
@@ -91,12 +93,14 @@ namespace trillbot.Classes {
             } else if (rolls[0] != 7 && rolls[1] != 7 && rolls[2] != 7) { //Three non-pinapple symbols
                 str.Add("You've Won " + Payouts[10]*bet + " Credits!");
                 c.balance+=Payouts[10]*bet;
+            } else if (rolls[0] == 7 && rolls[1] == 7 && rolls[2] == 7) {
+                str.Add("You lost " + bet + " credits");
+                if(ChannelID != 0) security(Context);
             } else {
                 str.Add("You lost " + bet + " credits");
             }
             return(String.Join(System.Environment.NewLine,str));
         }
-
         public string payouts() {
             List<string> str = new List<string>();
             str.Add("**" + this.name + " Payouts**");
@@ -114,6 +118,15 @@ namespace trillbot.Classes {
             str.Add(reels[4] + reels[5] + reels[6] + " | " + reels[4] + reels[5] + reels[6] + " | " + reels[4] + reels[5] + reels[6] + ": " + Payouts[9]);
             str.Add("Any three symbols which aren't " + reels[7] + ": " + Payouts[10]);
             return(String.Join(System.Environment.NewLine,str));
+        }
+
+        public void security(ICommandContext Context) { 
+            var channel = Context.Guild.GetChannelAsync(ChannelID).GetAwaiter().GetResult() as ISocketMessageChannel;
+            var usrs = Context.Guild.GetUsersAsync().GetAwaiter().GetResult().ToList();
+            var user = usrs[Program.rand.Next(usrs.Count)];
+
+            string output = user.Nickname.ToString() + " needs to be checked on by security for violations.";
+            helpers.output(channel, output);
         }
 
     }

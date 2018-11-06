@@ -5,6 +5,7 @@
             "Name": "Citrius & Flowers",
             "Description": "This fruity and flowery slot machine is a 1 credit machine. Keeping with proper Trilliant Standard, pineapples are not considered a fruit, as such that reel line is a bust.",
             "Max Bet": 100,
+            "Channel": 0,
             "Reels": [
                 "💰",
                 "🍒",
