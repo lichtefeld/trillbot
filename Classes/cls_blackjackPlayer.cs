@@ -54,5 +54,23 @@ namespace trillbot.Classes {
             }
             return value;
         }
+
+        public string handDisplay() {
+            List<string> str = new List<string>();
+            str.Add("**" + name + "'s Hands**");
+            for(int i = 0; i < hand.Count; i++) {
+                str.Add("*Hand " + i + "*");
+                str.Add(handDisplay(hand[i]));
+            }
+            return String.Join(System.Environment.NewLine,str);
+        }
+        private string handDisplay(List<StandardCard> cards) {
+            List<string> str = new List<string>();
+            foreach(var c in cards) {
+                str.Add(c.ToString());
+            }
+            str.Add(handValue(cards).ToString());
+            return String.Join(" | ", str);
+        }
     }
 }

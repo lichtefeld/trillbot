@@ -125,7 +125,7 @@ namespace trillbot.Classes {
             var usrs = Context.Guild.GetUsersAsync().GetAwaiter().GetResult().ToList();
             var user = usrs[Program.rand.Next(usrs.Count)];
 
-            string output = user.Nickname.ToString() + " needs to be checked on by security for violations.";
+            string output = user.Nickname.ToString() + " is being monitored by security drones.";
             helpers.output(channel, output);
         }
 

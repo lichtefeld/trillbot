@@ -51,6 +51,10 @@ namespace trillbot.Classes {
             {4,"♢"}
         };
 
+        public override string ToString() {
+            return value_to_output[value] + suit_to_output[suit];
+        }
+
         public static List<StandardCard> straightDeck() {
             List<StandardCard> cards = new List<StandardCard>();
             for(int i = 1; i < 5; i++) {
