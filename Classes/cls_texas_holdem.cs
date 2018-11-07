@@ -22,6 +22,7 @@ namespace trillbot.Classes {
         public List<StandardCard> hole {get;set;}
         public long ID {get;set;}
         public long cash_pool {get;set;}
+        public bool fold {get;set;} = false;
 
     }
 
@@ -32,13 +33,18 @@ namespace trillbot.Classes {
 
     public class HoldEm
     {
-        private Stack<StandardCard> deck { get; set; } = new Stack<StandardCard>();
-
+        private Stack<StandardCard> deck { get; set; } = StandardCard.shuffleDeck(StandardCard.straightDeck());
+        public int card_round {get;set;} = 0;
         public List<StandardCard> flop {get;set;}
-
         public List<StandardCard> turn {get;set;}
-
         public List<StandardCard> river {get;set;}
+        public static int big_blind {get;set;} = 500;
+        public int small_blind {get;set;} = big_blind / 2;
+        public int ante {get;set;}
+        public int dealer_index {get;set;}
+        public int min_raise {get;set;} = 50;
+        public int min_bet = big_blind;
+        public List<Player> players {get;set;}
     }
 
 }
