@@ -72,5 +72,13 @@ namespace trillbot.Classes {
             str.Add(handValue(cards).ToString());
             return String.Join(" | ", str);
         }
+
+        public void updateBet(int b) {
+            
+        }
+
+        public void addCard(StandardCard card, int i = 1) {
+            hand[i].Add(card);
+        } 
     }
 }
