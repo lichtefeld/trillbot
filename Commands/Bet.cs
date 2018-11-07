@@ -125,21 +125,6 @@ namespace trillbot.Commands
             await Context.User.SendMessageAsync(helpers.formatBets(character, Context.Guild));
         }
 
-        [Command("displaybalance")]
-        public async Task DisplayBalanceAsync() {
-            //Display bets to the User in a DM?
-            var usr = Context.Guild.GetUser(Context.Message.Author.Id);
-            var character = Character.get_character(Context.Message.Author.Id);
-
-            if (character == null)
-            {
-                await ReplyAsync("Account not found. Please create one before proceeding via `ta!registeraccount`");
-                return;
-            }
-
-            await Context.User.SendMessageAsync("You have a current balance of " + character.balance + " imperial credits.");
-        }
-
         [Command("cancelbet")]
         public async Task CancelbetAsync(int ID)
         {

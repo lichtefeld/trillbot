@@ -65,5 +65,20 @@ namespace trillbot.Commands
 
             await ReplyAsync("**Racers for the Grand Prix**"+System.Environment.NewLine+string.Join(System.Environment.NewLine,characters.Select(e=>e.name).ToList()));
         }
+
+        [Command("balance")]
+        public async Task DisplayBalanceAsync() {
+            //Display bets to the User in a DM?
+            var usr = Context.Guild.GetUser(Context.Message.Author.Id);
+            var character = Character.get_character(Context.Message.Author.Id);
+
+            if (character == null)
+            {
+                await ReplyAsync("Account not found. Please create one before proceeding via `ta!registeraccount`");
+                return;
+            }
+
+            await Context.User.SendMessageAsync("You have a current balance of " + character.balance + " imperial credits.");
+        }
     }
 }

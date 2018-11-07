@@ -141,7 +141,7 @@ namespace trillbot.Classes {
                 if(e.item2 > 2)
                 {
                     r.stillIn = false;
-                    str.Add(r.name + " subcumbs to " + e.item1.title + " and their vehicle explodes! 💥");
+                    str.Add(r.name + " succumbs to " + e.item1.title + " and their vehicle explodes! 💥");
                     if(r.coreSync != null) {
                         r.coreSync.stillIn = false;
                         str.Add(r.coreSync.name + "'s core fails in tangent with " + r.name + " as their racer goes up in smoke!");
@@ -149,7 +149,7 @@ namespace trillbot.Classes {
                 }
 
                 if(e.item1.ID == 17 && e.item2 > 1) {
-                    str.Add(r.name + " subcumbs to " + e.item1.title + " and their vehicle explodes! 💥");
+                    str.Add(r.name + " succumbs to " + e.item1.title + " and their vehicle explodes! 💥");
                     r.stillIn = false;
                     if(r.coreSync != null) {
                         r.coreSync.stillIn = false;
@@ -173,7 +173,7 @@ namespace trillbot.Classes {
             }
             if(r.sab() && r.hazards.Count > 1) {
                 r.stillIn = false;
-                str.Add(r.name + " subcumbs to Sabotage and their vehicle explodes! 💥");
+                str.Add(r.name + " succumbs to Sabotage and their vehicle explodes! 💥");
                 if(r.coreSync != null) {
                     r.coreSync.stillIn = false;
                     str.Add(r.coreSync.name + "'s core fails in tangent with " + r.name + " as their racer goes up in smoke!");
