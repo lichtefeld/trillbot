@@ -59,6 +59,11 @@ namespace trillbot.Commands
             //await ReplyAsync(emoteName);
             var betInfo = emote_to_ID.FirstOrDefault(e=> e.Item1 == emoteName);
 
+            if(!acceptBets) {
+                await ReplyAsync("Sorry, we are no longer accepting bets!");
+                return;
+            }
+
             if(betInfo == null) {
                 await ReplyAsync("Please submit input of a racer using an emote");
                 return;
@@ -97,12 +102,16 @@ namespace trillbot.Commands
             character.bets.Add(b);
             character.balance -= amount;
             Character.update_character(character);
-            await ReplyAsync(usr.Mention + ", you have placed the following bet: " + System.Environment.NewLine + b.display(Context.Guild));
 
+            if(type == "death") {
+                await ReplyAsync("Thank you " + usr.Mention + "! Your donation will support Hong Lu's Orphans!" + System.Environment.NewLine + "you have placed the following bet: " + System.Environment.NewLine + b.display(Context.Guild));
+            } else {
+                await ReplyAsync(usr.Mention + ", you have placed the following bet: " + System.Environment.NewLine + b.display(Context.Guild));
+            }
         }
 
         [Command("displaybets")]
-        public async Task DisplaybetsAsync()
+        public async Task DisplaybetsAsync(IUser User = null)
         {
             //Display bets to the User in a DM?
             var usr = Context.Guild.GetUser(Context.Message.Author.Id);
@@ -115,21 +124,6 @@ namespace trillbot.Commands
             }
             
             await Context.User.SendMessageAsync(helpers.formatBets(character, Context.Guild));
-        }
-
-        [Command("displaybalance")]
-        public async Task DisplayBalanceAsync() {
-            //Display bets to the User in a DM?
-            var usr = Context.Guild.GetUser(Context.Message.Author.Id);
-            var character = Character.get_character(Context.Message.Author.Id);
-
-            if (character == null)
-            {
-                await ReplyAsync("Account not found. Please create one before proceeding via `ta!registeraccount`");
-                return;
-            }
-
-            await Context.User.SendMessageAsync("You have a current balance of " + character.balance + " imperial credits.");
         }
 
         [Command("cancelbet")]
@@ -207,6 +201,14 @@ namespace trillbot.Commands
             }
             await ReplyAsync(output_string);
         }
+
+        [Command("togglebets")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task toggleBetsAsync() {
+            acceptBets = !acceptBets;
+            await ReplyAsync("Betting acceptance toggled to: " + acceptBets);
+        }
+
     }
 
     public class fuck_tuples
