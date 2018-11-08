@@ -17,6 +17,55 @@ namespace trillbot.Commands
 {
     public class AdminCommands : ModuleBase<SocketCommandContext> {
         
+        [Command("add")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task addFundsAsync(SocketUser user, int i) {
+            var c = Character.get_character(user.Id);
+            if(c == null) {
+                await ReplyAsync("This user doesn't have an account");
+                return;
+            }
 
+            if (i <= 0) {
+                await ReplyAsync("Don't add negative or 0 funds.");
+                return;
+            }
+
+            c.balance+=i;
+            await ReplyAsync(c.name + " has a new balance of " + c.balance);
+            Character.update_character(c);
+        }
+
+        [Command("sub")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task subFundsAsync(SocketUser user, int i) {
+            var c = Character.get_character(user.Id);
+            if(c == null) {
+                await ReplyAsync("This user doesn't have an account");
+                return;
+            }
+
+            if (i <= 0) {
+                await ReplyAsync("Don't sub negative or 0 funds.");
+                return;
+            }
+
+            c.balance-=i;
+            await ReplyAsync(c.name + " has a new balance of " + c.balance);
+            Character.update_character(c);
+        }
+
+        [Command("bal")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task balFundsAsync(SocketUser user) {
+            var c = Character.get_character(user.Id);
+            if(c == null) {
+                await ReplyAsync("This user doesn't have an account");
+                return;
+            }
+
+            await ReplyAsync(c.name + " has a balance of " + c.balance);
+            Character.update_character(c);
+        }
     }
 }

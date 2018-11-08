@@ -230,18 +230,42 @@ namespace trillbot.Commands
             int win = k[0];
             k.RemoveAt(0);
             var chars = Character.get_character();
+            var wins = new List<Tuple<Classes.Bet,int,string>>();
+            var deaths = new List<Tuple<Classes.Bet,int,string>>();
+            
             foreach (Character c in chars) {
                 foreach(Classes.Bet b in c.bets) {
                     if(b.Type == "win") {
                         if(b.RacerID == win) {
-                            
+                            var payout = b.Amount * emote_to_ID.FirstOrDefault(e=> e.Item2 == b.RacerID).Item3;
+                            c.balance += payout;
+                            wins.Add(new Tuple<Classes.Bet, int, string>(b,payout,c.name));
                         }
                     } else {
-
+                        if(k.Contains(b.RacerID)) {
+                            var payout = b.Amount * emote_to_ID.FirstOrDefault(e=> e.Item2 == b.RacerID).Item4;
+                            c.balance += (int)payout;
+                            deaths.Add(new Tuple<Classes.Bet, int, string>(b,(int)payout,c.name));
+                        }
                     }
                 }
                 Character.update_character(c);
             }
+            wins.OrderByDescending(e=>e.Item2);
+            deaths.OrderByDescending(e=>e.Item2);
+            var winStrings = new List<string>();
+            var deathStrings = new List<string>();
+
+            winStrings.Add("**Top Leaderboard for Payouts: Winning Bets**");
+            deathStrings.Add("**Top Leaderboard for Payouts: Death Bets**");
+
+            for(int i = 0; i < 10; i++) {
+                winStrings.Add("**#" + i +":** " + wins[i].Item3 + " placed a bet on " + wins[i].Item1.RacerName + ". It payed out " + wins[i].Item2);
+                deathStrings.Add("**#" + i +":** " + deaths[i].Item3 + " placed a bet on " + deaths[i].Item1.RacerName + ". It payed out " + deaths[i].Item2);
+            }
+            
+            helpers.output(Context.Guild.GetTextChannel(509818685775675402),winStrings);
+            helpers.output(Context.Guild.GetTextChannel(507638583885299714),deathStrings);
         }
     }
 }

@@ -98,6 +98,7 @@ namespace trillbot.Classes {
             foreach(blackjackPlayer p in table) {
                 p.addCard(GetCard());
                 p.addCard(GetCard());
+                p.insurance = -1;
             }
             hand.Add(GetCard());
             hand.Add(GetCard());
@@ -159,6 +160,59 @@ namespace trillbot.Classes {
         private void checkDealer() {
             if(hand[1].value == 14) {
                 helpers.output(channel,dealerName + " offers insurance to the table.");
+                return;
+            } else if (handValue(hand) == 21) {
+                helpers.output(channel,dealerName + " has blackjack! Hand: " + hand[0].ToString() + " | " + hand[1].ToString());
+                payouts();
+            } else {
+                helpers.output(channel,dealerName + " turns to " + table[0].name + ". It's " + channel.GetUserAsync(table[0].player_discord_id).GetAwaiter().GetResult().Mention + "'s turn to play");
+            }
+        }
+
+        private void payouts() {
+            position = 0;
+            var str = new List<string>();
+            //Check if Dealer Has Blackjack?
+            if(handValue(hand) == 21 && hand.Count == 2) { //Dealer Has Blackjack!
+                foreach(var p in table) {
+                    if(p.handValue(0) == 21) {
+                        var c = Character.get_character(p.player_discord_id);
+                        c.balance += p.bet;
+                        Character.update_character(c);
+                        str.Add(p.name + " has a blackjack! This results in a __push__.");
+                    } else if(p.insurance >= 0) {
+                        var c = Character.get_character(p.player_discord_id);
+                        c.balance += 3*p.insurance;
+                        Character.update_character(c);
+                        str.Add(p.name + " wins their insurance bet and receives " + 3*p.insurance + " credits back.");
+                    }
+                }
+            } else {
+                var dealerValue = handValue(hand);
+                foreach(var p in table) {
+                    for(int i = 0; i < p.hand.Count; i++) {
+                        if(p.handValue(i) > 21) {
+                            str.Add(p.name +"s hand " + i + " is a bust");
+                        } else if (p.handValue(i) == 21 && p.hand[i].Count == 2) {
+                            var c = Character.get_character(p.player_discord_id);
+                            c.balance += (int)((double)p.bet*1.5 + p.bet);
+                            Character.update_character(c);
+                            str.Add(p.name + " has a blackjack with hand " + i + "! They win " + (int)((double)p.bet*1.5 + p.bet) + " credits.");
+                        } else if (p.handValue(i) == dealerValue) {
+                            var c = Character.get_character(p.player_discord_id);
+                            c.balance += p.bet;
+                            Character.update_character(c);
+                            str.Add(p.name + " has a tie with hand " + i + "! This results in a __push__.");
+                        } else if (p.handValue(i) > dealerValue) {
+                            var c = Character.get_character(p.player_discord_id);
+                            c.balance += 2*p.bet;
+                            Character.update_character(c);
+                            str.Add(p.name + " beats the dealer with hand " + i + "! They win " + 2*p.bet + " credits.");
+                        } else {
+                            str.Add(p.name + " loses to the dealer with hand " + i + "!");
+                        }
+                    }
+                }
             }
         }
 
@@ -177,6 +231,49 @@ namespace trillbot.Classes {
             } else {
                 helpers.output(channel,dealerName + " sits and wait for someone to approach his table.");
                 CardsUntilShuffle = -1;
+            }
+        }
+
+        public void takeInsurance(SocketCommandContext context, int insure) {
+            var p = table.FirstOrDefault(e=>e.player_discord_id == context.User.Id);
+            if(p == null) {
+                helpers.output(channel,context.User.Mention + ", you aren't in this blackjack game. To join `ta!join`");
+                return;
+            }
+            var c = Character.get_character(p.player_discord_id);
+            if (c == null) {
+                helpers.output(channel,context.User.Mention + ", Context Xavier. Something horrible has gone wrong: No Character Account while in Blackjack Game");
+                return;
+            }
+            if (insure < 0) {
+                if(c.balance-p.bet/2 >= 0) {
+                    p.insurance = p.bet/2;
+                    helpers.output(channel,context.User.Mention + ", you have placed an insurance bet of " + p.insurance);
+                    c.balance -= p.insurance;
+                    Character.update_character(c);
+                } else {
+                    helpers.output(channel,context.User.Mention + ", you don't have enough money to make this bet of insurance. You place a 0 credit insurance bid.");
+                    p.insurance = 0;
+                }
+            } else {
+                if(c.balance-insure >= 0) {
+                    p.insurance = insure;
+                    helpers.output(channel,context.User.Mention + ", you have placed an insurance bet of " + p.insurance);
+                    c.balance -= p.insurance;
+                    Character.update_character(c);
+                } else {
+                    helpers.output(channel,context.User.Mention + ", you don't have enough money to make this bet of insurance. You place a 0 credit insurance bid.");
+                    p.insurance = 0;
+                }
+            }
+            position++;
+            if(position == currentRound) {
+                if(handValue(hand) == 21) {
+                    helpers.output(channel,dealerName + " has blackjack! Hand: " + hand[0].ToString() + " | " + hand[1].ToString());
+                    payouts();
+                } else {
+                    nextPlayer();
+                }
             }
         }
 

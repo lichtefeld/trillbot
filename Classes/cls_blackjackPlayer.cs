@@ -23,6 +23,7 @@ namespace trillbot.Classes {
         public List<List<StandardCard>> hand { get; set; } = new List<List<StandardCard>>();
         public int bet { get; set; }
         public bool bust { get; set; }
+        public int insurance { get; set;}
 
         public blackjackPlayer(ulong ID, string n, int b) {
             player_discord_id = ID;
@@ -30,7 +31,7 @@ namespace trillbot.Classes {
             bet = b;
         }
 
-        public int handValue(int i = 1) {
+        public int handValue(int i = 0) {
             if (i < 0 || i >= hand.Count) return -1;
             else return handValue(hand[i]);
         }
@@ -38,6 +39,7 @@ namespace trillbot.Classes {
         private int handValue(List<StandardCard> cards) {
             int value = 0;
             int numAces = 0;
+            if (cards.Count == 0) return -1;
             foreach(StandardCard c in cards) {
                 if(c.value == 14) {
                     numAces++;
@@ -66,6 +68,7 @@ namespace trillbot.Classes {
         }
         private string handDisplay(List<StandardCard> cards) {
             List<string> str = new List<string>();
+            if (cards.Count == 0) return "";
             foreach(var c in cards) {
                 str.Add(c.ToString());
             }
@@ -77,7 +80,7 @@ namespace trillbot.Classes {
             
         }
 
-        public void addCard(StandardCard card, int i = 1) {
+        public void addCard(StandardCard card, int i = 0) {
             hand[i].Add(card);
         } 
     }
