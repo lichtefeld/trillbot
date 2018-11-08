@@ -103,25 +103,63 @@ namespace trillbot.Classes {
             hand.Add(GetCard());
         }
 
-        private void displayTable() {
+        private void displayTable(bool firstRound) {
             List<string> str = new List<string>();
-            int count = 0;
             foreach(blackjackPlayer p in table) {
                 var s = p.handDisplay();
-                count += s.Length + 2;
-                if (count > 1950) {
-                    helpers.output(channel,String.Join(System.Environment.NewLine,str));
-                    count = 0;
-                    str = new List<string>();
-                }
                 str.Add(s);
                 str.Add(System.Environment.NewLine);
             }
+            str.Add("**"+dealerName+"'s Hand**");
+            str.Add(handDisplay(hand,!firstRound));
+            helpers.output(channel,str);
+        }
+
+        private string handDisplay(List<StandardCard> cards, bool holeCard) { //Dealer Version 
+            List<string> str = new List<string>();
+            if(holeCard) {
+                foreach(var c in cards) {
+                    str.Add(c.ToString());
+                }
+                str.Add(handValue(cards).ToString());
+            } else {
+                str.Add("XX");
+                for(int i = 1; i < cards.Count; i++) {
+                    str.Add(cards[i].ToString());
+                }
+            }
+            return String.Join(" | ", str);
         }
 
         private void nextPlayer() {
             var usr = channel.GetUserAsync(table[position].player_discord_id).GetAwaiter().GetResult();
             helpers.output(channel,usr.Mention + ", it is now your turn. " + System.Environment.NewLine + table[position].handDisplay() + System.Environment.NewLine + table[position].name + ", would you like to hit, ");
+        }
+
+        private int handValue(List<StandardCard> cards) {
+            int value = 0;
+            int numAces = 0;
+            foreach(StandardCard c in cards) {
+                if(c.value == 14) {
+                    numAces++;
+                    value += 11;
+                } else if(c.value > 10) {
+                    value += 10;
+                } else {
+                    value += c.value;
+                }
+            }
+            while(numAces > 0 && value > 21) {
+                value -= 10;
+                numAces--;
+            }
+            return value;
+        }
+
+        private void checkDealer() {
+            if(hand[1].value == 14) {
+                helpers.output(channel,dealerName + " offers insurance to the table.");
+            }
         }
 
         public void runGame() {
@@ -132,10 +170,10 @@ namespace trillbot.Classes {
                 subPlayer();
                 if(CardsUntilShuffle <= 0) newDeck();
                 dealHand();
-                displayTable();
+                displayTable(true);
                 currentRound = table.Count-1; 
                 position = 0;
-                nextPlayer();
+                checkDealer();
             } else {
                 helpers.output(channel,dealerName + " sits and wait for someone to approach his table.");
                 CardsUntilShuffle = -1;
