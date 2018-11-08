@@ -260,8 +260,8 @@ namespace trillbot.Commands
             deathStrings.Add("**Top Leaderboard for Payouts: Death Bets**");
 
             for(int i = 0; i < 10; i++) {
-                winStrings.Add("**#" + i +":** " + wins[i].Item3 + " placed a bet on " + wins[i].Item1.RacerName + ". It payed out " + wins[i].Item2);
-                deathStrings.Add("**#" + i +":** " + deaths[i].Item3 + " placed a bet on " + deaths[i].Item1.RacerName + ". It payed out " + deaths[i].Item2);
+                if(i < wins.Count) winStrings.Add("**#" + i +":** " + wins[i].Item3 + " placed a bet on " + wins[i].Item1.RacerName + ". It payed out " + wins[i].Item2);
+                if(i < deaths.Count) deathStrings.Add("**#" + i +":** " + deaths[i].Item3 + " placed a bet on " + deaths[i].Item1.RacerName + ". It payed out " + deaths[i].Item2);
             }
             
             helpers.output(Context.Guild.GetTextChannel(509818685775675402),winStrings);

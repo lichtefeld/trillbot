@@ -522,6 +522,26 @@
     },
     {
       "ability": {
+        "id": 11,
+        "title": "Living on the Edge",
+        "description": "On the first turn you are affected by the Sabotage Hazard, your passive movement is 3.",
+        "active": false
+       },
+       "abilityRemaining": true,
+       "coreSync": null,
+       "id": 5,
+       "player_discord_id": 163726513139744768,
+       "name": "'Mongrel' Jim Timo",
+    "faction": "Vagrant",
+     "cards": [],
+     "distance": 0,
+     "hazards": [],
+     "inGame": true,
+     "stillIn": true,
+      "crash": false
+    },
+    {
+      "ability": {
         "id": 23,
         "title": "Seasoned Trickster",
         "description": "Target 2 other racers, apply random Hazards to both of them.",
