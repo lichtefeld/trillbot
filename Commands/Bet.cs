@@ -215,7 +215,7 @@ namespace trillbot.Commands
 
         [Command("togglebets")]
         [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task payoutAsync(string[] nums) {
+        public async Task payoutAsync(params string[] nums) {
             var k = new List<int>();
             for(int l = 1; l < nums.Length; l++) {
                 int o;
@@ -232,7 +232,7 @@ namespace trillbot.Commands
             var chars = Character.get_character();
             var wins = new List<Tuple<Classes.Bet,int,string>>();
             var deaths = new List<Tuple<Classes.Bet,int,string>>();
-            
+
             foreach (Character c in chars) {
                 foreach(Classes.Bet b in c.bets) {
                     if(b.Type == "win") {
