@@ -213,7 +213,7 @@ namespace trillbot.Commands
             await ReplyAsync("Betting acceptance toggled to: " + acceptBets);
         }
 
-        [Command("togglebets")]
+        [Command("runPayouts")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task payoutAsync(params string[] nums) {
             var k = new List<int>();
