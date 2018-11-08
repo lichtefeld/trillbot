@@ -96,7 +96,7 @@ namespace trillbot.Commands
             }
             var emotesList = Context.Guild.Emotes.ToList();
             var em = emotesList.FirstOrDefault(e=> e.Name == betInfo.Item1.Substring(1,betInfo.Item1.Length-2));
-            var b = new trillbot.Classes.Bet(character.bets.Count,betInfo.Item5,amount,type,em.Name);
+            var b = new trillbot.Classes.Bet(character.bets.Count,betInfo.Item5,amount,type,em.Name,betInfo.Item2);
 
             character.bets.Add(b);
             character.balance -= amount;
@@ -135,6 +135,11 @@ namespace trillbot.Commands
             if (character == null)
             {
                 await ReplyAsync("Account not found. Please create one before proceeding via `ta!registeraccount`");
+                return;
+            }
+
+            if(!acceptBets) {
+                await ReplyAsync("Sorry, we are no longer accepting bets!");
                 return;
             }
 
@@ -208,5 +213,35 @@ namespace trillbot.Commands
             await ReplyAsync("Betting acceptance toggled to: " + acceptBets);
         }
 
+        [Command("togglebets")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task payoutAsync(string[] nums) {
+            var k = new List<int>();
+            for(int l = 1; l < nums.Length; l++) {
+                int o;
+                if(Int32.TryParse(nums[l],out o)) {
+                    k.Add(o);
+                } else {
+                    await ReplyAsync("Failed to convert to integer");
+                    return;
+                }
+            }
+
+            int win = k[0];
+            k.RemoveAt(0);
+            var chars = Character.get_character();
+            foreach (Character c in chars) {
+                foreach(Classes.Bet b in c.bets) {
+                    if(b.Type == "win") {
+                        if(b.RacerID == win) {
+                            
+                        }
+                    } else {
+
+                    }
+                }
+                Character.update_character(c);
+            }
+        }
     }
 }

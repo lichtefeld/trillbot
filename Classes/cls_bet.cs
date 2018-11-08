@@ -16,6 +16,8 @@ namespace trillbot.Classes {
 
         [JsonProperty ("RacerName")]
         public string RacerName { get; set; }
+        [JsonProperty("RacerID")]
+        public int RacerID { get; set;}
 
         [JsonProperty ("Amount")]
         public int Amount { get; set; }
@@ -24,12 +26,13 @@ namespace trillbot.Classes {
         public string Type { get; set; }
         public string Emote { get; set; }
 
-        public Bet(int i, string rn, int a, string type, string emote) {
+        public Bet(int i, string rn, int a, string type, string emote, int ID) {
             Id = i;
             RacerName = rn;
             Amount = a;
             Type = type;
             Emote = emote;
+            RacerID = ID;
         }
 
         public string display(IGuild Guild) {
