@@ -23,7 +23,7 @@ namespace trillbot.Classes {
         private int CardsUntilShuffle { get; set; }
         public string dealerName { get; set; }
         public List<blackjackPlayer> table {get; set;} = new List<blackjackPlayer>();
-        private int position { get; set; }
+        private Tuple<int,int> position { get; set; } = new Tuple<int,int>(0,0);
         private int currentRound {get; set; }
 
         private List<ulong> toLeave { get; set; } = new List<ulong>();
@@ -133,8 +133,8 @@ namespace trillbot.Classes {
         }
 
         private void nextPlayer() {
-            var usr = channel.GetUserAsync(table[position].player_discord_id).GetAwaiter().GetResult();
-            helpers.output(channel,usr.Mention + ", it is now your turn. " + System.Environment.NewLine + table[position].handDisplay() + System.Environment.NewLine + table[position].name + ", would you like to hit, ");
+            var usr = channel.GetUserAsync(table[position.Item1].player_discord_id).GetAwaiter().GetResult();
+            helpers.output(channel,usr.Mention + ", it is now your turn. " + System.Environment.NewLine + table[position.Item1].handDisplay() + System.Environment.NewLine + table[position.Item1].name + ", would you like to hit, ");
         }
 
         private int handValue(List<StandardCard> cards) {
@@ -170,7 +170,7 @@ namespace trillbot.Classes {
         }
 
         private void payouts() {
-            position = 0;
+            position = new Tuple<int,int>(0,0);
             var str = new List<string>();
             //Check if Dealer Has Blackjack?
             if(handValue(hand) == 21 && hand.Count == 2) { //Dealer Has Blackjack!
@@ -226,7 +226,7 @@ namespace trillbot.Classes {
                 dealHand();
                 displayTable(true);
                 currentRound = table.Count-1; 
-                position = 0;
+                position = new Tuple<int,int>(0,0);
                 checkDealer();
             } else {
                 helpers.output(channel,dealerName + " sits and wait for someone to approach his table.");
@@ -266,8 +266,8 @@ namespace trillbot.Classes {
                     p.insurance = 0;
                 }
             }
-            position++;
-            if(position == currentRound) {
+            position = new Tuple<int,int>(position.Item1+1,position.Item2);
+            if(position.Item1 == currentRound) {
                 if(handValue(hand) == 21) {
                     helpers.output(channel,dealerName + " has blackjack! Hand: " + hand[0].ToString() + " | " + hand[1].ToString());
                     payouts();
@@ -277,6 +277,45 @@ namespace trillbot.Classes {
             }
         }
 
+        public void hit(SocketCommandContext context) { 
+            var p = table[position.Item1];
+            if(p.player_discord_id != context.User.Id) {
+                helpers.output(channel,context.User.Mention + ", the dealer isn't interacting with you right now");
+                return;
+            }
+        }
+
+        public void stand(SocketCommandContext context) {
+            var p = table[position.Item1];
+            if(p.player_discord_id != context.User.Id) {
+                helpers.output(channel,context.User.Mention + ", the dealer isn't interacting with you right now");
+                return;
+            }
+        }
+
+        public void doubleDown(SocketCommandContext context) {
+            var p = table[position.Item1];
+            if(p.player_discord_id != context.User.Id) {
+                helpers.output(channel,context.User.Mention + ", the dealer isn't interacting with you right now");
+                return;
+            }
+        }
+
+        public void split(SocketCommandContext context) {
+            var p = table[position.Item1];
+            if(p.player_discord_id != context.User.Id) {
+                helpers.output(channel,context.User.Mention + ", the dealer isn't interacting with you right now");
+                return;
+            }
+        }
+
+        public void surrender(SocketCommandContext context) {
+            var p = table[position.Item1];
+            if(p.player_discord_id != context.User.Id) {
+                helpers.output(channel,context.User.Mention + ", the dealer isn't interacting with you right now");
+                return;
+            }
+        }
     }
 
 }
