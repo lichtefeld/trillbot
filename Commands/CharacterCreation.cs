@@ -80,5 +80,31 @@ namespace trillbot.Commands
 
             await Context.User.SendMessageAsync("You have a current balance of " + character.balance + " imperial credits.");
         }
+
+        [Command("give")]
+        public async Task giveMoneyAsync(SocketUser user, int amount) {
+            var userChar = Character.get_character(Context.User.Id);
+            if (userChar == null) {
+                await ReplyAsync(Context.User.Mention + ", Account not found. Please create one before proceeding via `ta!registeraccount`");
+                return;
+            }
+            var Char = Character.get_character(user.Id);
+            if (Char == null) {
+                await ReplyAsync(user + " does not have an account." );
+                return;
+            }
+
+            
+
+            if(userChar.balance < amount) {
+                await ReplyAsync(Context.User.Mention + ", you don't have that much money");
+                return;
+            }
+
+            Char.balance += amount;
+            userChar.balance -= amount;
+
+            await ReplyAsync(Context.User.Mention + ", you have transfered " + amount + ", to " + Char.name);
+        }
     }
 }
