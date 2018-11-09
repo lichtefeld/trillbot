@@ -11,25 +11,20 @@ using System.Linq;
 namespace trillbot.Classes {
 
     public partial class Bet {
-        [JsonProperty ("ID")]
         public long Id { get; set; }
-
-        [JsonProperty ("RacerName")]
         public string RacerName { get; set; }
-
-        [JsonProperty ("Amount")]
+        public int RacerID { get; set;}
         public int Amount { get; set; }
-
-        [JsonProperty("Type")]
         public string Type { get; set; }
         public string Emote { get; set; }
 
-        public Bet(int i, string rn, int a, string type, string emote) {
+        public Bet(int i, string rn, int a, string type, string emote, int ID) {
             Id = i;
             RacerName = rn;
             Amount = a;
             Type = type;
             Emote = emote;
+            RacerID = ID;
         }
 
         public string display(IGuild Guild) {
@@ -38,11 +33,6 @@ namespace trillbot.Classes {
         }
 
     }
-   public partial class Bet
-    {
-        public static Bet[] FromJson(string json) => JsonConvert.DeserializeObject<Bet[]>(json, Converter.Settings);
-    }
-
     public static class Serialize
     {
         public static string ToJson(this Bet[] self) => JsonConvert.SerializeObject(self, Converter.Settings);

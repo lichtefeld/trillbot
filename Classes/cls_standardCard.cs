@@ -77,7 +77,9 @@ namespace trillbot.Classes
             Stack<StandardCard> shuffled = new Stack<StandardCard>();
             while (deck.Count > 0)
             {
-                shuffled.Append(deck[Program.rand.Next(deck.Count)]);
+                var card = deck[Program.rand.Next(deck.Count)];
+                shuffled.Push(card);
+                deck.Remove(card);
             }
             return shuffled;
         }

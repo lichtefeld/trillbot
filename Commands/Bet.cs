@@ -97,7 +97,7 @@ namespace trillbot.Commands
             }
             var emotesList = Context.Guild.Emotes.ToList();
             var em = emotesList.FirstOrDefault(e=> e.Name == betInfo.Item1.Substring(1,betInfo.Item1.Length-2));
-            var b = new trillbot.Classes.Bet(character.bets.Count,betInfo.Item5,amount,type,em.Name);
+            var b = new trillbot.Classes.Bet(character.bets.Count,betInfo.Item5,amount,type,em.Name,betInfo.Item2);
 
             character.bets.Add(b);
             character.balance -= amount;
@@ -136,6 +136,11 @@ namespace trillbot.Commands
             if (character == null)
             {
                 await ReplyAsync("Account not found. Please create one before proceeding via `ta!registeraccount`");
+                return;
+            }
+
+            if(!acceptBets) {
+                await ReplyAsync("Sorry, we are no longer accepting bets!");
                 return;
             }
 
@@ -209,6 +214,60 @@ namespace trillbot.Commands
             await ReplyAsync("Betting acceptance toggled to: " + acceptBets);
         }
 
+        [Command("runPayouts")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task payoutAsync(params string[] nums) {
+            var k = new List<int>();
+            for(int l = 1; l < nums.Length; l++) {
+                int o;
+                if(Int32.TryParse(nums[l],out o)) {
+                    k.Add(o);
+                } else {
+                    await ReplyAsync("Failed to convert to integer");
+                    return;
+                }
+            }
+
+            int win = k[0];
+            k.RemoveAt(0);
+            var chars = Character.get_character();
+            var wins = new List<Tuple<Classes.Bet,int,string>>();
+            var deaths = new List<Tuple<Classes.Bet,int,string>>();
+
+            foreach (Character c in chars) {
+                foreach(Classes.Bet b in c.bets) {
+                    if(b.Type == "win") {
+                        if(b.RacerID == win) {
+                            var payout = b.Amount * emote_to_ID.FirstOrDefault(e=> e.Item2 == b.RacerID).Item3;
+                            c.balance += payout;
+                            wins.Add(new Tuple<Classes.Bet, int, string>(b,payout,c.name));
+                        }
+                    } else {
+                        if(k.Contains(b.RacerID)) {
+                            var payout = b.Amount * emote_to_ID.FirstOrDefault(e=> e.Item2 == b.RacerID).Item4;
+                            c.balance += (int)payout;
+                            deaths.Add(new Tuple<Classes.Bet, int, string>(b,(int)payout,c.name));
+                        }
+                    }
+                }
+                Character.update_character(c);
+            }
+            wins.OrderByDescending(e=>e.Item2);
+            deaths.OrderByDescending(e=>e.Item2);
+            var winStrings = new List<string>();
+            var deathStrings = new List<string>();
+
+            winStrings.Add("**Top Leaderboard for Payouts: Winning Bets**");
+            deathStrings.Add("**Top Leaderboard for Payouts: Death Bets**");
+
+            for(int i = 0; i < 10; i++) {
+                if(i < wins.Count) winStrings.Add("**#" + i +":** " + wins[i].Item3 + " placed a bet on " + wins[i].Item1.RacerName + ". It payed out " + wins[i].Item2);
+                if(i < deaths.Count) deathStrings.Add("**#" + i +":** " + deaths[i].Item3 + " placed a bet on " + deaths[i].Item1.RacerName + ". It payed out " + deaths[i].Item2);
+            }
+            
+            helpers.output(Context.Guild.GetTextChannel(509818685775675402),winStrings);
+            helpers.output(Context.Guild.GetTextChannel(507638583885299714),deathStrings);
+        }
     }
 
     public class fuck_tuples

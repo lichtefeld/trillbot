@@ -22,15 +22,27 @@ namespace trillbot.Classes {
         public string name { get; set; }
         public List<List<StandardCard>> hand { get; set; } = new List<List<StandardCard>>();
         public int bet { get; set; }
-        public bool bust { get; set; }
+        public int insurance { get; set;}
+        public bool doubleDown { get; set;}
+        public bool surrender { get; set;}
 
         public blackjackPlayer(ulong ID, string n, int b) {
             player_discord_id = ID;
             name = n;
             bet = b;
+            doubleDown = false;
+            surrender = false;
+            hand.Add(new List<StandardCard>());
         }
 
-        public int handValue(int i = 1) {
+        public void reset() {
+            hand = new List<List<StandardCard>>();
+            hand.Add(new List<StandardCard>());
+            doubleDown = false;
+            surrender = false;
+        }
+
+        public int handValue(int i = 0) {
             if (i < 0 || i >= hand.Count) return -1;
             else return handValue(hand[i]);
         }
@@ -38,6 +50,7 @@ namespace trillbot.Classes {
         private int handValue(List<StandardCard> cards) {
             int value = 0;
             int numAces = 0;
+            if (cards.Count == 0) return -1;
             foreach(StandardCard c in cards) {
                 if(c.value == 14) {
                     numAces++;
@@ -59,18 +72,27 @@ namespace trillbot.Classes {
             List<string> str = new List<string>();
             str.Add("**" + name + "'s Hands**");
             for(int i = 0; i < hand.Count; i++) {
-                str.Add("*Hand " + i + "*");
+                str.Add("*Hand " + (i+1) + "*");
                 str.Add(handDisplay(hand[i]));
             }
             return String.Join(System.Environment.NewLine,str);
         }
+
+        public string handDisplay(int i) {
+            List<string> str = new List<string>();
+            str.Add("**" + name + "'s Hand: " + (i+1) + "**");
+            str.Add(handDisplay(hand[i]));
+            return String.Join(System.Environment.NewLine,str);
+        }
         private string handDisplay(List<StandardCard> cards) {
             List<string> str = new List<string>();
+            if (cards.Count == 0) return "";
             foreach(var c in cards) {
                 str.Add(c.ToString());
             }
-            str.Add(handValue(cards).ToString());
+            str.Add("`" + handValue(cards).ToString() + "`");
             return String.Join(" | ", str);
         }
+
     }
 }
