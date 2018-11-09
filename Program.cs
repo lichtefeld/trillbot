@@ -28,7 +28,6 @@ namespace trillbot
         public static Dictionary<ulong,Classes.GrandPrix> games = new Dictionary<ulong, Classes.GrandPrix>(); //For future multi-game system
         public static Dictionary<ulong,Classes.slotMachine> slots = new Dictionary<ulong, Classes.slotMachine>(); //Multichannel Slot Machine
         public static Dictionary<ulong,Classes.blackjackDealer> blackjack = new Dictionary<ulong, Classes.blackjackDealer>(); //Blackjack Games
-        //public static Dictionary<ulong,Classes.HoldEm> HoldEm = new Dictionary<ulong, Classes.HoldEm>(); //Holdem Games
 
         public async Task RunBotAsync()
         {
