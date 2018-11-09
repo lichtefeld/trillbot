@@ -73,7 +73,8 @@ namespace trillbot.Classes {
                     helpers.output(channel,Context.User.Mention + ", you nod and will leave this table at the end of the round.");
                 } else {
                     table.Remove(player);
-                    helpers.output(channel,Context.User.Mention + ", you stand up and leave the table.");
+                    helpers.output(channel,Context.User.Mention + ", you stand up and leave the table." + System.Environment.NewLine + dealerName + " sits and wait for someone to approach his table.");
+                    CardsUntilShuffle = -1;
                 }
             }
         }
@@ -158,6 +159,11 @@ namespace trillbot.Classes {
                 dealerTurn();
             } else {
                 var usr = channel.GetUserAsync(table[position.Item1].player_discord_id).GetAwaiter().GetResult();
+                if(table[position.Item1].handValue(position.Item2) == 21) {
+                    helpers.output(channel,usr.Mention + ", it is now your turn. " + System.Environment.NewLine + table[position.Item1].handDisplay() + System.Environment.NewLine + table[position.Item1].name + ", you have 21. Automatically standing");
+                    position = new Tuple<int, int>(position.Item1+1,0);
+                    nextPlayer();
+                }
                 helpers.output(channel,usr.Mention + ", it is now your turn. " + System.Environment.NewLine + table[position.Item1].handDisplay() + System.Environment.NewLine + table[position.Item1].name + ", would you like to hit, stand, double, split, or surrender?");
             }
         }
@@ -339,6 +345,7 @@ namespace trillbot.Classes {
                     helpers.output(channel,dealerName + " has blackjack! Hand: " + hand[0].ToString() + " | " + hand[1].ToString());
                     payouts();
                 } else {
+                    position = new Tuple<int, int>(0,0);
                     nextPlayer();
                 }
             }
@@ -362,6 +369,15 @@ namespace trillbot.Classes {
                     nextPlayer();
                 }
             } else {
+                if(p.handValue(position.Item2) == 21) {
+                    helpers.output(channel, p.name + " now has a hand of " + p.handDisplay(position.Item2) + System.Environment.NewLine + "A 21 means you automatically stand.");
+                    if(position.Item2 < p.hand.Count) {
+                        helpers.output(channel,p.name + " time to play hand " + position.Item2 + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+                    } else {
+                        position = new Tuple<int, int>(position.Item1+1,0);
+                        nextPlayer();
+                    }
+                }
                 helpers.output(channel, p.name + " now has a hand of " + p.handDisplay(position.Item2) + System.Environment.NewLine + "It's still your turn.");
             }
         }
@@ -375,7 +391,7 @@ namespace trillbot.Classes {
             helpers.output(channel,p.name + " stands.");
             position = new Tuple<int, int>(position.Item1,position.Item2+1);
             if(position.Item2 < p.hand.Count) {
-                helpers.output(channel,p.name + " time to play hand " + position.Item2 + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+                helpers.output(channel,p.name + " time to play hand " + (position.Item2+1) + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
             } else {
                 position = new Tuple<int, int>(position.Item1+1,0);
                 nextPlayer();
@@ -386,6 +402,10 @@ namespace trillbot.Classes {
             var p = table[position.Item1];
             if(p.player_discord_id != context.User.Id) {
                 helpers.output(channel,context.User.Mention + ", the dealer isn't interacting with you right now");
+                return;
+            }
+            if (p.hand[position.Item2].Count != 2) {
+                helpers.output(channel,context.User.Mention + ", Sorry you can only double down as the first move on a hand.");
                 return;
             }
             var c = Character.get_character(p.player_discord_id);
@@ -405,7 +425,7 @@ namespace trillbot.Classes {
             
             position = new Tuple<int, int>(position.Item1,position.Item2+1);
             if(position.Item2 < p.hand.Count) {
-                helpers.output(channel,p.name + " time to play hand " + position.Item2 + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+                helpers.output(channel,p.name + " time to play hand " + (position.Item2+1) + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
             } else {
                 position = new Tuple<int, int>(position.Item1+1,0);
                 nextPlayer();
@@ -443,7 +463,7 @@ namespace trillbot.Classes {
                 p.hand[position.Item2].RemoveAt(1);
                 p.hand[p.hand.Count-1].Add(GetCard());
                 p.hand[position.Item2].Add(GetCard());
-                helpers.output(channel,p.name + " splits their hand. There current hands are " + p.handDisplay() + System.Environment.NewLine + "You are new resolving hand " + position.Item2);
+                helpers.output(channel,p.name + " splits their hand. There current hands are " + p.handDisplay() + System.Environment.NewLine + "You are new resolving hand " + (position.Item2+1));
             }
         }
 
@@ -466,7 +486,7 @@ namespace trillbot.Classes {
 
             position = new Tuple<int, int>(position.Item1,position.Item2+1);
             if(position.Item2 < p.hand.Count) {
-                helpers.output(channel,p.name + " time to play hand " + position.Item2 + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+                helpers.output(channel,p.name + " time to play hand " + (position.Item2+1) + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
             } else {
                 position = new Tuple<int, int>(position.Item1+1,0);
                 nextPlayer();

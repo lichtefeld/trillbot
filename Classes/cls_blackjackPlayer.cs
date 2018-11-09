@@ -72,7 +72,7 @@ namespace trillbot.Classes {
             List<string> str = new List<string>();
             str.Add("**" + name + "'s Hands**");
             for(int i = 0; i < hand.Count; i++) {
-                str.Add("*Hand " + i + "*");
+                str.Add("*Hand " + (i+1) + "*");
                 str.Add(handDisplay(hand[i]));
             }
             return String.Join(System.Environment.NewLine,str);
@@ -80,7 +80,7 @@ namespace trillbot.Classes {
 
         public string handDisplay(int i) {
             List<string> str = new List<string>();
-            str.Add("**" + name + "'s Hand: " + i + "**");
+            str.Add("**" + name + "'s Hand: " + (i+1) + "**");
             str.Add(handDisplay(hand[i]));
             return String.Join(System.Environment.NewLine,str);
         }
@@ -90,7 +90,7 @@ namespace trillbot.Classes {
             foreach(var c in cards) {
                 str.Add(c.ToString());
             }
-            str.Add(handValue(cards).ToString());
+            str.Add("`" + handValue(cards).ToString() + "`");
             return String.Join(" | ", str);
         }
 
