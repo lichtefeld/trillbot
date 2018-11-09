@@ -410,7 +410,6 @@ namespace trillbot.Classes {
 
             return s;
         }
-
         public void exitGame(SocketCommandContext Context) {
             if(runningGame) {
                 helpers.output(Context.Channel,"You can't exit the game while it is running. Use `ta!leave`");
