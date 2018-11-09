@@ -25,19 +25,22 @@ namespace trillbot.Classes {
         public List<blackjackPlayer> table {get; set;} = new List<blackjackPlayer>();
         private Tuple<int,int> position { get; set; } = new Tuple<int,int>(0,0);
         private int currentRound {get; set; }
-
         private List<ulong> toLeave { get; set; } = new List<ulong>();
         private bool gameRunning { get; set; } = false;
         private ISocketMessageChannel channel { get; set;}
         private List<StandardCard> hand { get; set; } = new List<StandardCard>();
+        public int minbet { get; set; }
+        public int maxbet { get; set; }
 
         //List of Players to Add, List of Players to Remove
 
-        public blackjackDealer(string name, int numDecks, ISocketMessageChannel c) {
+        public blackjackDealer(string name, int numDecks, ISocketMessageChannel c, int minBet, int maxBet) {
             dealerName = name;
             numberOfDecks = numDecks;
             channel = c;
             CardsUntilShuffle = -1;
+            minbet = minBet;
+            maxbet = maxBet;
             //newDeck();
         }  
 
@@ -64,8 +67,13 @@ namespace trillbot.Classes {
         public void subPlayer(SocketCommandContext Context) {
             var player = table.FirstOrDefault(e=> e.player_discord_id == Context.User.Id);
             if(player != null) {
-                toLeave.Add(Context.User.Id);
-                helpers.output(channel,Context.User.Mention + ", you nod and will leave this table at the end of the round.");
+                if(gameRunning) {
+                    toLeave.Add(Context.User.Id);
+                    helpers.output(channel,Context.User.Mention + ", you nod and will leave this table at the end of the round.");
+                } else {
+                    table.Remove(player);
+                    helpers.output(channel,Context.User.Mention + ", you stand up and leave the table.");
+                }
             }
         }
 
@@ -113,7 +121,6 @@ namespace trillbot.Classes {
                 var s = p.handDisplay();
                 str.Add(s);
             }
-            str.Add("**"+dealerName+"'s Hand**");
             str.Add(handDisplay(hand,!firstRound));
             helpers.output(channel,str);
         }
@@ -131,7 +138,7 @@ namespace trillbot.Classes {
                     str.Add(cards[i].ToString());
                 }
             }
-            return dealerName + "'s Hand" + System.Environment.NewLine + String.Join(" | ", str);
+            return "**" + dealerName + "'s Hand**" + System.Environment.NewLine + String.Join(" | ", str);
         }
 
         private void dealerTurn() {
@@ -141,6 +148,7 @@ namespace trillbot.Classes {
                 hand.Add(GetCard());
                 str.Add(handDisplay(hand,true));
             }
+            helpers.output(channel,str);
             payouts();
         }
 
@@ -149,7 +157,7 @@ namespace trillbot.Classes {
                 dealerTurn();
             } else {
                 var usr = channel.GetUserAsync(table[position.Item1].player_discord_id).GetAwaiter().GetResult();
-                helpers.output(channel,usr.Mention + ", it is now your turn. " + System.Environment.NewLine + table[position.Item1].handDisplay() + System.Environment.NewLine + table[position.Item1].name + ", would you like to hit, ");
+                helpers.output(channel,usr.Mention + ", it is now your turn. " + System.Environment.NewLine + table[position.Item1].handDisplay() + System.Environment.NewLine + table[position.Item1].name + ", would you like to hit, stand, double, split, or surrender?");
             }
         }
 
@@ -196,7 +204,7 @@ namespace trillbot.Classes {
                         c.balance += p.bet;
                         Character.update_character(c);
                         str.Add(p.name + " has a blackjack! This results in a __push__.");
-                    } else if(p.insurance >= 0) {
+                    } else if(p.insurance > 0) {
                         var c = Character.get_character(p.player_discord_id);
                         c.balance += 3*p.insurance;
                         Character.update_character(c);
@@ -253,11 +261,26 @@ namespace trillbot.Classes {
                 }
             }
             str.Add("To start the next round, one player of the game just needs to type `ta!next`");
+            resetTable();
             gameRunning = false;
             helpers.output(channel,str);
         }
 
-        public void runGame() {
+        private void resetTable() {
+            foreach(var p in table) {
+                p.reset();
+            }
+            hand = new List<StandardCard>();
+        }
+
+        public void runGame(SocketCommandContext context = null) {
+            if(context != null) {
+                var p = table.FirstOrDefault(e=>e.player_discord_id == context.User.Id);
+                if(p == null) {
+                    helpers.output(channel,context.User.Mention + ", you aren't in the game so you can't start the next round.");
+                    return;
+                }
+            }
             subPlayer();
             gameRunning = true;
             if(table.Count > 0) {
@@ -267,7 +290,7 @@ namespace trillbot.Classes {
                 if(CardsUntilShuffle <= 0) newDeck();
                 dealHand();
                 displayTable(true);
-                currentRound = table.Count-1; 
+                currentRound = table.Count;
                 position = new Tuple<int,int>(0,0);
                 checkDealer();
             } else {
@@ -299,6 +322,7 @@ namespace trillbot.Classes {
                 }
             } else {
                 if(c.balance-insure >= 0) {
+                    if(insure > p.bet/2) insure = p.bet/2;
                     p.insurance = insure;
                     helpers.output(channel,context.User.Mention + ", you have placed an insurance bet of " + p.insurance);
                     c.balance -= p.insurance;
@@ -376,7 +400,7 @@ namespace trillbot.Classes {
             var card = GetCard();
             p.hand[position.Item2].Add(card);
             p.doubleDown = true;
-            helpers.output(channel,p.name + " doubles down. They are dealt " + c.ToString() + " and have a total hand of " + p.handDisplay(position.Item2));
+            helpers.output(channel,p.name + " doubles down. They are dealt " + card.ToString() + " and have a total hand of " + System.Environment.NewLine + p.handDisplay(position.Item2));
             
             position = new Tuple<int, int>(position.Item1,position.Item2+1);
             if(position.Item2 < p.hand.Count) {
@@ -391,6 +415,10 @@ namespace trillbot.Classes {
             var p = table[position.Item1];
             if(p.player_discord_id != context.User.Id) {
                 helpers.output(channel,context.User.Mention + ", the dealer isn't interacting with you right now");
+                return;
+            }
+            if(p.hand.Count == 4) {
+                helpers.output(channel,context.User.Mention + ", sorry. You can only split upto a maximum of 4 hands.");
                 return;
             }
             var val1 = p.hand[position.Item2][0].value;
@@ -410,9 +438,9 @@ namespace trillbot.Classes {
                 c.balance -= p.bet;
                 Character.update_character(c);
                 p.hand.Add(new List<StandardCard>());
-                p.hand[position.Item2+1].Add(p.hand[position.Item2][1]);
+                p.hand[p.hand.Count-1].Add(p.hand[position.Item2][1]);
                 p.hand[position.Item2].RemoveAt(1);
-                p.hand[position.Item2+1].Add(GetCard());
+                p.hand[p.hand.Count-1].Add(GetCard());
                 p.hand[position.Item2].Add(GetCard());
                 helpers.output(channel,p.name + " splits their hand. There current hands are " + p.handDisplay() + System.Environment.NewLine + "You are new resolving hand " + position.Item2);
             }
@@ -433,6 +461,14 @@ namespace trillbot.Classes {
                 c.balance += p.bet/2;
                 p.surrender = true;
                 helpers.output(channel,p.name + " surrenders their hand receving " + p.bet/2 + " credits back.");
+            }
+
+            position = new Tuple<int, int>(position.Item1,position.Item2+1);
+            if(position.Item2 < p.hand.Count) {
+                helpers.output(channel,p.name + " time to play hand " + position.Item2 + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+            } else {
+                position = new Tuple<int, int>(position.Item1+1,0);
+                nextPlayer();
             }
         }
     }
