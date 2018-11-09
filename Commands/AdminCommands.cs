@@ -18,7 +18,7 @@ namespace trillbot.Commands
 {
     public class leaderboard_stats
     {
-        public string leaderboards { get; set; }
+        public string leaderboard { get; set; }
         public string api_key { get; set; }
     }
     public class AdminCommands : ModuleBase<SocketCommandContext>
@@ -65,7 +65,7 @@ namespace trillbot.Commands
 
             leaderboard_stats s = new leaderboard_stats
             {
-                leaderboards = string.Join(System.Environment.NewLine, rtn),
+                leaderboard = string.Join(System.Environment.NewLine, rtn),
                 api_key = key
             };
 
