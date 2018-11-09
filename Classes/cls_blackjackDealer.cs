@@ -96,8 +96,8 @@ namespace trillbot.Classes {
 
         private void dealHand() {
             foreach(blackjackPlayer p in table) {
-                p.addCard(GetCard());
-                p.addCard(GetCard());
+                p.hand[0].Add(GetCard());
+                p.hand[0].Add(GetCard());
                 p.insurance = -1;
             }
             hand.Add(GetCard());
@@ -132,9 +132,17 @@ namespace trillbot.Classes {
             return String.Join(" | ", str);
         }
 
+        private void dealerTurn() {
+
+        }
+
         private void nextPlayer() {
-            var usr = channel.GetUserAsync(table[position.Item1].player_discord_id).GetAwaiter().GetResult();
-            helpers.output(channel,usr.Mention + ", it is now your turn. " + System.Environment.NewLine + table[position.Item1].handDisplay() + System.Environment.NewLine + table[position.Item1].name + ", would you like to hit, ");
+            if (position.Item1 >= currentRound) {
+                dealerTurn();
+            } else {
+                var usr = channel.GetUserAsync(table[position.Item1].player_discord_id).GetAwaiter().GetResult();
+                helpers.output(channel,usr.Mention + ", it is now your turn. " + System.Environment.NewLine + table[position.Item1].handDisplay() + System.Environment.NewLine + table[position.Item1].name + ", would you like to hit, ");
+            }
         }
 
         private int handValue(List<StandardCard> cards) {
@@ -165,7 +173,7 @@ namespace trillbot.Classes {
                 helpers.output(channel,dealerName + " has blackjack! Hand: " + hand[0].ToString() + " | " + hand[1].ToString());
                 payouts();
             } else {
-                helpers.output(channel,dealerName + " turns to " + table[0].name + ". It's " + channel.GetUserAsync(table[0].player_discord_id).GetAwaiter().GetResult().Mention + "'s turn to play");
+                nextPlayer();
             }
         }
 
@@ -190,6 +198,7 @@ namespace trillbot.Classes {
             } else {
                 var dealerValue = handValue(hand);
                 foreach(var p in table) {
+                    if(p.surrender) continue;
                     for(int i = 0; i < p.hand.Count; i++) {
                         if(p.handValue(i) > 21) {
                             str.Add(p.name +"s hand " + i + " is a bust");
@@ -200,24 +209,37 @@ namespace trillbot.Classes {
                             str.Add(p.name + " has a blackjack with hand " + i + "! They win " + (int)((double)p.bet*1.5 + p.bet) + " credits.");
                         } else if (p.handValue(i) == dealerValue) {
                             var c = Character.get_character(p.player_discord_id);
-                            c.balance += p.bet;
+                            if(p.doubleDown) {
+                                c.balance += p.bet*2;
+                            } else {
+                                c.balance += p.bet;
+                            }
                             Character.update_character(c);
                             str.Add(p.name + " has a tie with hand " + i + "! This results in a __push__.");
                         } else if (p.handValue(i) > dealerValue) {
                             var c = Character.get_character(p.player_discord_id);
-                            c.balance += 2*p.bet;
-                            Character.update_character(c);
-                            str.Add(p.name + " beats the dealer with hand " + i + "! They win " + 2*p.bet + " credits.");
+                            if(p.doubleDown) {
+                                c.balance += p.bet*4;
+                                str.Add(p.name + " beats the dealer with hand " + i + "! They win " + 4*p.bet + " credits.");
+                            } else {
+                                c.balance += p.bet*2;
+                                str.Add(p.name + " beats the dealer with hand " + i + "! They win " + 2*p.bet + " credits.");
+                            }
+                            Character.update_character(c);    
                         } else {
                             str.Add(p.name + " loses to the dealer with hand " + i + "!");
                         }
                     }
                 }
             }
+            str.Add("To start the next round, one player of the game just needs to type `ta!next`");
+            gameRunning = false;
+            helpers.output(channel,str);
         }
 
         public void runGame() {
             subPlayer();
+            gameRunning = true;
             if(table.Count > 0) {
                 helpers.output(channel,dealerName + " asks everyone to put forth their wager.");
                 collectBets();
@@ -283,6 +305,20 @@ namespace trillbot.Classes {
                 helpers.output(channel,context.User.Mention + ", the dealer isn't interacting with you right now");
                 return;
             }
+            var card = GetCard();
+            p.hand[position.Item2].Add(card);
+            if(p.handValue(position.Item2) > 21) {
+                helpers.output(channel, p.name + " busts with a hand of " + p.handDisplay(position.Item2));
+                position = new Tuple<int, int>(position.Item1,position.Item2+1);
+                if(position.Item2 < p.hand.Count) {
+                    helpers.output(channel,p.name + " time to play hand " + position.Item2 + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+                } else {
+                    position = new Tuple<int, int>(position.Item1+1,0);
+                    nextPlayer();
+                }
+            } else {
+                helpers.output(channel, p.name + " now has a hand of " + p.handDisplay(position.Item2) + System.Environment.NewLine + "It's still your turn.");
+            }
         }
 
         public void stand(SocketCommandContext context) {
@@ -290,6 +326,14 @@ namespace trillbot.Classes {
             if(p.player_discord_id != context.User.Id) {
                 helpers.output(channel,context.User.Mention + ", the dealer isn't interacting with you right now");
                 return;
+            }
+            helpers.output(channel,p.name + " stands.");
+            position = new Tuple<int, int>(position.Item1,position.Item2+1);
+            if(position.Item2 < p.hand.Count) {
+                helpers.output(channel,p.name + " time to play hand " + position.Item2 + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+            } else {
+                position = new Tuple<int, int>(position.Item1+1,0);
+                nextPlayer();
             }
         }
 
@@ -299,6 +343,28 @@ namespace trillbot.Classes {
                 helpers.output(channel,context.User.Mention + ", the dealer isn't interacting with you right now");
                 return;
             }
+            var c = Character.get_character(p.player_discord_id);
+            if(p.player_discord_id != context.User.Id) {
+                helpers.output(channel,context.User.Mention + ", Contact Xavier. Error Code: Character missing while in Blackjack Game");
+                return;
+            }
+            if(c.balance-p.bet <= 0) {
+                helpers.output(channel,context.User.Mention + ", You don't have enough in the bank to make this bet");
+                return;
+            }
+            c.balance -= p.bet;
+            var card = GetCard();
+            p.hand[position.Item2].Add(card);
+            p.doubleDown = true;
+            helpers.output(channel,p.name + " doubles down. They are dealt " + c.ToString() + " and have a total hand of " + p.handDisplay(position.Item2));
+            
+            position = new Tuple<int, int>(position.Item1,position.Item2+1);
+            if(position.Item2 < p.hand.Count) {
+                helpers.output(channel,p.name + " time to play hand " + position.Item2 + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+            } else {
+                position = new Tuple<int, int>(position.Item1+1,0);
+                nextPlayer();
+            }
         }
 
         public void split(SocketCommandContext context) {
@@ -307,6 +373,29 @@ namespace trillbot.Classes {
                 helpers.output(channel,context.User.Mention + ", the dealer isn't interacting with you right now");
                 return;
             }
+            var val1 = p.hand[position.Item2][0].value;
+            if(val1 != 14 && val1 > 10) val1 = 10;
+            var val2 = p.hand[position.Item2][1].value;
+            if(val2 != 14 && val2 > 10) val2 = 10;
+            if(val1 == val2) {
+                var c = Character.get_character(p.player_discord_id);
+                if (c == null) {
+                    helpers.output(channel,context.User.Mention + ", Contact Xavier: Error Blackjack without Character");
+                    return;
+                }
+                if (c.balance - p.bet < 0) {
+                    helpers.output(channel,context.User.Mention + ", you don't have the money to split your hand");
+                    return;
+                }
+                c.balance -= p.bet;
+                Character.update_character(c);
+                p.hand.Add(new List<StandardCard>());
+                p.hand[position.Item2+1].Add(p.hand[position.Item2][1]);
+                p.hand[position.Item2].RemoveAt(1);
+                p.hand[position.Item2+1].Add(GetCard());
+                p.hand[position.Item2].Add(GetCard());
+                helpers.output(channel,p.name + " splits their hand. There current hands are " + p.handDisplay() + System.Environment.NewLine + "You are new resolving hand " + position.Item2);
+            }
         }
 
         public void surrender(SocketCommandContext context) {
@@ -314,6 +403,16 @@ namespace trillbot.Classes {
             if(p.player_discord_id != context.User.Id) {
                 helpers.output(channel,context.User.Mention + ", the dealer isn't interacting with you right now");
                 return;
+            }
+            if(p.hand.Count == 1 && p.hand[0].Count == 2) {
+                var c  = Character.get_character(p.player_discord_id);
+                if (c == null) {
+                    helpers.output(channel,context.User.Mention + ", Contact Xavier: Error Blackjack without Character");
+                    return;
+                }
+                c.balance += p.bet/2;
+                p.surrender = true;
+                helpers.output(channel,p.name + " surrenders their hand receving " + p.bet/2 + " credits back.");
             }
         }
     }

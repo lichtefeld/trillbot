@@ -11,18 +11,10 @@ using System.Linq;
 namespace trillbot.Classes {
 
     public partial class Bet {
-        [JsonProperty ("ID")]
         public long Id { get; set; }
-
-        [JsonProperty ("RacerName")]
         public string RacerName { get; set; }
-        [JsonProperty("RacerID")]
         public int RacerID { get; set;}
-
-        [JsonProperty ("Amount")]
         public int Amount { get; set; }
-
-        [JsonProperty("Type")]
         public string Type { get; set; }
         public string Emote { get; set; }
 
@@ -41,11 +33,6 @@ namespace trillbot.Classes {
         }
 
     }
-   public partial class Bet
-    {
-        public static Bet[] FromJson(string json) => JsonConvert.DeserializeObject<Bet[]>(json, Converter.Settings);
-    }
-
     public static class Serialize
     {
         public static string ToJson(this Bet[] self) => JsonConvert.SerializeObject(self, Converter.Settings);
