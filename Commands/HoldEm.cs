@@ -50,8 +50,8 @@ namespace trillbot.Commands
             string message = Context.Message.Author.Username + " has joined the game.";
         }
 
-        [Command("playholdem")]
-        public async Task PlayholdemAsync()
+        [Command("startround")]
+        public async Task StartroundAsync()
         {
             HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
 
@@ -64,12 +64,19 @@ namespace trillbot.Commands
 
             game.players[big_index].cash_pool = game.players[big_index].cash_pool - game.big_blind;
 
-            betting_round round = new betting_round();
+            SocketGuildUser small_user = Context.Guild.GetUser(game.players[small_index].ID);
+            SocketGuildUser big_user = Context.Guild.GetUser(game.players[big_index].ID);
 
-            round.pot += game.big_blind;
-            round.pot += game.small_blind;
+            await ReplyAsync(generate_name(small_user) + " has been debited the small blind.");
 
-            game.dealer_index++;
+            await ReplyAsync(generate_name(big_user) + " has been debited the big blind.");
+
+            game.current_round = new betting_round();
+
+            // betting_round round = new betting_round();
+
+            game.current_round.pot += game.big_blind;
+            game.current_round.pot += game.small_blind;
 
             //deal the hole cards
 
@@ -81,40 +88,130 @@ namespace trillbot.Commands
                 foreach (var player in game.players)
                 {
                     player.hole.Add(deck.Pop());
-                    
+
                 }
             }
 
             game.players.ForEach(async e => await send_cards(e.ID));
+
+            await ReplyAsync("Cards Dealt.");
+
+            await ReplyAsync("Bet goes to " + generate_name(get_usr_from_index(Context, game.dealer_index + 1)));
         }
 
-        private async Task start_betting_round ()
-        {           
+        [Command("holdemchips")]
+        public async Task HoldemchipsAsync(int amount)
+        {
+            HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
+        }
+
+        [Command("holdembet")]
+        public async Task HoldembetAsync(int amount)
+        {
+            HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
+        }
+
+        [Command("holdemcheck")]
+        public async Task HoldemcheckAsync()
+        {
+            HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
+        }
+
+        [Command("holdemcall")]
+        public async Task HoldemcallAsync()
+        {
+            HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
+        }
+
+        [Command("holdemraise")]
+        public async Task HoldemraiseAsync(int amount)
+        {
+            HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
+        }
+
+        [Command("holdemfold")]
+        public async Task HoldemfoldAsync()
+        {
+            HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
+        }
+
+        private static async Task lay_down_next(SocketCommandContext context)
+        {
+            HoldEm game = Program.HoldEm.First(e => e.Key == context.Channel.Id).Value;
+
+            if(game.current_round.flop == null)
+            {
+                game.current_round.flop = new List<StandardCard>();
+
+                game.current_round.flop.Add(game.deck.Pop());
+                game.current_round.flop.Add(game.deck.Pop());
+                game.current_round.flop.Add(game.deck.Pop());
+
+                List<string> message = new List<string>();
+
+                message.Add("The Flop:");
+
+                game.current_round.flop.ForEach(e=>message.Add(StandardCard.value_to_output[e.value].ToString() + " of " + StandardCard.suit_to_output[e.suit].ToString()));
+
+                string rtner = string.Join(System.Environment.NewLine, message);
+
+                await context.Channel.SendMessageAsync(rtner);
+
+                return;
+            }
+
+            if(game.current_round.turn == null)
+            {
+
+            }
+
+            if(game.current_round.river == null)
+            {
+
+            }
+        }
+
+        private async Task start_betting_round()
+        {
             //perform the small and big blinds
 
             HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
 
-            
+
             int callcount = 0;
 
             do
             {
-                
+
             } while (callcount < game.players.Count);
+        }
+
+        private static SocketGuildUser get_usr_from_index (SocketCommandContext context, int index)
+        {
+            HoldEm game = Program.HoldEm.First(e => e.Key == context.Channel.Id).Value;
+
+            SocketGuildUser usr = context.Guild.GetUser(game.players[index].ID);
+
+            return usr;
+        }
+
+        private static string generate_name(SocketGuildUser usr)
+        {
+            return usr.Nickname == null ? usr.Username : usr.Nickname;
         }
         private async Task send_cards(UInt64 id)
         {
             SocketGuildUser usr = Context.Guild.GetUser(id);
 
-            List<string> message = new List<string> {"Your Hole Cards:"};
+            List<string> message = new List<string> { "Your Hole Cards:" };
 
-            HoldEm game = Program.HoldEm.First(e=>e.Key == Context.Channel.Id).Value;
+            HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
 
-            Player player = game.players.First(e=>e.ID == id);
+            Player player = game.players.First(e => e.ID == id);
 
-            player.hole.ForEach(e=>message.Add(StandardCard.value_to_output[e.value].ToString() + " of " + StandardCard.suit_to_output[e.suit].ToString()));
+            player.hole.ForEach(e => message.Add(StandardCard.value_to_output[e.value].ToString() + " of " + StandardCard.suit_to_output[e.suit].ToString()));
 
-            await usr.SendMessageAsync(string.Join(System.Environment.NewLine, message),false,null,null);
+            await usr.SendMessageAsync(string.Join(System.Environment.NewLine, message), false, null, null);
         }
 
 
