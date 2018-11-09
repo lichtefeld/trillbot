@@ -27,7 +27,7 @@ namespace trillbot.Commands
             }
             var game = new blackjackDealer(name,i,Context.Channel);
             Program.blackjack.Add(Context.Channel.Id, game);
-            await Context.Channel.SendMessageAsync("Slot machine added. Use `ta!payouts` to determin the payouts of this machine.");
+            await Context.Channel.SendMessageAsync("Blackjack Dealer Added");
         }
 
         [Command("removeblackjack")]

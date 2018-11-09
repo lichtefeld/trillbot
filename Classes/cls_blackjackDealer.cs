@@ -37,17 +37,18 @@ namespace trillbot.Classes {
             dealerName = name;
             numberOfDecks = numDecks;
             channel = c;
-            newDeck();
+            CardsUntilShuffle = -1;
+            //newDeck();
         }  
 
         private void newDeck() {
             List<StandardCard> cards = StandardCard.straightDeck();
             List<StandardCard> multiCard = cards;
-            for(int i = 1; i <= numberOfDecks; i++) {
+            for(int i = 1; i < numberOfDecks; i++) {
                 multiCard.AddRange(cards);
             }
             CardsUntilShuffle = multiCard.Count/2 + Program.rand.Next(52*(numberOfDecks/2));
-            deck = StandardCard.shuffleDeck(cards);
+            this.deck = StandardCard.shuffleDeck(cards);
         }
 
         public void addPlayer(blackjackPlayer p, SocketCommandContext Context) {
@@ -91,10 +92,12 @@ namespace trillbot.Classes {
 
         private StandardCard GetCard() {
             CardsUntilShuffle--;
+            if (deck.Count == 0) newDeck();
             return deck.Pop();
         }
 
         private void dealHand() {
+            if(CardsUntilShuffle < 0) newDeck();
             foreach(blackjackPlayer p in table) {
                 p.hand[0].Add(GetCard());
                 p.hand[0].Add(GetCard());
@@ -109,7 +112,6 @@ namespace trillbot.Classes {
             foreach(blackjackPlayer p in table) {
                 var s = p.handDisplay();
                 str.Add(s);
-                str.Add(System.Environment.NewLine);
             }
             str.Add("**"+dealerName+"'s Hand**");
             str.Add(handDisplay(hand,!firstRound));
@@ -129,11 +131,17 @@ namespace trillbot.Classes {
                     str.Add(cards[i].ToString());
                 }
             }
-            return String.Join(" | ", str);
+            return dealerName + "'s Hand" + System.Environment.NewLine + String.Join(" | ", str);
         }
 
         private void dealerTurn() {
-
+            var str = new List<string>();
+            str.Add(handDisplay(hand,true));
+            while(handValue(hand) < 17) {
+                hand.Add(GetCard());
+                str.Add(handDisplay(hand,true));
+            }
+            payouts();
         }
 
         private void nextPlayer() {
@@ -207,16 +215,30 @@ namespace trillbot.Classes {
                             c.balance += (int)((double)p.bet*1.5 + p.bet);
                             Character.update_character(c);
                             str.Add(p.name + " has a blackjack with hand " + i + "! They win " + (int)((double)p.bet*1.5 + p.bet) + " credits.");
-                        } else if (p.handValue(i) == dealerValue) {
-                            var c = Character.get_character(p.player_discord_id);
-                            if(p.doubleDown) {
-                                c.balance += p.bet*2;
+                        } else if (dealerValue < 21) {
+                            if (p.handValue(i) == dealerValue) {
+                                var c = Character.get_character(p.player_discord_id);
+                                if(p.doubleDown) {
+                                    c.balance += p.bet*2;
+                                } else {
+                                    c.balance += p.bet;
+                                }
+                                Character.update_character(c);
+                                str.Add(p.name + " has a tie with hand " + i + "! This results in a __push__.");
+                            } else if (p.handValue(i) > dealerValue) {
+                                var c = Character.get_character(p.player_discord_id);
+                                if(p.doubleDown) {
+                                    c.balance += p.bet*4;
+                                    str.Add(p.name + " beats the dealer with hand " + i + "! They win " + 4*p.bet + " credits.");
+                                } else {
+                                    c.balance += p.bet*2;
+                                    str.Add(p.name + " beats the dealer with hand " + i + "! They win " + 2*p.bet + " credits.");
+                                }
+                                Character.update_character(c);    
                             } else {
-                                c.balance += p.bet;
+                                str.Add(p.name + " loses to the dealer with hand " + i + "!");
                             }
-                            Character.update_character(c);
-                            str.Add(p.name + " has a tie with hand " + i + "! This results in a __push__.");
-                        } else if (p.handValue(i) > dealerValue) {
+                        } else {
                             var c = Character.get_character(p.player_discord_id);
                             if(p.doubleDown) {
                                 c.balance += p.bet*4;
@@ -225,9 +247,7 @@ namespace trillbot.Classes {
                                 c.balance += p.bet*2;
                                 str.Add(p.name + " beats the dealer with hand " + i + "! They win " + 2*p.bet + " credits.");
                             }
-                            Character.update_character(c);    
-                        } else {
-                            str.Add(p.name + " loses to the dealer with hand " + i + "!");
+                            Character.update_character(c);
                         }
                     }
                 }
