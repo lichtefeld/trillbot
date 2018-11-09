@@ -58,7 +58,8 @@ namespace trillbot.Classes {
             table.Add(p);
             if (!gameRunning) {
                 helpers.output(channel,Context.User.Mention + ", you have sat down at " + this.dealerName + "'s table. You'll be betting " + p.bet + " on every hand.");
-                runGame();
+                if(table.Count == 1) runGame();
+                else helpers.output(channel,"I will wait for `ta!next` to start the next round");
             } else {
                 helpers.output(channel,Context.User.Mention + ", you have sat down at " + this.dealerName + "'s table and will join the next game. You'll be betting " + p.bet + " on every hand.");
             }
