@@ -27,6 +27,8 @@ namespace trillbot.Classes {
         public string description { get; set; }
         [JsonProperty("Max Bet")]
         public int maxBet {get; set; }
+        [JsonProperty("Min Bet")]
+        public int minBet {get; set; }
         [JsonProperty("Reels")]
         public List<string> reels { get; set; } = new List<string>();
         [JsonProperty("Weights")]

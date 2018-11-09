@@ -5,6 +5,7 @@
             "Name": "Citrus & Flowers",
             "Description": "This fruity and flowery slot machine is a 1 credit machine. Keeping with proper Trilliant Standard, pineapples are not considered a fruit, as such that reel line is a bust.",
             "Max Bet": 100,
+            "in Bet": 1,
             "Channel": 509175596547440641,
             "Reels": [
                 "💰",
@@ -46,6 +47,69 @@
                     7,
                     9,
                     32
+                ]
+            ],
+            "Payouts": [
+                8000,
+                1000,
+                300,
+                200,
+                100,
+                40,
+                40,
+                30,
+                20,
+                2,
+                1 
+            ]
+        },
+        {
+            "Id": 2,
+            "Name": "Sharks & Sealife",
+            "Description": "This machine focuses on Exotic Sea-Life. Using a minimum bet of 10 Imperial Credits, the Sharks & Sealife is sure to entertain customers for hours! 🌊 is considered a bust",
+            "Max Bet": 1000,
+            "Min Bet": 10,
+            "Channel": 0,
+            "Reels": [
+                "🦈",
+                "🐳",
+                "🐋",
+                "🐬",
+                "🐡",
+                "🐠",
+                "🐟",
+                "🌊"
+            ],
+            "Weights": [
+                [
+                    1,
+                    2,
+                    2,
+                    8,
+                    6,
+                    12,
+                    10,
+                    23
+                ],
+                [
+                    1,
+                    1,
+                    6,
+                    3,
+                    10,
+                    12,
+                    10,
+                    21
+                ],
+                [
+                    1,
+                    5,
+                    2,
+                    3,
+                    7,
+                    9,
+                    12,
+                    26
                 ]
             ],
             "Payouts": [
