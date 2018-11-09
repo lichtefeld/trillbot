@@ -80,6 +80,8 @@ namespace trillbot.Commands
             request.AddHeader("Content-Type", "text/json");
 
             var response = client.Execute(request);
+
+            await ReplyAsync("Stats uploaded.");
         }
 
         [Command("sub")]
