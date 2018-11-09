@@ -37,9 +37,10 @@ namespace trillbot.Classes
     public class betting_round
     {
         public List<StandardCard> flop { get; set; }
-        public List<StandardCard> turn { get; set; }
-        public List<StandardCard> river { get; set; }
+        public StandardCard turn { get; set; }
+        public StandardCard river { get; set; }
         public List<player_bet> bets { get; set; } = new List<player_bet>();
+        public int call_count {get;set;} = 0;
         public int pot { get; set; }
         public int max_bet_position { get; set; }
         public int call_position { get; set; }
@@ -47,7 +48,7 @@ namespace trillbot.Classes
 
     public class HoldEm
     {
-        public Stack<StandardCard> deck { get; set; } = StandardCard.shuffleDeck(StandardCard.straightDeck());
+        public Stack<StandardCard> deck { get; set; } 
         // public int card_round { get; set; } = 0;
         public betting_round current_round {get;set;}
         public int big_blind { get; set; } = 500;
@@ -60,6 +61,7 @@ namespace trillbot.Classes
 
         public HoldEm()
         {
+            this.deck = StandardCard.shuffleDeck(StandardCard.straightDeck());
             this.small_blind = this.big_blind / 2;
             this.min_bet = small_blind;
         }

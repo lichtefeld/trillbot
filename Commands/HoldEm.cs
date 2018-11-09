@@ -96,50 +96,145 @@ namespace trillbot.Commands
 
             await ReplyAsync("Cards Dealt.");
 
-            await ReplyAsync("Bet goes to " + generate_name(get_usr_from_index(Context, game.dealer_index + 1)));
+            game.current_round.call_position = game.dealer_index + 1;
+
+            await ReplyAsync("Bet goes to " + generate_name(get_usr_from_index(Context, game.current_round.call_position)));
         }
 
         [Command("holdemchips")]
         public async Task HoldemchipsAsync(int amount)
         {
             HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
+
+            await ReplyAsync(game.players.First(e => e.ID == Context.Message.Author.Id).cash_pool.ToString());
+        }
+
+        [Command("holdempot")]
+        public async Task HoldempotAsync(int amount)
+        {
+            HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
+
+            await ReplyAsync(game.current_round.pot.ToString());
         }
 
         [Command("holdembet")]
         public async Task HoldembetAsync(int amount)
         {
             HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
+
+            game.current_round.pot += amount;
+            
+            do
+            {
+                game.current_round.call_position++;
+            } while (!game.players[game.current_round.call_position].fold);
+
+            game.current_round.call_count = 0;
+
+            await ReplyAsync("Bet goes to " + generate_name(get_usr_from_index(Context, game.current_round.call_position)));
         }
 
         [Command("holdemcheck")]
         public async Task HoldemcheckAsync()
         {
             HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
+
+            do
+            {
+                game.current_round.call_position++;
+            } while (!game.players[game.current_round.call_position].fold);
+
+            game.current_round.call_count++;
+
+            if(game.current_round.call_count == game.players.Count() - 1)
+            {
+                await lay_down_next(Context);
+                return;
+            }
+
+            await ReplyAsync("Bet goes to " + generate_name(get_usr_from_index(Context, game.current_round.call_position)));
         }
 
         [Command("holdemcall")]
         public async Task HoldemcallAsync()
         {
             HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
+
+            int last_player_bet_amount = game.current_round.bets.Last(e => e.player_id == Context.Message.Author.Id).amount;
+
+            int last_bet_amount = game.current_round.bets.Last().amount;
+
+            game.players.First(e => e.ID == Context.Message.Author.Id).cash_pool -= last_bet_amount - last_player_bet_amount;
+
+            game.current_round.pot += last_bet_amount - last_player_bet_amount;
+
+            do
+            {
+                game.current_round.call_position++;
+            } while (!game.players[game.current_round.call_position].fold);
+
+            game.current_round.call_count++;
+
+            if(game.current_round.call_count == game.players.Count() - 1)
+            {
+                await lay_down_next(Context);
+                return;
+            }
+
+            await ReplyAsync("Bet goes to " + generate_name(get_usr_from_index(Context, game.current_round.call_position)));
         }
 
         [Command("holdemraise")]
         public async Task HoldemraiseAsync(int amount)
         {
             HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
+
+            int last_player_bet_amount = game.current_round.bets.Last(e => e.player_id == Context.Message.Author.Id).amount;
+
+            int last_bet_amount = game.current_round.bets.Last().amount;
+
+            game.players.First(e => e.ID == Context.Message.Author.Id).cash_pool -= last_bet_amount - last_player_bet_amount + amount;
+
+            game.current_round.pot += last_bet_amount - last_player_bet_amount + amount;
+
+            do
+            {
+                game.current_round.call_position++;
+            } while (!game.players[game.current_round.call_position].fold);
+
+            game.current_round.call_count = 0;
+
+            await ReplyAsync("Bet goes to " + generate_name(get_usr_from_index(Context, game.current_round.call_position)));
         }
 
         [Command("holdemfold")]
         public async Task HoldemfoldAsync()
         {
             HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
+
+            game.players.First(e => e.ID == Context.Message.Author.Id).fold = true;
+
+            do
+            {
+                game.current_round.call_position++;
+            } while (!game.players[game.current_round.call_position].fold);
+
+            game.current_round.call_count++;
+
+            if(game.current_round.call_count == game.players.Count() - 1)
+            {
+                await lay_down_next(Context);
+                return;
+            }
+
+            await ReplyAsync("Bet goes to " + generate_name(get_usr_from_index(Context, game.current_round.call_position)));
         }
 
         private static async Task lay_down_next(SocketCommandContext context)
         {
             HoldEm game = Program.HoldEm.First(e => e.Key == context.Channel.Id).Value;
 
-            if(game.current_round.flop == null)
+            if (game.current_round.flop == null)
             {
                 game.current_round.flop = new List<StandardCard>();
 
@@ -151,7 +246,7 @@ namespace trillbot.Commands
 
                 message.Add("The Flop:");
 
-                game.current_round.flop.ForEach(e=>message.Add(StandardCard.value_to_output[e.value].ToString() + " of " + StandardCard.suit_to_output[e.suit].ToString()));
+                game.current_round.flop.ForEach(e => message.Add(StandardCard.value_to_output[e.value].ToString() + " of " + StandardCard.suit_to_output[e.suit].ToString()));
 
                 string rtner = string.Join(System.Environment.NewLine, message);
 
@@ -160,33 +255,42 @@ namespace trillbot.Commands
                 return;
             }
 
-            if(game.current_round.turn == null)
+            if (game.current_round.turn == null)
             {
+                game.current_round.turn = game.deck.Pop();
 
+                List<string> message = new List<string>();
+
+                message.Add("The Turn:");
+
+                message.Add(StandardCard.value_to_output[game.current_round.turn.value].ToString() + " of " + StandardCard.suit_to_output[game.current_round.turn.suit].ToString());
+
+                string rtner = string.Join(System.Environment.NewLine, message);
+
+                await context.Channel.SendMessageAsync(rtner);
+
+                return;
             }
 
-            if(game.current_round.river == null)
+            if (game.current_round.river == null)
             {
+                game.current_round.river = game.deck.Pop();
 
+                List<string> message = new List<string>();
+
+                message.Add("The River:");
+
+                message.Add(StandardCard.value_to_output[game.current_round.river.value].ToString() + " of " + StandardCard.suit_to_output[game.current_round.river.suit].ToString());
+
+                string rtner = string.Join(System.Environment.NewLine, message);
+
+                await context.Channel.SendMessageAsync(rtner);
+
+                return;
             }
         }
 
-        private async Task start_betting_round()
-        {
-            //perform the small and big blinds
-
-            HoldEm game = Program.HoldEm.First(e => e.Key == Context.Channel.Id).Value;
-
-
-            int callcount = 0;
-
-            do
-            {
-
-            } while (callcount < game.players.Count);
-        }
-
-        private static SocketGuildUser get_usr_from_index (SocketCommandContext context, int index)
+        private static SocketGuildUser get_usr_from_index(SocketCommandContext context, int index)
         {
             HoldEm game = Program.HoldEm.First(e => e.Key == context.Channel.Id).Value;
 
