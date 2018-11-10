@@ -120,8 +120,10 @@ namespace trillbot.Commands
                     }
                     num.Add(i);
                 break;
-                case "split": 
-                    if (inputs.Length != 4) {
+                case "split":
+                    await ReplyAsync("Currently not accepting split bets");
+                    return;
+                    /* if (inputs.Length != 4) {
                         await Context.Channel.SendMessageAsync(Context.User.Mention + ", your input ins't structured correctly: `ta!bet \"split\" " + amount + " [Num 1] [Num 2]`");
                         return;
                     }
@@ -138,7 +140,7 @@ namespace trillbot.Commands
                             return;
                         }
                         //TO BUILD
-                    }
+                    }*/
                 break;
                 case "street":
                     Int32.TryParse(inputs[2], out i);
@@ -151,6 +153,8 @@ namespace trillbot.Commands
                     }
                 break;
                 case "square":
+                    await ReplyAsync("Currently not accepting Square bets");
+                    return;
                     //TO BUILD
                 break;
                 case "line":
