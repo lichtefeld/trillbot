@@ -14,6 +14,7 @@ using Discord.WebSocket;
 using JsonFlatFileDataStore;
 using Newtonsoft.Json;
 using trillbot.Classes;
+using trillbot.Commands;
 
 namespace trillbot.Classes {
     public class GrandPrix {
@@ -1059,7 +1060,7 @@ namespace trillbot.Classes {
         //Mannually Reset a Game
         public void doReset(SocketCommandContext Context) {
             racers.ForEach(e=> {
-                e.reset();
+                trillbot.Commands.RacerCreation.allRacers.FirstOrDefault(k=>k.ID == e.ID).reset();
             });
             Context.Channel.SendMessageAsync("Game Reset").GetAwaiter().GetResult();
             Program.games.Remove(Context.Channel.Id);
