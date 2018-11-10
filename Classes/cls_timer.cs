@@ -39,6 +39,7 @@ namespace trillbot.Classes {
             Timer t30 = new Timer (new TimerCallback (thirtySeconds));
             Timer t10 = new Timer (new TimerCallback (tenSeconds));
             Timer t = new Timer (new TimerCallback (numberCallback));
+            channel.SendMessageAsync(roulette.dealerName + " reminds everyone you have **TWO MINUTES** left to place your bets!");
         }
         
         private void oneMinute(object state) {

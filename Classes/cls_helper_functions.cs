@@ -7,6 +7,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using System.Linq;
+using System.Threading;
 
 namespace trillbot.Classes
 {
@@ -58,6 +59,7 @@ namespace trillbot.Classes
                 count += s.Length + 1;
                 if (count >= 2000) {
                     channel.SendMessageAsync(output_string);
+                    Thread.Sleep (100);
                     count = s.Length;
                     output_string = s + System.Environment.NewLine;
                 } else {
