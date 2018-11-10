@@ -81,6 +81,20 @@ namespace trillbot.Commands
             await Context.User.SendMessageAsync("You have a current balance of " + character.balance + " imperial credits.");
         }
 
+        [Command("bal")]
+        public async Task displayBalAsync() {
+            var usr = Context.Guild.GetUser(Context.Message.Author.Id);
+            var character = Character.get_character(Context.Message.Author.Id);
+
+            if (character == null)
+            {
+                await ReplyAsync("Account not found. Please create one before proceeding via `ta!registeraccount`");
+                return;
+            }
+
+            await ReplyAsync(Context.User.Mention + ", you have a current balance of " + character.balance + " imperial credits.");
+        }
+
         [Command("give")]
         public async Task giveMoneyAsync(SocketUser user, int amount) {
             var userChar = Character.get_character(Context.User.Id);
