@@ -53,7 +53,7 @@ namespace trillbot.Classes {
                 case "square":
                 case "line":
                 case "dozens":
-                case "coloumns":
+                case "columns":
                     return type + " on " + String.Join(" | ",nums) + " for " + amount;
                 case "color":
                     if(leftOption) {
@@ -82,7 +82,7 @@ namespace trillbot.Classes {
     public class roulette {
         private static readonly List<int> reds = new List<int> {1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36};
         private static readonly List<int> blacks = new List<int> {2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35};
-        public static readonly List<string> betTypes = new List<string> {"straight", "split", "street", "square", "line", "color", "dozens", "coloumns", "half", "pair"};
+        public static readonly List<string> betTypes = new List<string> {"straight", "split", "street", "square", "line", "color", "dozens", "columns", "half", "pair"};
 
         //Internal Variables
         public string dealerName { get; set; }
@@ -100,6 +100,10 @@ namespace trillbot.Classes {
             minBet = min;
             maxInside = inside;
             maxOutside = outside;
+        }
+
+        public void config() {
+            //To Build Config Display
         }
 
         public void join(SocketCommandContext context, roulettePlayer p) {
@@ -187,7 +191,7 @@ namespace trillbot.Classes {
                                 payout = b.amount + b.amount * 2;
                             }
                         break;
-                        case "coloumns":
+                        case "columns":
                             if(b.nums.Contains(num)) {
                                 payout = b.amount + b.amount * 2;
                             }

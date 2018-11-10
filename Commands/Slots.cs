@@ -62,7 +62,7 @@ namespace trillbot.Commands
         public async Task payoutsAsync() {
             var slot = Program.slots.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
             if (slot.Value == null) {
-                await Context.Channel.SendMessageAsync("Woah there, isn't slot machine in this channel.");
+                //await Context.Channel.SendMessageAsync("Woah there, isn't slot machine in this channel.");
                 return;
             }
             await ReplyAsync(slot.Value.payouts());
