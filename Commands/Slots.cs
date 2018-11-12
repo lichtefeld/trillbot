@@ -84,7 +84,7 @@ namespace trillbot.Commands
                 await Context.Channel.SendMessageAsync("You can't make a bet that brings you to a negative balance.");
                 return;
             }
-            if(bet < 1 || bet > slot.Value.maxBet) {
+            if(bet < slot.Value.minBet || bet > slot.Value.maxBet) {
                 await Context.Channel.SendMessageAsync("You can't make a bet larger than this machines max bet OR a negative bet.");
                 return;
             }
