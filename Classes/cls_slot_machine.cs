@@ -65,7 +65,7 @@ namespace trillbot.Classes {
             if(rolls[0] == 0 && rolls[1] == 0 && rolls[2] == 0) { //3 Moneybags
                 str.Add("JACKPOT! You've Won " + Payouts[0]*bet + " Credits!");
                 c.balance+=Payouts[0]*bet;
-            } else if (rolls[0] == 1 && rolls[0] == 2 && rolls[0] == 3 ) { //One of each Fruit
+            } else if (rolls[0] == 1 || rolls[0] == 2 || rolls[0] == 3 ) { //One of each Fruit
                 switch(rolls[0]) {
                     case 3:
                     if(rolls[1] == 2) {
@@ -146,7 +146,7 @@ namespace trillbot.Classes {
             List<string> str = new List<string>();
             str.Add("**" + this.name + " Payouts**");
             str.Add(this.description);
-            str.Add("*Payouts assume a bet of 1 Imperial Credit.* This machines's max bet is: " + this.maxBet);
+            str.Add("*Payouts assume a bet of 1 Imperial Credit.* This machines's max bet is: " + this.maxBet + ". This machine's minimum bet is: " + this.minBet);
             str.Add(reels[0] + " | " + reels[0] + " | " + reels[0] + ": " + Payouts[0]);
             str.Add(reels[1] + " | " + reels[2] + " | " + reels[3] + ": " + Payouts[1]);
             str.Add(reels[1] + " | " + reels[1] + " | " + reels[1] + ": " + Payouts[2]);
