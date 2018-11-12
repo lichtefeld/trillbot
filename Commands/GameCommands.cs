@@ -43,7 +43,7 @@ namespace trillbot.Commands
         }
 
         [Command("startgame")]
-        [RequireUserPermission(GuildPermission.Administrator)]
+        //[RequireUserPermission(GuildPermission.Administrator)]
         public async Task startGame() {
             var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
             if ( prix.Value == null) {

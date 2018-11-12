@@ -119,6 +119,9 @@ namespace trillbot.Commands
             userChar.balance -= amount;
 
             await ReplyAsync(Context.User.Mention + ", you have transfered " + amount + ", to " + Char.name);
+
+            Character.update_character(Char);
+            Character.update_character(userChar);
         }
     }
 }

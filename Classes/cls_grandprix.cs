@@ -289,7 +289,7 @@ namespace trillbot.Classes {
             foreach(racer r in listRacer) {
                 string s = r.leader(lengths);
                 count += s.Length;
-                if(count >= 1990) {
+                if(count >= 1800) {
                     str.Add("```");
                     ouput_string = string.Join(System.Environment.NewLine, str);
                     Context.Channel.SendMessageAsync(ouput_string).GetAwaiter().GetResult();
@@ -1053,8 +1053,8 @@ namespace trillbot.Classes {
                     str.Add("#" + (i+1) + ": " + racers[i].nameID() + " | " + racers[i].ability.Title);
                 }
             }
-            string output = String.Join(System.Environment.NewLine, str);
-            Context.Channel.SendMessageAsync(output).GetAwaiter().GetResult();
+            helpers.output(Context.Channel,str);
+            //Context.Channel.SendMessageAsync(output).GetAwaiter().GetResult();
         }
 
         //Mannually Reset a Game
