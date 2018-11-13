@@ -85,6 +85,25 @@ namespace trillbot.Classes
             User.SendMessageAsync(output_string).GetAwaiter().GetResult();
         }
 
+        public static void output(IUser User, string str) {
+            if (str.Length == 0) return;
+            if (str.Length > 2000) {
+                int split = 0;
+                for(int i = 2000; i > 0; i--) {
+                    if(str[i] == ' ') {
+                        split = i;
+                        break;
+                    }
+                }
+                string output = str.Remove(split);
+                helpers.output(User, output);
+                str = str.Remove(0,split);
+                helpers.output(User,str);
+            } else {
+                User.SendMessageAsync(str).GetAwaiter().GetResult();
+            }
+        }
+
         public static void UpdateRacersDatabase() {
             Serialize.ToJson(trillbot.Commands.RacerCreation.allRacers.ToArray());
         }

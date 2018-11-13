@@ -19,7 +19,7 @@ namespace trillbot.Classes {
 
     public class blackjackDealer {
         private Stack<StandardCard> deck { get; set; } = new Stack<StandardCard>();
-        private int numberOfDecks { get; set; }
+        public int numberOfDecks { get; set; }
         private int CardsUntilShuffle { get; set; }
         public string dealerName { get; set; }
         public List<blackjackPlayer> table {get; set;} = new List<blackjackPlayer>();
@@ -27,7 +27,7 @@ namespace trillbot.Classes {
         private int currentRound {get; set; }
         private List<ulong> toLeave { get; set; } = new List<ulong>();
         private bool gameRunning { get; set; } = false;
-        private ISocketMessageChannel channel { get; set;}
+        public ISocketMessageChannel channel { get; set;}
         private List<StandardCard> hand { get; set; } = new List<StandardCard>();
         public int minbet { get; set; }
         public int maxbet { get; set; }
