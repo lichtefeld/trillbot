@@ -22,7 +22,8 @@ namespace trillbot
         private CommandService _commands;
         private IServiceProvider _services;
         public static readonly string[] prefixes = {
-            "ta!"
+            "ta!",
+            "Ta!"
         };
 
         public static Dictionary<ulong,Classes.GrandPrix> games = new Dictionary<ulong, Classes.GrandPrix>(); //For future multi-game system

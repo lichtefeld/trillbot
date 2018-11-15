@@ -388,7 +388,7 @@ namespace trillbot.Classes {
         //Make a fresh deck of cards
         private static List<Card> freshDeck() {
             List<Card> c = new List<Card>();
-            List<Card> temp = trillbot.Classes.Card.get_card();
+            List<Card> temp = trillbot.Classes.Card.get_card().Where(e=>e.ID < 18).ToList();
 
             foreach (Card c1 in temp) {
                 for(int i = 0; i < c1.count; i++) {

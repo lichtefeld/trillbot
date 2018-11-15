@@ -121,9 +121,7 @@ namespace trillbot.Commands
                     num.Add(i);
                 break;
                 case "split":
-                    await ReplyAsync("Currently not accepting split bets");
-                    return;
-                    /* if (inputs.Length != 4) {
+                    if (inputs.Length != 4) {
                         await Context.Channel.SendMessageAsync(Context.User.Mention + ", your input ins't structured correctly: `ta!bet \"split\" " + amount + " [Num 1] [Num 2]`");
                         return;
                     }
@@ -139,8 +137,12 @@ namespace trillbot.Commands
                             await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid board space. Please provide a space between 0 and 37 where 37 = 00.");
                             return;
                         }
-                        //TO BUILD
-                    }*/
+                        if (num[0] - 1 != i && num[0] + 1 != i && num[0] - 3 != i && num[0] + 3 != i && num[0] != i) {
+                            await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid board space to split with. `ta!bet \"split\" " + amount + " " + num[0] + " [Num 2]`");
+                            return;
+                        }
+                        num.Add(i);
+                    }
                 break;
                 case "street":
                     Int32.TryParse(inputs[2], out i);
