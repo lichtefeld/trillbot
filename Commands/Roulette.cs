@@ -87,7 +87,7 @@ namespace trillbot.Commands
             }
 
             if(inputs.Length < 3) {
-                await Context.Channel.SendMessageAsync(Context.User.Mention + ", your input ins't structured correctly: `ta!bet \"type\" [amount] [Nums OR \"Type Option\"]`");
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", your input ins't structured correctly: `ta!bet type [amount] [Nums OR Type Option]`");
                 return;
             }
 
@@ -122,7 +122,7 @@ namespace trillbot.Commands
                 break;
                 case "split":
                     if (inputs.Length != 4) {
-                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", your input ins't structured correctly: `ta!bet \"split\" " + amount + " [Num 1] [Num 2]`");
+                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", your input ins't structured correctly: `ta!bet split " + amount + " [Num 1] [Num 2]`");
                         return;
                     }
                     Int32.TryParse(inputs[2], out i);
@@ -138,7 +138,7 @@ namespace trillbot.Commands
                             return;
                         }
                         if (num[0] - 1 != i && num[0] + 1 != i && num[0] - 3 != i && num[0] + 3 != i && num[0] != i) {
-                            await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid board space to split with. `ta!bet \"split\" " + amount + " " + num[0] + " [Num 2]`");
+                            await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid board space to split with. `ta!bet split " + amount + " " + num[0] + " [Num 2]`");
                             return;
                         }
                         num.Add(i);
@@ -147,7 +147,7 @@ namespace trillbot.Commands
                 case "street":
                     Int32.TryParse(inputs[2], out i);
                     if (i < 1 || i > 12) {
-                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid street number. Please provide a number between 1 - 12. `ta!bet \"street\" " + amount + " [1-12]` ");
+                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid street number. Please provide a number between 1 - 12. `ta!bet street " + amount + " [1-12]` ");
                         return;
                     }
                     for(int j = 0; j < 3; j++) {
@@ -162,7 +162,7 @@ namespace trillbot.Commands
                 case "line":
                     Int32.TryParse(inputs[2], out i);
                     if (i < 1 || i > 11) {
-                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid line number. Please provide a number between 1 - 11. `ta!bet \"line\" " + amount + " [1-11]` ");
+                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid line number. Please provide a number between 1 - 11. `ta!bet line " + amount + " [1-11]` ");
                         return;
                     }
                     for(int j = 0; j < 6; j++) {
@@ -172,7 +172,7 @@ namespace trillbot.Commands
                 case "dozens":
                     Int32.TryParse(inputs[2], out i);
                     if (i < 1 || i > 3) {
-                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid dozen number. Please provide a number between 1 - 3. `ta!bet \"dozen\" " + amount + " [1-3]` ");
+                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid dozen number. Please provide a number between 1 - 3. `ta!bet dozen " + amount + " [1-3]` ");
                         return;
                     }
                     for(int j = 0; j < 12; j++) {
@@ -182,7 +182,7 @@ namespace trillbot.Commands
                 case "columns":
                     Int32.TryParse(inputs[2], out i);
                     if (i < 1 || i > 3) {
-                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid column number. Please provide a number between 1 - 3. `ta!bet \"column\" " + amount + " [1-3]` ");
+                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid column number. Please provide a number between 1 - 3. `ta!bet column " + amount + " [1-3]` ");
                         return;
                     }
                     for(int j = 0; j < 12; j++) {
@@ -195,7 +195,7 @@ namespace trillbot.Commands
                     } else if (inputs[2].ToLower().Equals("black")) {
                         left = false;
                     } else {
-                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid color. Please provide either `red` or `black`. `ta!bet \"color\" " + amount + " [\"red\" / \"black\"`");
+                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid color. Please provide either `red` or `black`. `ta!bet color " + amount + " [red / black]`");
                         return;
                     }
                 break;
@@ -205,7 +205,7 @@ namespace trillbot.Commands
                     } else if (inputs[2].ToLower().Equals("high")) {
                         left = false;
                     } else {
-                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid half. Please provide either `low` or `high`. `ta!bet \"half\" " + amount + " [\"low\" / \"high\"`");
+                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid half. Please provide either `low` or `high`. `ta!bet half " + amount + " [low / high]`");
                         return;
                     }
                 break;
@@ -215,13 +215,14 @@ namespace trillbot.Commands
                     } else if (inputs[2].ToLower().Equals("odd")) {
                         left = false;
                     } else {
-                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid pair. Please provide either `even` or `odd`. `ta!bet \"pair\" " + amount + " [\"even\" / \"odd\"`");
+                        await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid pair. Please provide either `even` or `odd`. `ta!bet pair " + amount + " [even / odd]`");
                         return;
                     }
                 break;
             }
-            c.balance -= amount;
             var b = new rouletteBet(type,amount,left,num);
+            if(inputs[inputs.Count() - 1].ToLower() == "true") b.rolling = true;
+            c.balance -= amount;
             rl.Value.bet(Context,b);
         }
 

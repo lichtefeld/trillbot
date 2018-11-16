@@ -26,6 +26,23 @@ namespace trillbot.Classes {
             player_discord_id = id;
             name = n;
         }
+
+        public bool reset() {
+            var b = new List<rouletteBet>();
+            var c = Character.get_character(player_discord_id);
+            foreach (var bet in bets) {
+                if(bet.rolling) {
+                    if(c.balance - bet.amount >= 0) {
+                        b.Add(bet);
+                        c.balance -= bet.amount;
+                    }
+                }    
+            }
+            bets = b;
+            Character.update_character(c);
+            if(bets.Count > 0) return true;
+            else return false;
+        }
     }
 
     public class rouletteBet {
@@ -33,6 +50,7 @@ namespace trillbot.Classes {
         public List<int> nums { get; set; } = new List<int>();
         public int amount { get; set;}
         public bool leftOption { get; set;}
+        public bool rolling { get; set; } //For having a bet last through rounds, triggers automatic next game. Currently defaulting to false
          /*
         Low/High
         Red/Black
@@ -43,6 +61,7 @@ namespace trillbot.Classes {
             amount = a;
             leftOption = left;
             nums = num;
+            rolling = false;
         }
 
         public override string ToString() {
@@ -90,7 +109,7 @@ namespace trillbot.Classes {
         public List<roulettePlayer> table { get; set; } = new List<roulettePlayer>();
         private List<ulong> toSub { get; set; } = new List<ulong>();
         private bool isRolling { get; set; }
-        private rouletteTimer Timer { get; set; } = new rouletteTimer();
+        private rouletteTimer Timer { get; set; }
         public int minBet { get; set; }
         public int maxInside {get; set;}
         public int maxOutside { get; set;}
@@ -100,6 +119,7 @@ namespace trillbot.Classes {
             minBet = min;
             maxInside = inside;
             maxOutside = outside;
+            Timer = new rouletteTimer(chan,this);
         }
 
         public void config() {
@@ -146,9 +166,17 @@ namespace trillbot.Classes {
         }
 
         public void payouts(int num) {
+            bool rollAgain = false;
             var str = new List<string>();
-            if (num == 37) str.Add("The Roulette Wheel lands on : `00`");
-            else str.Add("The Roulette Wheel lands on : `" + num + "`");
+            //Formatting of Roulette Wheel Output
+            str.Add("```diff");
+            str.Add("The wheel stops and the ball begins to roll what slot will it stop at? ");
+            if(reds.Contains(num)) str.Add("- The Number is " + num + "```");
+            else if (blacks.Contains(num)) str.Add("--- The Number is " + num + "```");
+            else if (num ==37) str.Add("+ The Number is 00```");
+            else str.Add("+ The Number is " + num  + "```");
+
+            //Adding Each Player's Successful Bets
             foreach(var p in table) {
                 var c = Character.get_character(p.player_discord_id);
                 foreach(var b in p.bets) {
@@ -217,10 +245,12 @@ namespace trillbot.Classes {
                     }
                 }
                 Character.update_character(c);
+                if(p.reset()) rollAgain = true;
             }
             helpers.output(channel,str);
-            isRolling = false;
             subPlayer();
+            if(rollAgain) Timer.startTimer();
+            else isRolling = false;
         }
     }
 
