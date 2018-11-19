@@ -17,6 +17,14 @@ using trillbot.Classes;
 
 namespace trillbot.Classes {
 
-    
+    public class psiball_Player {
+        public ulong discord_player_id { get; set; }
+        public psiball_Team team { get; set; }
+    }
+
+    public class psiball_Arena {
+        
+
+    }
 
 }

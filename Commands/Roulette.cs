@@ -137,7 +137,7 @@ namespace trillbot.Commands
                             await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid board space. Please provide a space between 0 and 37 where 37 = 00.");
                             return;
                         }
-                        if (num[0] - 1 != i && num[0] + 1 != i && num[0] - 3 != i && num[0] + 3 != i && num[0] != i) {
+                        if (num[0] - 1 != i && num[0] + 1 != i && num[0] - 3 != i && num[0] + 3 != i && num[0] != i) { //Check not valid
                             await Context.Channel.SendMessageAsync(Context.User.Mention + ", you didn't provide a valid board space to split with. `ta!bet split " + amount + " " + num[0] + " [Num 2]`");
                             return;
                         }

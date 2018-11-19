@@ -65,48 +65,24 @@ namespace trillbot.Classes {
             if(rolls[0] == 0 && rolls[1] == 0 && rolls[2] == 0) { //3 Moneybags
                 str.Add("JACKPOT! You've Won " + Payouts[0]*bet + " Credits!");
                 c.balance+=Payouts[0]*bet;
-            } else if (rolls[0] == 1 || rolls[0] == 2 || rolls[0] == 3 ) { //One of each Fruit
-                switch(rolls[0]) {
-                    case 3:
-                    if(rolls[1] == 2) {
-                        if(rolls[2] == 1) {
-                            str.Add("You've Won " + Payouts[1]*bet + " Credits!");
-                            c.balance+=Payouts[1]*bet;
-                        }
-                    } else if (rolls[1] == 1) {
-                        if(rolls[2] == 2) {
-                            str.Add("You've Won " + Payouts[1]*bet + " Credits!");
-                            c.balance+=Payouts[1]*bet;
-                        }
-                    }
-                    break;
-                    case 2:
-                    if(rolls[1] == 1) {
-                        if(rolls[2] == 3) {
-                            str.Add("You've Won " + Payouts[1]*bet + " Credits!");
-                            c.balance+=Payouts[1]*bet;
-                        }
-                    } else if (rolls[1] == 3) {
-                        if(rolls[2] == 1) {
-                            str.Add("You've Won " + Payouts[1]*bet + " Credits!");
-                            c.balance+=Payouts[1]*bet;
-                        }
-                    }
-                    break;
-                    case 1:
-                    if(rolls[1] == 2) {
-                        if(rolls[2] == 3) {
-                            str.Add("You've Won " + Payouts[1]*bet + " Credits!");
-                            c.balance+=Payouts[1]*bet;
-                        }
-                    } else if (rolls[1] == 3) {
-                        if(rolls[2] == 2) {
-                            str.Add("You've Won " + Payouts[1]*bet + " Credits!");
-                            c.balance+=Payouts[1]*bet;
-                        }
-                    }
-                    break;
-                } 
+            } else if (rolls[0] == 1 && rolls[1] == 2 && rolls[2] == 3 ) { //One of each Fruit
+                str.Add("You've Won " + Payouts[1]*bet + " Credits!");
+                c.balance+=Payouts[1]*bet;
+            } else if (rolls[0] == 1 && rolls[1] == 3 && rolls[2] == 2) {
+                str.Add("You've Won " + Payouts[1]*bet + " Credits!");
+                c.balance+=Payouts[1]*bet;
+            } else if (rolls[0] == 2 && rolls[1] == 1 && rolls[2] == 3) {
+                str.Add("You've Won " + Payouts[1]*bet + " Credits!");
+                c.balance+=Payouts[1]*bet;
+            } else if (rolls[0] == 2 && rolls[1] == 3 && rolls[3] == 1) {
+                str.Add("You've Won " + Payouts[1]*bet + " Credits!");
+                c.balance+=Payouts[1]*bet;
+            } else if (rolls[0] == 3 && rolls[1] == 1 && rolls[2] == 2) {
+                str.Add("You've Won " + Payouts[1]*bet + " Credits!");
+                c.balance+=Payouts[1]*bet;
+            } else if (rolls[0] == 3 && rolls[1] == 2 && rolls[2] == 1) {
+                str.Add("You've Won " + Payouts[1]*bet + " Credits!");
+                c.balance+=Payouts[1]*bet;
             } else if (rolls[0] == 1 && rolls[1] == 1 && rolls[2] == 1) { //Three Cherries
                 str.Add("You've Won " + Payouts[2]*bet + " Credits!");
                 c.balance+=Payouts[2]*bet;
