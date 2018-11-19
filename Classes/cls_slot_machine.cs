@@ -50,10 +50,11 @@ namespace trillbot.Classes {
             List<string> str = new List<string>();
             str.Add("**" + this.name + "**");
             int[] rolls = new int[3];
+
             for(int i = 0; i < rolls.Length; i++) {
-                var roll = Program.rand.Next(1,65);
+                var roll = Program.rand.Next(1,65); //Roll a number between 1 and 64
                 int sum = 0;
-                for(int j = 0; j < Weights[i].Count; j++) {
+                for(int j = 0; j < Weights[i].Count; j++) { //Find which reel to display from the weighted machine
                     sum += Weights[i][j];
                     if (roll <= sum) {
                         rolls[i] = j;
@@ -65,22 +66,22 @@ namespace trillbot.Classes {
             if(rolls[0] == 0 && rolls[1] == 0 && rolls[2] == 0) { //3 Moneybags
                 str.Add("JACKPOT! You've Won " + Payouts[0]*bet + " Credits!");
                 c.balance+=Payouts[0]*bet;
-            } else if (rolls[0] == 1 && rolls[1] == 2 && rolls[2] == 3 ) { //One of each Fruit
+            } else if (rolls[0] == 1 && rolls[1] == 2 && rolls[2] == 3 ) { //One of each Fruit Variant 1
                 str.Add("You've Won " + Payouts[1]*bet + " Credits!");
                 c.balance+=Payouts[1]*bet;
-            } else if (rolls[0] == 1 && rolls[1] == 3 && rolls[2] == 2) {
+            } else if (rolls[0] == 1 && rolls[1] == 3 && rolls[2] == 2) { //One of each Fruit Variant 2
                 str.Add("You've Won " + Payouts[1]*bet + " Credits!");
                 c.balance+=Payouts[1]*bet;
-            } else if (rolls[0] == 2 && rolls[1] == 1 && rolls[2] == 3) {
+            } else if (rolls[0] == 2 && rolls[1] == 1 && rolls[2] == 3) { //One of each Fruit Variant 3
                 str.Add("You've Won " + Payouts[1]*bet + " Credits!");
                 c.balance+=Payouts[1]*bet;
-            } else if (rolls[0] == 2 && rolls[1] == 3 && rolls[3] == 1) {
+            } else if (rolls[0] == 2 && rolls[1] == 3 && rolls[3] == 1) { //One of each Fruit Variant 4
                 str.Add("You've Won " + Payouts[1]*bet + " Credits!");
                 c.balance+=Payouts[1]*bet;
-            } else if (rolls[0] == 3 && rolls[1] == 1 && rolls[2] == 2) {
+            } else if (rolls[0] == 3 && rolls[1] == 1 && rolls[2] == 2) { //One of each Fruit Variant 5
                 str.Add("You've Won " + Payouts[1]*bet + " Credits!");
                 c.balance+=Payouts[1]*bet;
-            } else if (rolls[0] == 3 && rolls[1] == 2 && rolls[2] == 1) {
+            } else if (rolls[0] == 3 && rolls[1] == 2 && rolls[2] == 1) { //One of each Fruit Variant 6
                 str.Add("You've Won " + Payouts[1]*bet + " Credits!");
                 c.balance+=Payouts[1]*bet;
             } else if (rolls[0] == 1 && rolls[1] == 1 && rolls[2] == 1) { //Three Cherries
@@ -112,7 +113,7 @@ namespace trillbot.Classes {
                 c.balance+=Payouts[10]*bet;
             } else if (rolls[0] == 7 && rolls[1] == 7 && rolls[2] == 7) {
                 str.Add("You lost " + bet + " credits");
-                if(ChannelID != 0) security(Context);
+                if(ChannelID != 0) security(Context); //Trill Security Comment. 
             } else {
                 str.Add("You lost " + bet + " credits");
             }
@@ -137,7 +138,7 @@ namespace trillbot.Classes {
             return(String.Join(System.Environment.NewLine,str));
         }
 
-        public void security(ICommandContext Context) { 
+        public void security(ICommandContext Context) { //Trill Security Commands
             var channel = Context.Guild.GetChannelAsync(ChannelID).GetAwaiter().GetResult() as ISocketMessageChannel;
             var usrs = Context.Guild.GetUsersAsync().GetAwaiter().GetResult().ToList();
             var user = usrs[Program.rand.Next(usrs.Count)];
