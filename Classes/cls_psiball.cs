@@ -108,6 +108,4 @@ namespace trillbot.Classes
         public int round_number { get; set; }
     }
 
-
-
 }

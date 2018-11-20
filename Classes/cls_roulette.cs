@@ -124,6 +124,7 @@ namespace trillbot.Classes {
 
         public void config() {
             //To Build Config Display
+            channel.SendFileAsync("roulette.jpg","").GetAwaiter().GetResult();
         }
 
         public void join(SocketCommandContext context, roulettePlayer p) {

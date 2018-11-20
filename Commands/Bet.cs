@@ -49,7 +49,7 @@ namespace trillbot.Commands
             {new Tuple<string,int, int, double, string>(":nikita:",25,40,7.0,"Nikita")}
         };
 
-        [Command("bet")]
+        [Command("racebet")]
         public async Task BetAsync(string type, string s, int amount)
         {
             var usr = Context.Guild.GetUser(Context.Message.Author.Id);
