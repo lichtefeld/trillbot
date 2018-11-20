@@ -62,6 +62,7 @@ namespace trillbot.Classes {
                     }
                 }
             }
+            
             str.Add(displayReel(rolls[0], rolls[1], rolls[2])); //Comments Assume Default Emotes
             if(rolls[0] == 0 && rolls[1] == 0 && rolls[2] == 0) { //3 Moneybags
                 str.Add("JACKPOT! You've Won " + Payouts[0]*bet + " Credits!");
