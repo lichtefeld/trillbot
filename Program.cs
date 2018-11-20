@@ -22,14 +22,13 @@ namespace trillbot
         private CommandService _commands;
         private IServiceProvider _services;
         public static readonly string[] prefixes = {
-            "ta!",
-            "Ta!"
+            "ta!"
         };
 
-        public static Dictionary<ulong,Classes.GrandPrix> games = new Dictionary<ulong, Classes.GrandPrix>(); //For future multi-game system
-        public static Dictionary<ulong,Classes.slotMachine> slots = new Dictionary<ulong, Classes.slotMachine>(); //Multichannel Slot Machine
-        public static Dictionary<ulong,Classes.blackjackDealer> blackjack = new Dictionary<ulong, Classes.blackjackDealer>(); //Blackjack Games
-        public static Dictionary<ulong,Classes.roulette> roulette = new Dictionary<ulong, Classes.roulette>(); //Roulette Games
+        public static Dictionary<ulong, Classes.GrandPrix> games = new Dictionary<ulong, Classes.GrandPrix>(); //For future multi-game system
+        public static Dictionary<ulong, Classes.slotMachine> slots = new Dictionary<ulong, Classes.slotMachine>(); //Multichannel Slot Machine
+        public static Dictionary<ulong, Classes.blackjackDealer> blackjack = new Dictionary<ulong, Classes.blackjackDealer>(); //Blackjack Games
+        public static Dictionary<ulong, Classes.roulette> roulette = new Dictionary<ulong, Classes.roulette>(); //Roulette Games
 
         public async Task RunBotAsync()
         {
@@ -45,7 +44,7 @@ namespace trillbot
             //event subscriptions
             _client.Log += Log;
 
-            trillbot.Commands.RacerCreation.allRacers = trillbot.Classes.racer.get_racer().OrderBy(e=>e.ID).ToList();
+            trillbot.Commands.RacerCreation.allRacers = trillbot.Classes.racer.get_racer().OrderBy(e => e.ID).ToList();
 
             await RegisterCommandAsync();
 
@@ -88,7 +87,7 @@ namespace trillbot
             var msg_prefix = message.Content.ToString().Substring(0, 3);
 
             //if the prefix is in the list of valid prefixes, continue
-            if (prefixes.Any(msg_prefix.Contains))
+            if (prefixes.Where(e => String.Equals(e, msg_prefix, StringComparison.OrdinalIgnoreCase)).Count() > 0)
             {
                 //log that we have a command sent
                 var logmessage = String.Concat(message.Author, " sent command ", message.Content);
@@ -96,10 +95,8 @@ namespace trillbot
                 await Log(new LogMessage(LogSeverity.Info, "VERBOSE", logmessage));
 
                 var argPosition = 0;
-                
-                var used_prefix = prefixes.FirstOrDefault(e=>message.Content.ToString().StartsWith(e));   
 
-                if ((used_prefix != null && message.HasStringPrefix(used_prefix, ref argPosition)) || message.HasMentionPrefix(_client.CurrentUser, ref argPosition))
+                if (message.HasStringPrefix(msg_prefix, ref argPosition) || message.HasMentionPrefix(_client.CurrentUser, ref argPosition))
                 {
                     var context = new SocketCommandContext(_client, message);
 
