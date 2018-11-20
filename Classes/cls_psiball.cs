@@ -106,6 +106,11 @@ namespace trillbot.Classes
         public psiball_team team1 { get; set; }
         public psiball_team team2 { get; set; }
         public int round_number { get; set; }
+
+        psiball_game(psiball_team t1, psiball_team t2) {
+            team1 = t1;
+            team2 = t2;
+        }
     }
 
 }

@@ -17,7 +17,7 @@ using trillbot.Classes;
 
 namespace trillbot.Classes {
 
-    public partial class psiball_Team {
+    public partial class psiball_Team { //JSON File Format of a team!
         [JsonProperty ("ID")]
         public int ID { get; set; }
         [JsonProperty("Title")]
