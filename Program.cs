@@ -99,7 +99,7 @@ namespace trillbot
                 
                 var used_prefix = prefixes.FirstOrDefault(e=>message.Content.ToString().StartsWith(e));   
 
-                if ((used_prefix != null && message.HasStringPrefix("ta!", ref argPosition)) || message.HasMentionPrefix(_client.CurrentUser, ref argPosition))
+                if ((used_prefix != null && message.HasStringPrefix(used_prefix, ref argPosition)) || message.HasMentionPrefix(_client.CurrentUser, ref argPosition))
                 {
                     var context = new SocketCommandContext(_client, message);
 
