@@ -16,9 +16,14 @@ using RestSharp;
 
 namespace trillbot.Commands
 {
+    public class leaderboard
+    {
+        public string name {get;set;}
+        public long credits {get;set;}
+    }
     public class leaderboard_stats
     {
-        public string leaderboard { get; set; }
+        public List<leaderboard> leaderboard { get; set; }
         public string api_key { get; set; }
     }
     public class AdminCommands : ModuleBase<SocketCommandContext>
@@ -52,9 +57,9 @@ namespace trillbot.Commands
         {
             List<Classes.Character> characters = Classes.Character.get_character();
 
-            List<string> rtn = new List<string>();
+            List<leaderboard> rtn = new List<leaderboard>();
 
-            characters.OrderByDescending(e=>e.balance).ToList().ForEach(e=>rtn.Add(e.name + " " + e.balance));
+            characters.OrderByDescending(e=>e.balance).ToList().ForEach(e=>rtn.Add(new leaderboard {name = e.name, credits = e.balance}));
 
 
             var file = "trillbot.json";
@@ -65,7 +70,7 @@ namespace trillbot.Commands
 
             leaderboard_stats s = new leaderboard_stats
             {
-                leaderboard = string.Join(System.Environment.NewLine, rtn),
+                leaderboard = rtn,
                 api_key = key
             };
 
