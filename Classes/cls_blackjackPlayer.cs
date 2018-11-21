@@ -23,14 +23,14 @@ namespace trillbot.Classes {
         public List<List<StandardCard>> hand { get; set; } = new List<List<StandardCard>>();
         public int bet { get; set; }
         public int insurance { get; set;}
-        public bool doubleDown { get; set;}
+        public List<bool> doubleDown { get; set;} = new List<bool>();
         public bool surrender { get; set;}
 
         public blackjackPlayer(ulong ID, string n, int b) {
             player_discord_id = ID;
             name = n;
             bet = b;
-            doubleDown = false;
+            doubleDown.Add(false);
             surrender = false;
             hand.Add(new List<StandardCard>());
         }
@@ -38,7 +38,8 @@ namespace trillbot.Classes {
         public void reset() {
             hand = new List<List<StandardCard>>();
             hand.Add(new List<StandardCard>());
-            doubleDown = false;
+            doubleDown = new List<bool>();
+            doubleDown.Add(false);
             surrender = false;
         }
 

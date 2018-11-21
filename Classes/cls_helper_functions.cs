@@ -7,6 +7,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using System.Linq;
+using System.Threading;
 
 namespace trillbot.Classes
 {
@@ -58,6 +59,7 @@ namespace trillbot.Classes
                 count += s.Length + 1;
                 if (count >= 2000) {
                     channel.SendMessageAsync(output_string);
+                    Thread.Sleep (100);
                     count = s.Length;
                     output_string = s + System.Environment.NewLine;
                 } else {
@@ -65,6 +67,41 @@ namespace trillbot.Classes
                 }
             }
             channel.SendMessageAsync(output_string).GetAwaiter().GetResult();
+        }
+        public static void output(IUser User, List<string> str) {
+            int count = 0;
+            string output_string = "";
+            if (str.Count == 0) return; 
+            foreach(string s in str) {
+                count += s.Length + 1;
+                if (count >= 2000) {
+                    User.SendMessageAsync(output_string);
+                    count = s.Length;
+                    output_string = s + System.Environment.NewLine;
+                } else {
+                    output_string += s + System.Environment.NewLine;
+                }
+            }
+            User.SendMessageAsync(output_string).GetAwaiter().GetResult();
+        }
+
+        public static void output(IUser User, string str) {
+            if (str.Length == 0) return;
+            if (str.Length > 2000) {
+                int split = 0;
+                for(int i = 2000; i > 0; i--) {
+                    if(str[i] == ' ') {
+                        split = i;
+                        break;
+                    }
+                }
+                string output = str.Remove(split);
+                helpers.output(User, output);
+                str = str.Remove(0,split);
+                helpers.output(User,str);
+            } else {
+                User.SendMessageAsync(str).GetAwaiter().GetResult();
+            }
         }
 
         public static void UpdateRacersDatabase() {
@@ -94,13 +131,13 @@ namespace trillbot.Classes
             }
         }
 
-        public static string formatBets(Character character, IGuild Guild) {
+        public static List<string> formatBets(Character character, IGuild Guild) {
             var output = new List<string>();
             output.Add("**" +character.name + " Bets**");
             foreach (trillbot.Classes.Bet bet in character.bets) {
                 output.Add(bet.display(Guild));
             }
-            return String.Join(System.Environment.NewLine,output);
+            return output;
         }
     }
 

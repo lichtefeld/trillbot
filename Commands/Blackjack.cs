@@ -58,12 +58,16 @@ namespace trillbot.Commands
                 await Context.Channel.SendMessageAsync(Context.User.Mention + ", sorry this table has a minimum bet of " + bj.Value.minbet + " and a maximum bet of " + bj.Value.maxbet + ". You must bet between those values.");
                 return;
             }
+            if(bj.Value.table.FirstOrDefault(e=>e.player_discord_id == Context.User.Id) != null) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", sorry you have already joined this blackjack table.");
+                return;
+            }
             var p = new blackjackPlayer(Context.User.Id,c.name,b);
             bj.Value.addPlayer(p,Context);
         }
 
         [Command("leave")]
-        public async Task joinBlackjackAsync() {
+        public async Task leaveBlackjackAsync() {
             var bj = Program.blackjack.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
             if (bj.Value == null) {
                 await Context.Channel.SendMessageAsync("Woah there, isn't blackjack dealer in this channel.");

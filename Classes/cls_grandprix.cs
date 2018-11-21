@@ -14,6 +14,7 @@ using Discord.WebSocket;
 using JsonFlatFileDataStore;
 using Newtonsoft.Json;
 using trillbot.Classes;
+using trillbot.Commands;
 
 namespace trillbot.Classes {
     public class GrandPrix {
@@ -288,7 +289,7 @@ namespace trillbot.Classes {
             foreach(racer r in listRacer) {
                 string s = r.leader(lengths);
                 count += s.Length;
-                if(count >= 1990) {
+                if(count >= 1800) {
                     str.Add("```");
                     ouput_string = string.Join(System.Environment.NewLine, str);
                     Context.Channel.SendMessageAsync(ouput_string).GetAwaiter().GetResult();
@@ -387,7 +388,7 @@ namespace trillbot.Classes {
         //Make a fresh deck of cards
         private static List<Card> freshDeck() {
             List<Card> c = new List<Card>();
-            List<Card> temp = trillbot.Classes.Card.get_card();
+            List<Card> temp = trillbot.Classes.Card.get_card().Where(e=>e.ID < 18).ToList();
 
             foreach (Card c1 in temp) {
                 for(int i = 0; i < c1.count; i++) {
@@ -410,7 +411,6 @@ namespace trillbot.Classes {
 
             return s;
         }
-
         public void exitGame(SocketCommandContext Context) {
             if(runningGame) {
                 helpers.output(Context.Channel,"You can't exit the game while it is running. Use `ta!leave`");
@@ -1053,14 +1053,14 @@ namespace trillbot.Classes {
                     str.Add("#" + (i+1) + ": " + racers[i].nameID() + " | " + racers[i].ability.Title);
                 }
             }
-            string output = String.Join(System.Environment.NewLine, str);
-            Context.Channel.SendMessageAsync(output).GetAwaiter().GetResult();
+            helpers.output(Context.Channel,str);
+            //Context.Channel.SendMessageAsync(output).GetAwaiter().GetResult();
         }
 
         //Mannually Reset a Game
         public void doReset(SocketCommandContext Context) {
             racers.ForEach(e=> {
-                e.reset();
+                trillbot.Commands.RacerCreation.allRacers.FirstOrDefault(k=>k.ID == e.ID).reset();
             });
             Context.Channel.SendMessageAsync("Game Reset").GetAwaiter().GetResult();
             Program.games.Remove(Context.Channel.Id);

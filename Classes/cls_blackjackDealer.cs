@@ -19,7 +19,7 @@ namespace trillbot.Classes {
 
     public class blackjackDealer {
         private Stack<StandardCard> deck { get; set; } = new Stack<StandardCard>();
-        private int numberOfDecks { get; set; }
+        public int numberOfDecks { get; set; }
         private int CardsUntilShuffle { get; set; }
         public string dealerName { get; set; }
         public List<blackjackPlayer> table {get; set;} = new List<blackjackPlayer>();
@@ -27,10 +27,11 @@ namespace trillbot.Classes {
         private int currentRound {get; set; }
         private List<ulong> toLeave { get; set; } = new List<ulong>();
         private bool gameRunning { get; set; } = false;
-        private ISocketMessageChannel channel { get; set;}
+        public ISocketMessageChannel channel { get; set;}
         private List<StandardCard> hand { get; set; } = new List<StandardCard>();
         public int minbet { get; set; }
         public int maxbet { get; set; }
+        private List<string> toOutput { get; set; } = new List<string>();
 
         //List of Players to Add, List of Players to Remove
 
@@ -93,7 +94,7 @@ namespace trillbot.Classes {
                         c.balance -= p.bet;
                         Character.update_character(c);
                     } else {
-                        helpers.output(channel,p.name + " is unable to make this bet and they leave the table.");
+                        toOutput.Add(p.name + " is unable to make this bet and they leave the table.");
                         toLeave.Add(p.player_discord_id);
                     }
                 }
@@ -118,13 +119,12 @@ namespace trillbot.Classes {
         }
 
         private void displayTable(bool firstRound) {
-            List<string> str = new List<string>();
+            //List<string> str = new List<string>();
             foreach(blackjackPlayer p in table) {
                 var s = p.handDisplay();
-                str.Add(s);
+                toOutput.Add(s);
             }
-            str.Add(handDisplay(hand,!firstRound));
-            helpers.output(channel,str);
+            toOutput.Add(handDisplay(hand,!firstRound));
         }
 
         private string handDisplay(List<StandardCard> cards, bool holeCard) { //Dealer Version 
@@ -144,13 +144,12 @@ namespace trillbot.Classes {
         }
 
         private void dealerTurn() {
-            var str = new List<string>();
-            str.Add(handDisplay(hand,true));
+            //var str = new List<string>();
+            toOutput.Add(handDisplay(hand,true));
             while(handValue(hand) < 17) {
                 hand.Add(GetCard());
-                str.Add(handDisplay(hand,true));
+                toOutput.Add(handDisplay(hand,true));
             }
-            helpers.output(channel,str);
             payouts();
         }
 
@@ -160,12 +159,14 @@ namespace trillbot.Classes {
             } else {
                 var usr = channel.GetUserAsync(table[position.Item1].player_discord_id).GetAwaiter().GetResult();
                 if(table[position.Item1].handValue(position.Item2) == 21) {
-                    helpers.output(channel,usr.Mention + ", it is now your turn. " + System.Environment.NewLine + table[position.Item1].handDisplay() + System.Environment.NewLine + table[position.Item1].name + ", you have 21. Automatically standing");
+                    toOutput.Add(usr.Mention + ", it is now your turn. " + System.Environment.NewLine + table[position.Item1].handDisplay() + System.Environment.NewLine + table[position.Item1].name + ", you have 21. Automatically standing");
                     position = new Tuple<int, int>(position.Item1+1,0);
                     nextPlayer();
                     return;
                 }
-                helpers.output(channel,usr.Mention + ", it is now your turn. " + System.Environment.NewLine + table[position.Item1].handDisplay() + System.Environment.NewLine + table[position.Item1].name + ", would you like to hit, stand, double, split, or surrender?");
+                toOutput.Add(usr.Mention + ", it is now your turn. " + System.Environment.NewLine + table[position.Item1].handDisplay() + System.Environment.NewLine + table[position.Item1].name + ", would you like to hit, stand, double, split, or surrender?");
+                helpers.output(channel,toOutput);
+                toOutput = new List<string>();
             }
         }
 
@@ -191,10 +192,12 @@ namespace trillbot.Classes {
 
         private void checkDealer() {
             if(hand[1].value == 14) {
-                helpers.output(channel,dealerName + " offers insurance to the table.");
+                toOutput.Add(dealerName + " offers insurance to the table.");
+                helpers.output(channel,toOutput);
+                toOutput = new List<string>();
                 return;
             } else if (handValue(hand) == 21) {
-                helpers.output(channel,dealerName + " has blackjack! Hand: " + hand[0].ToString() + " | " + hand[1].ToString());
+                toOutput.Add(dealerName + " has blackjack! Hand: " + hand[0].ToString() + " | " + hand[1].ToString());
                 payouts();
             } else {
                 nextPlayer();
@@ -203,7 +206,7 @@ namespace trillbot.Classes {
 
         private void payouts() {
             position = new Tuple<int,int>(0,0);
-            var str = new List<string>();
+            //var str = new List<string>();
             //Check if Dealer Has Blackjack?
             if(handValue(hand) == 21 && hand.Count == 2) { //Dealer Has Blackjack!
                 foreach(var p in table) {
@@ -211,12 +214,12 @@ namespace trillbot.Classes {
                         var c = Character.get_character(p.player_discord_id);
                         c.balance += p.bet;
                         Character.update_character(c);
-                        str.Add(p.name + " has a blackjack! This results in a __push__.");
+                        toOutput.Add(p.name + " has a blackjack! This results in a __push__.");
                     } else if(p.insurance > 0) {
                         var c = Character.get_character(p.player_discord_id);
                         c.balance += 3*p.insurance;
                         Character.update_character(c);
-                        str.Add(p.name + " wins their insurance bet and receives " + 3*p.insurance + " credits back.");
+                        toOutput.Add(p.name + " wins their insurance bet and receives " + 3*p.insurance + " credits back.");
                     }
                 }
             } else {
@@ -225,53 +228,54 @@ namespace trillbot.Classes {
                     if(p.surrender) continue;
                     for(int i = 0; i < p.hand.Count; i++) {
                         if(p.handValue(i) > 21) {
-                            str.Add(p.name +"s hand " + (i+1) + " is a bust");
+                            toOutput.Add(p.name +"s hand " + (i+1) + " is a bust");
                         } else if (p.handValue(i) == 21 && p.hand[i].Count == 2) {
                             var c = Character.get_character(p.player_discord_id);
                             c.balance += (int)((double)p.bet*1.5 + p.bet);
                             Character.update_character(c);
-                            str.Add(p.name + " has a blackjack with hand " + (i+1) + "! They win " + (int)((double)p.bet*1.5 + p.bet) + " credits.");
+                            toOutput.Add(p.name + " has a blackjack with hand " + (i+1) + "! They win " + (int)((double)p.bet*1.5 + p.bet) + " credits.");
                         } else if (dealerValue < 22) {
                             if (p.handValue(i) == dealerValue) {
                                 var c = Character.get_character(p.player_discord_id);
-                                if(p.doubleDown) {
+                                if(p.doubleDown[i]) {
                                     c.balance += p.bet*2;
                                 } else {
                                     c.balance += p.bet;
                                 }
                                 Character.update_character(c);
-                                str.Add(p.name + " has a tie with hand " + (i+1) + "! This results in a __push__.");
+                                toOutput.Add(p.name + " has a tie with hand " + (i+1) + "! This results in a __push__.");
                             } else if (p.handValue(i) > dealerValue) {
                                 var c = Character.get_character(p.player_discord_id);
-                                if(p.doubleDown) {
+                                if(p.doubleDown[i]) {
                                     c.balance += p.bet*4;
-                                    str.Add(p.name + " beats the dealer with hand " + (i+1) + "! They win " + 4*p.bet + " credits.");
+                                    toOutput.Add(p.name + " beats the dealer with hand " + (i+1) + "! They win " + 4*p.bet + " credits.");
                                 } else {
                                     c.balance += p.bet*2;
-                                    str.Add(p.name + " beats the dealer with hand " + (i+1) + "! They win " + 2*p.bet + " credits.");
+                                    toOutput.Add(p.name + " beats the dealer with hand " + (i+1) + "! They win " + 2*p.bet + " credits.");
                                 }
                                 Character.update_character(c);    
                             } else {
-                                str.Add(p.name + " loses to the dealer with hand " + (i+1) + "!");
+                                toOutput.Add(p.name + " loses to the dealer with hand " + (i+1) + "!");
                             }
                         } else {
                             var c = Character.get_character(p.player_discord_id);
-                            if(p.doubleDown) {
+                            if(p.doubleDown[i]) {
                                 c.balance += p.bet*4;
-                                str.Add(p.name + " beats the dealer with hand " + (i+1) + "! They win " + 4*p.bet + " credits.");
+                                toOutput.Add(p.name + " beats the dealer with hand " + (i+1) + "! They win " + 4*p.bet + " credits.");
                             } else {
                                 c.balance += p.bet*2;
-                                str.Add(p.name + " beats the dealer with hand " + (i+1) + "! They win " + 2*p.bet + " credits.");
+                                toOutput.Add(p.name + " beats the dealer with hand " + (i+1) + "! They win " + 2*p.bet + " credits.");
                             }
                             Character.update_character(c);
                         }
                     }
                 }
             }
-            str.Add("To start the next round, one player of the game just needs to type `ta!next`");
+            toOutput.Add("To start the next round, one player of the game just needs to type `ta!next`");
             resetTable();
             gameRunning = false;
-            helpers.output(channel,str);
+            helpers.output(channel,toOutput);
+            toOutput = new List<string>();
         }
 
         private void resetTable() {
@@ -289,10 +293,14 @@ namespace trillbot.Classes {
                     return;
                 }
             }
+            if (gameRunning) {
+                helpers.output(channel, context.User.Mention + " a hand is already going!");
+                return;
+            }
             subPlayer();
             gameRunning = true;
             if(table.Count > 0) {
-                helpers.output(channel,dealerName + " asks everyone to put forth their wager.");
+                toOutput.Add(dealerName + " asks everyone to put forth their wager.");
                 collectBets();
                 subPlayer();
                 if(CardsUntilShuffle <= 0) newDeck();
@@ -302,7 +310,9 @@ namespace trillbot.Classes {
                 position = new Tuple<int,int>(0,0);
                 checkDealer();
             } else {
-                helpers.output(channel,dealerName + " sits and wait for someone to approach his table.");
+                toOutput.Add(dealerName + " sits and wait for someone to approach his table.");
+                helpers.output(channel,toOutput);
+                toOutput = new List<string>();
                 CardsUntilShuffle = -1;
             }
         }
@@ -347,7 +357,7 @@ namespace trillbot.Classes {
             position = new Tuple<int,int>(position.Item1+1,position.Item2);
             if(position.Item1 == currentRound) {
                 if(handValue(hand) == 21) {
-                    helpers.output(channel,dealerName + " has blackjack! Hand: " + hand[0].ToString() + " | " + hand[1].ToString());
+                    toOutput.Add(dealerName + " has blackjack! Hand: " + hand[0].ToString() + " | " + hand[1].ToString());
                     payouts();
                 } else {
                     position = new Tuple<int, int>(0,0);
@@ -369,27 +379,33 @@ namespace trillbot.Classes {
             var card = GetCard();
             p.hand[position.Item2].Add(card);
             if(p.handValue(position.Item2) > 21) {
-                helpers.output(channel, p.name + " busts with a hand of " + p.handDisplay(position.Item2));
+                toOutput.Add(p.name + " busts with a hand of " + p.handDisplay(position.Item2));
                 position = new Tuple<int, int>(position.Item1,position.Item2+1);
                 if(position.Item2 < p.hand.Count) {
-                    helpers.output(channel,p.name + " time to play hand " + position.Item2 + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+                    toOutput.Add(p.name + " time to play hand " + position.Item2 + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+                    helpers.output(channel,toOutput);
+                    toOutput = new List<string>();
                 } else {
                     position = new Tuple<int, int>(position.Item1+1,0);
                     nextPlayer();
                 }
             } else {
                 if(p.handValue(position.Item2) == 21) {
-                    helpers.output(channel, p.name + " now has a hand of " + p.handDisplay(position.Item2) + System.Environment.NewLine + "A 21 means you automatically stand.");
+                    toOutput.Add(p.name + " now has a hand of " + p.handDisplay(position.Item2) + System.Environment.NewLine + "A 21 means you automatically stand.");
                     position = new Tuple<int, int>(position.Item1,position.Item2+1);
                     if(position.Item2 < p.hand.Count) {
-                        helpers.output(channel,p.name + " time to play hand " + position.Item2 + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+                        toOutput.Add(p.name + " time to play hand " + position.Item2 + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+                        helpers.output(channel,toOutput);
+                        toOutput = new List<string>();
                     } else {
                         position = new Tuple<int, int>(position.Item1+1,0);
                         nextPlayer();
                         return;
                     }
                 }
-                helpers.output(channel, p.name + " now has a hand of " + p.handDisplay(position.Item2) + System.Environment.NewLine + "It's still your turn.");
+                toOutput.Add(p.name + " now has a hand of " + p.handDisplay(position.Item2) + System.Environment.NewLine + "It's still your turn.");
+                helpers.output(channel,toOutput);
+                toOutput = new List<string>();
             }
         }
 
@@ -403,10 +419,12 @@ namespace trillbot.Classes {
                 helpers.output(channel,context.User.Mention + ", use `ta!next` to start the next round or `ta!join [amount]` to join the game");
                 return; 
             }
-            helpers.output(channel,p.name + " stands.");
+            toOutput.Add(p.name + " stands.");
             position = new Tuple<int, int>(position.Item1,position.Item2+1);
             if(position.Item2 < p.hand.Count) {
-                helpers.output(channel,p.name + " time to play hand " + (position.Item2+1) + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+                toOutput.Add(p.name + " time to play hand " + (position.Item2+1) + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+                helpers.output(channel,toOutput);
+                toOutput = new List<string>();
             } else {
                 position = new Tuple<int, int>(position.Item1+1,0);
                 nextPlayer();
@@ -439,12 +457,14 @@ namespace trillbot.Classes {
             c.balance -= p.bet;
             var card = GetCard();
             p.hand[position.Item2].Add(card);
-            p.doubleDown = true;
-            helpers.output(channel,p.name + " doubles down. They are dealt " + card.ToString() + " and have a total hand of " + System.Environment.NewLine + p.handDisplay(position.Item2));
+            p.doubleDown[position.Item2] = true;
+            toOutput.Add(p.name + " doubles down. They are dealt " + card.ToString() + " and have a total hand of " + System.Environment.NewLine + p.handDisplay(position.Item2));
             
             position = new Tuple<int, int>(position.Item1,position.Item2+1);
             if(position.Item2 < p.hand.Count) {
-                helpers.output(channel,p.name + " time to play hand " + (position.Item2+1) + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+                toOutput.Add(p.name + " time to play hand " + (position.Item2+1) + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
+                helpers.output(channel,toOutput);
+                toOutput = new List<string>();
             } else {
                 position = new Tuple<int, int>(position.Item1+1,0);
                 nextPlayer();
@@ -482,11 +502,14 @@ namespace trillbot.Classes {
                 c.balance -= p.bet;
                 Character.update_character(c);
                 p.hand.Add(new List<StandardCard>());
+                p.doubleDown.Add(false);
                 p.hand[p.hand.Count-1].Add(p.hand[position.Item2][1]);
                 p.hand[position.Item2].RemoveAt(1);
                 p.hand[p.hand.Count-1].Add(GetCard());
                 p.hand[position.Item2].Add(GetCard());
-                helpers.output(channel,p.name + " splits their hand. There current hands are " + p.handDisplay() + System.Environment.NewLine + "You are new resolving hand " + (position.Item2+1));
+                toOutput.Add(p.name + " splits their hand. There current hands are " + p.handDisplay() + System.Environment.NewLine + "You are new resolving hand " + (position.Item2+1));
+                helpers.output(channel,toOutput);
+                toOutput = new List<string>();
             }
         }
 
@@ -508,16 +531,11 @@ namespace trillbot.Classes {
                 }
                 c.balance += p.bet/2;
                 p.surrender = true;
-                helpers.output(channel,p.name + " surrenders their hand receving " + p.bet/2 + " credits back.");
+                toOutput.Add(p.name + " surrenders their hand receving " + p.bet/2 + " credits back.");
             }
 
-            position = new Tuple<int, int>(position.Item1,position.Item2+1);
-            if(position.Item2 < p.hand.Count) {
-                helpers.output(channel,p.name + " time to play hand " + (position.Item2+1) + ". " + System.Environment.NewLine + p.handDisplay(position.Item2));
-            } else {
-                position = new Tuple<int, int>(position.Item1+1,0);
-                nextPlayer();
-            }
+            position = new Tuple<int, int>(position.Item1+1,0);
+            nextPlayer();
         }
     }
 

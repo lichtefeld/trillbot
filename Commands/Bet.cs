@@ -49,7 +49,7 @@ namespace trillbot.Commands
             {new Tuple<string,int, int, double, string>(":nikita:",25,40,7.0,"Nikita")}
         };
 
-        [Command("bet")]
+        [Command("racebet")]
         public async Task BetAsync(string type, string s, int amount)
         {
             var usr = Context.Guild.GetUser(Context.Message.Author.Id);
@@ -123,7 +123,7 @@ namespace trillbot.Commands
                 return;
             }
             
-            await Context.User.SendMessageAsync(helpers.formatBets(character, Context.Guild));
+            helpers.output(Context.User,helpers.formatBets(character, Context.Guild));
         }
 
         [Command("cancelbet")]
@@ -190,7 +190,7 @@ namespace trillbot.Commands
             var chars = Character.get_character();
             var strings = new List<string>();
             foreach(Character c in chars) {
-                strings.Add(helpers.formatBets(c, Context.Guild));
+                strings.AddRange(helpers.formatBets(c, Context.Guild));
             }
             int count = 0;
             string output_string = "";
