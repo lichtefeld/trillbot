@@ -1,0 +1,20 @@
+{
+  "psiball_Team": [
+    {
+      "ID": 0,
+      "Title": "Tiber Titans",
+      "Description": "",
+      "Logo": "https://vignette.wikia.nocookie.net/far-verona/images/1/11/The_Tiber_Titans_jumping_skywhale.png/revision/latest/scale-to-width-down/266?cb=20180830234900",
+      "Wiki": "https://far-verona.wikia.com/wiki/The_Tiber_Titans",
+      "players": []
+    },
+    {
+      "ID": 1,
+      "Title": "Tiber Titans",
+      "Description": "",
+      "Logo": "https://vignette.wikia.nocookie.net/far-verona/images/1/11/The_Tiber_Titans_jumping_skywhale.png/revision/latest/scale-to-width-down/266?cb=20180830234900",
+      "Wiki": "https://far-verona.wikia.com/wiki/The_Tiber_Titans",
+      "players": []
+    }
+  ]
+}

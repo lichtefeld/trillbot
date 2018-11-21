@@ -24,6 +24,10 @@ namespace trillbot.Classes {
         public string title { get; set; }
         [JsonProperty("Descrption")]
         public string description { get; set; }
+        [JsonProperty("Logo")] //Needs to be a link to the image. Aiming for 300x300 in size
+        public string logo { get; set; }
+        [JsonProperty("Wiki")] 
+        public string wiki { get; set; }
         [JsonProperty("PlayerIDs")]
         public List<ulong> players { get; set; }
     }
