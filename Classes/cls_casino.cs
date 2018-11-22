@@ -17,7 +17,7 @@ using trillbot.Classes;
 
 namespace trillbot.Classes {
 
-    public class casino_BJ {
+    public class casino_BJ { //Temp Storage Unit for a Slot Machine
         public string dealerName { get; set; }
         public int minBet { get; set; }
         public int maxBet { get; set; }
@@ -43,7 +43,7 @@ namespace trillbot.Classes {
         }
     }
 
-    public class casino_Slot {
+    public class casino_Slot { //Temp Storage Unit for a Slot Machine
         public int ID { get; set; }
         public string name { get; set; }
         public ulong chanID { get; set;}
@@ -67,39 +67,70 @@ namespace trillbot.Classes {
         [JsonProperty("Name")]
         public string name { get; set; }
         [JsonProperty("blackjacks")]
-        public List<casino_BJ> blackjacks { get; set; } = new List<casino_BJ>();
+        public List<casino_BJ> blackjacks { get; set; } 
         [JsonProperty("slots")]
-        public List<casino_Slot> slots { get; set; } = new List<casino_Slot>();
+        public List<casino_Slot> slots { get; set; }
         [JsonProperty("Guild ID")]
         public ulong guildID { get; set;}
         [JsonProperty("Casino Admin Channels")]
-        public List<ulong> adminChannels { get; set; } = new List<ulong>();
+        public List<ulong> adminChannels { get; set; }
+        [JsonProperty("Guild ID")]
+        public bool autorebuild { get; set; }
 
         //Constructor
-        public Casino() {
-
+        public Casino(SocketGuild Guild, bool ar = true) {
+            guildID = Guild.Id;
+            name = Guild.Name;
+            autorebuild = ar;
+            blackjacks = new List<casino_BJ>();
+            slots = new List<casino_Slot>();
+            adminChannels = new List<ulong>();
         }
         //Methods
-        public void rebuild(SocketCommandContext Context) {
+        public void rebuild(SocketCommandContext Context = null) {
             //Permissions Check rather than on the external level
-            if(!isCasinoManager(Context.Guild.GetUser(Context.User.Id))) {
+            if(Context != null && !isCasinoManager(Context.Guild.GetUser(Context.User.Id))) {
                 helpers.output(Context.Channel,Context.User.Mention + " you aren't an administrator nor do you have the `Casino Manager` role.");
+                return;
             }
+            var toUser = new List<string>();
+            var toAdminChan = new List<string>();
             //Rebuild Blackjack
+            toAdminChan.Add("**BLACKJACK CHANNELS**");
             blackjacks.ForEach(e=> {
-                if ( trillbot.Program.blackjack.ContainsKey(e.chanID)) {
+                if ( trillbot.Program.blackjack.ContainsKey(e.chanID)) { //Check if blackjack already exists. If so, remove the current dealer and replace with a new one. (In case of stuck dealer)
                     trillbot.Program.blackjack.Remove(e.chanID);
                 }
                 var chan = Context.Guild.GetTextChannel(e.chanID);
                 if (chan == null) {
-                    Context.User.SendMessageAsync("Failed to create dealer with name " + e.dealerName + ". Did you delete the channel?");
-                    return;
+                    toUser.Add("Failed to create dealer with name " + e.dealerName + " in channel ID: " + e.chanID + ". Did you delete the channel?");
+                } else {
+                    var bj = new blackjackDealer(e.dealerName,e.numDecks,chan,e.minBet,e.maxBet);
+                    trillbot.Program.blackjack.Add(e.chanID,bj);
+                    toAdminChan.Add("A dealer with the name of " + bj.dealerName + " has been added to channel " + chan + ".");
                 }
-                var bj = new blackjackDealer(e.dealerName,e.numDecks,chan,e.minBet,e.maxBet);
-                trillbot.Program.blackjack.Add(e.chanID,bj);
-                helpers.output(Context.Channel,"A dealer with the name of " + bj.dealerName + " has been added to this channel.");
-            });
-            //To repeat above code for each list.
+            }); //To repeat above code for each list.
+
+            //Rebuild Slots
+            var sms = slotMachine.get_slotMachine(); // Fetch List of all Valid Slot Machines
+            slots.ForEach(e=> {
+                if ( trillbot.Program.slots.ContainsKey(e.chanID)) { //Check if blackjack already exists. If so, remove the current dealer and replace with a new one. (In case of stuck dealer)
+                    trillbot.Program.slots.Remove(e.chanID);
+                }
+                var chan = Context.Guild.GetTextChannel(e.chanID);
+                if (chan == null) {
+                    toUser.Add("Failed to create slot machine with name " + e.name + " in channel ID: " + e.chanID + ". Did you delete the channel?");
+                } else {
+                    var sm = sms.FirstOrDefault(k=>e.ID == k.ID);
+                    if(sm == null) {
+                        toUser.Add("Failed to create slot machine with name " + e.name + " in channel " + chan + ". Was the slot machine ID changed?");
+                    } else {
+                        trillbot.Program.slots.Add(e.chanID,sm);
+                        toAdminChan.Add("A slot machine with the name of " + sm.name + " has been added to channel " + chan + ".");
+                    }
+                }
+            });//To repeat above code for each list.
+            
         }
 
         public void save() {
@@ -117,7 +148,7 @@ namespace trillbot.Classes {
             }
 
             var str = new List<string>();
-            str.Add(this.name + " bound to Server " + Context.Guild.Name);
+            str.Add(this.name + " bound to Server " + this.name);
             str.Add("**BLACKJACK TABLES**"); //Blackjack List
             foreach (var b in blackjacks) {
                 str.AddRange(b.display(Context.Guild));
@@ -136,10 +167,16 @@ namespace trillbot.Classes {
 
             helpers.output(Context.Channel,str);
         }
+
+        public void addAdminChannel(ulong chanID) {
+            if(adminChannels.Contains(chanID)) return;
+            else {
+                adminChannels.Add(chanID);
+            }
+        }
         public bool isCasinoAdminChannel(ISocketMessageChannel Channel) {
             if (adminChannels.Count == 0) return true;
-            if (adminChannels.Contains(Channel.Id)) return true;
-            return false;
+            return adminChannels.Contains(Channel.Id);
         }
 
         //Static Methods
@@ -150,8 +187,7 @@ namespace trillbot.Classes {
             if (manager != null) return true;
             else {
                 manager = roles.FirstOrDefault(e=>e.Permissions.Administrator);
-                if (manager != null) return true;
-                else return false;
+                return (manager != null);
             }
         }
 
@@ -161,7 +197,6 @@ namespace trillbot.Classes {
     public partial class Casino
     {
         public static Casino[] FromJson(string json) => JsonConvert.DeserializeObject<Casino[]>(json, Converter.Settings);
-
 
         public static List<Casino> get_Casino () {
             var store = new DataStore ("Casino.json");
