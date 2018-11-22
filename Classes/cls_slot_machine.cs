@@ -17,6 +17,10 @@ using trillbot.Classes;
 
 namespace trillbot.Classes {
 
+    public class slotMachineRunner : slotMachine {
+        public SocketTextChannel Channel { get; set;}
+    }
+
     public partial class slotMachine {
 
         [JsonProperty("Id")]
@@ -38,12 +42,8 @@ namespace trillbot.Classes {
         [JsonProperty("Channel")]
         public ulong ChannelID {get; set;}
 
-        private string displayReel(int i, int j, int k ) {
-            if (i < 0 || i > reels.Count || j < 0 || j > reels.Count || k < 0 || k > reels.Count) {
-                return "";
-            } else {
-                return reels[i] + " | " + reels[j] + " | " + reels[k];
-            }
+        private string displayReel(int[] rolls) {
+            return String.Join(" | ", rolls);
         }
 
         public string rollSlot(Character c, int bet, ICommandContext Context) {
@@ -63,7 +63,7 @@ namespace trillbot.Classes {
                 }
             }
             
-            str.Add(displayReel(rolls[0], rolls[1], rolls[2])); //Comments Assume Default Emotes
+            str.Add(displayReel(rolls)); //Comments Assume Default Emotes
             if(rolls[0] == 0 && rolls[1] == 0 && rolls[2] == 0) { //3 Moneybags
                 str.Add("JACKPOT! You've Won " + Payouts[0]*bet + " Credits!");
                 c.balance+=Payouts[0]*bet;
