@@ -43,23 +43,6 @@ namespace trillbot.Classes {
         }
     }
 
-    public class casino_Slot { //Temp Storage Unit for a Slot Machine
-        public int ID { get; set; }
-        public string name { get; set; }
-        public ulong chanID { get; set;}
-
-        public casino_Slot(Classes.slotMachine sm) {
-            ID = sm.ID;
-            name = sm.name;
-            //chanID = sm
-        }
-
-        public string display(SocketGuild Guild) {
-            var chan = Guild.GetTextChannel(chanID);
-            return name + " slots bound to " + chan;
-        }
-    }
-
     public partial class Casino {
         //Variables
         [JsonProperty("ID")]
@@ -69,7 +52,7 @@ namespace trillbot.Classes {
         [JsonProperty("blackjacks")]
         public List<casino_BJ> blackjacks { get; set; } 
         [JsonProperty("slots")]
-        public List<casino_Slot> slots { get; set; }
+        public List<slotMachine> slots { get; set; }
         [JsonProperty("Guild ID")]
         public ulong guildID { get; set;}
         [JsonProperty("Casino Admin Channels")]
@@ -83,7 +66,7 @@ namespace trillbot.Classes {
             name = Guild.Name;
             autorebuild = ar;
             blackjacks = new List<casino_BJ>();
-            slots = new List<casino_Slot>();
+            slots = new List<slotMachine>();
             adminChannels = new List<ulong>();
         }
         //Methods
@@ -114,19 +97,20 @@ namespace trillbot.Classes {
             //Rebuild Slots
             var sms = slotMachine.get_slotMachine(); // Fetch List of all Valid Slot Machines
             slots.ForEach(e=> {
-                if ( trillbot.Program.slots.ContainsKey(e.chanID)) { //Check if blackjack already exists. If so, remove the current dealer and replace with a new one. (In case of stuck dealer)
-                    trillbot.Program.slots.Remove(e.chanID);
+                if ( trillbot.Program.slots.ContainsKey(e.ChannelID)) { //Check if blackjack already exists. If so, remove the current dealer and replace with a new one. (In case of stuck dealer)
+                    trillbot.Program.slots.Remove(e.ChannelID);
                 }
-                var chan = Context.Guild.GetTextChannel(e.chanID);
+                var chan = Context.Guild.GetTextChannel(e.ChannelID);
                 if (chan == null) {
-                    toUser.Add("Failed to create slot machine with name " + e.name + " in channel ID: " + e.chanID + ". Did you delete the channel?");
+                    toUser.Add("Failed to create slot machine with name " + e.name + " in channel ID: " + e.ChannelID + ". Did you delete the channel?");
                 } else {
                     var sm = sms.FirstOrDefault(k=>e.ID == k.ID);
                     if(sm == null) {
                         toUser.Add("Failed to create slot machine with name " + e.name + " in channel " + chan + ". Was the slot machine ID changed?");
                     } else {
-                        trillbot.Program.slots.Add(e.chanID,sm);
-                        toAdminChan.Add("A slot machine with the name of " + sm.name + " has been added to channel " + chan + ".");
+                        var smr = new slotMachineRunner(chan, sm);
+                        trillbot.Program.slots.Add(e.ChannelID,smr);
+                        toAdminChan.Add("A slot machine with the name of " + smr.name + " has been added to channel " + chan + ".");
                     }
                 }
             });//To repeat above code for each list.

@@ -17,36 +17,59 @@ using trillbot.Classes;
 
 namespace trillbot.Classes {
 
-    public class slotMachineRunner : slotMachine {
+    public class slotMachineRunner {
         public SocketTextChannel Channel { get; set;}
-    }
+        public int ID { get; set; }
+        public string name { get; set;}
+        public string description { get; set;}
+        public int maxBet { get; set; }
+        public int minBet { get; set;}
+        public List<string> reels { get; set; }
+        public List<List<int>> Weights { get; set; }
+        public List<int> Payouts { get; set; }
+        public ulong ChannelID { get; set; }
 
-    public partial class slotMachine {
+        public slotMachineRunner(SocketTextChannel Chan, slotMachine sm) {
+            /* var sm = slotMachine.get_slotMachine(id);
+            if(sm == null) {
+                await Context.Channel.sendMessageAsyn(Context.User.Mention + ", you didn't pass a valid slot machine ID.");
+                return;
+            }*/
+            Channel = Chan;
+            this.ID = sm.ID;
+            this.name = sm.name;
+            this.description = sm.description;
+            this.maxBet = sm.maxBet;
+            this.minBet = sm.minBet;
+            this.reels = sm.reels;
+            this.Weights = sm.Weights;
+            this.Payouts = sm.Payouts;
+            this.ChannelID = Channel.Id;
 
-        [JsonProperty("Id")]
-        public int ID {get; set; }
-        [JsonProperty("Name")]
-        public string name { get; set; }
-        [JsonProperty("Description")]
-        public string description { get; set; }
-        [JsonProperty("Max Bet")]
-        public int maxBet {get; set; }
-        [JsonProperty("Min Bet")]
-        public int minBet {get; set; }
-        [JsonProperty("Reels")]
-        public List<string> reels { get; set; } = new List<string>();
-        [JsonProperty("Weights")]
-        public List<List<int>> Weights { get; set; } = new List<List<int>>();
-        [JsonProperty("Payouts")]
-        public List<int> Payouts { get; set; } = new List<int>();
-        [JsonProperty("Channel")]
-        public ulong ChannelID {get; set;}
+        }
 
         private string displayReel(int[] rolls) {
             return String.Join(" | ", rolls);
         }
 
-        public string rollSlot(Character c, int bet, ICommandContext Context) {
+        public void rollSlot(int bet, ICommandContext Context) {
+            
+            var c = Character.get_character(Context.User.Id);
+            if(c == null) {
+                helpers.output(Channel,Context.User.Mention + ", You don't have an account. Create one with `ta!registeraccount`");
+                return;
+            }
+            if(c.balance-bet < 0) {
+                helpers.output(Channel,Context.User.Mention + ",You can't make a bet that brings you to a negative balance.");
+                return;
+            }
+            if(bet < minBet || bet > maxBet) {
+                helpers.output(Channel,Context.User.Mention + ", You can't make a bet larger than this machine's max bet OR a negative bet.");
+                return;
+            }
+            c.balance -= bet;
+            
+            //Roll a Slot Roll
             List<string> str = new List<string>();
             str.Add("**" + this.name + "**");
             int[] rolls = new int[3];
@@ -112,13 +135,12 @@ namespace trillbot.Classes {
             } else if (rolls[0] != 7 && rolls[1] != 7 && rolls[2] != 7) { //Three non-pinapple symbols
                 str.Add("You've Won " + Payouts[10]*bet + " Credits!");
                 c.balance+=Payouts[10]*bet;
-            } else if (rolls[0] == 7 && rolls[1] == 7 && rolls[2] == 7) {
-                str.Add("You lost " + bet + " credits");
-                if(ChannelID != 0) security(Context); //Trill Security Comment. 
             } else {
                 str.Add("You lost " + bet + " credits");
             }
-            return(String.Join(System.Environment.NewLine,str));
+            //Update Character JSON & Output results
+            Character.update_character(c);
+            helpers.output(Channel,String.Join(System.Environment.NewLine,str));
         }
         public string payouts() {
             List<string> str = new List<string>();
@@ -138,16 +160,45 @@ namespace trillbot.Classes {
             str.Add("Any three symbols which aren't " + reels[7] + ": " + Payouts[10]);
             return(String.Join(System.Environment.NewLine,str));
         }
+    }
 
-        public void security(ICommandContext Context) { //Trill Security Commands
-            var channel = Context.Guild.GetChannelAsync(ChannelID).GetAwaiter().GetResult() as ISocketMessageChannel;
-            var usrs = Context.Guild.GetUsersAsync().GetAwaiter().GetResult().ToList();
-            var user = usrs[Program.rand.Next(usrs.Count)];
+    public partial class slotMachine {
 
-            string output = user.Nickname.ToString() + " is being monitored by security drones.";
-            helpers.output(channel, output);
+        [JsonProperty("Id")]
+        public int ID {get; set; }
+        [JsonProperty("Name")]
+        public string name { get; set; }
+        [JsonProperty("Description")]
+        public string description { get; set; }
+        [JsonProperty("Max Bet")]
+        public int maxBet {get; set; }
+        [JsonProperty("Min Bet")]
+        public int minBet {get; set; }
+        [JsonProperty("Reels")]
+        public List<string> reels { get; set; } = new List<string>();
+        [JsonProperty("Weights")]
+        public List<List<int>> Weights { get; set; } = new List<List<int>>();
+        [JsonProperty("Payouts")]
+        public List<int> Payouts { get; set; } = new List<int>();
+        [JsonProperty("Channel")]
+        public ulong ChannelID {get; set;}
+
+        public slotMachine(slotMachineRunner sm) {
+            this.ID = sm.ID;
+            this.name = sm.name;
+            this.description = sm.description;
+            this.maxBet = sm.maxBet;
+            this.minBet = sm.minBet;
+            this.reels = sm.reels;
+            this.Weights = sm.Weights;
+            this.Payouts = sm.Payouts;
+            this.ChannelID = sm.ChannelID;
         }
 
+        public string display(SocketGuild Guild) {
+            var chan = Guild.GetTextChannel(ChannelID);
+            return name + " slots. Min Bet: " + minBet + ". Max Bet: " + maxBet + ". Located in " + chan;
+        }
     }
 
     public partial class slotMachine {

@@ -43,7 +43,29 @@ namespace trillbot.Classes {
             minbet = minBet;
             maxbet = maxBet;
             //newDeck();
-        }  
+        }
+
+        public static string explain() {
+            var str = new List<string>();
+            str.Add("Blackjack is a casino banked game, meaning that players compete against the house rather than each other. The objective is to get a hand total of closer to 21 than the dealer without going over 21 (busting).");
+            str.Add("At the start of a Blackjack game, the players and the dealer receive two cards each. The players' cards are normally dealt face up, while the dealer has one face down (called the hole card) and one face up. The best possible Blackjack hand is an opening deal of an ace with any ten-point card.");
+            str.Add("When playing Blackjack the numeral cards 2 to 10 have their face values, Jacks, Queens and Kings are valued at 10, and Aces can have a value of either 1 or 11. The Ace is always valued at 11 unless that would result in the hand going over 21, in which case it is valued as 1.");
+            str.Add("A starting hand of a 10 valued card and an Ace is called a Blackjack or natural and beats all hands other than another Blackjack. If both the player and dealer have Blackjack, the result is a push (tie): neither the player nor the bank wins and the bet is returned to the player.");
+            str.Add("If the dealer is showing an ACE they will offer a bet called \"insurance\" which pays out if the dealer has blackjack.");
+            str.Add("**Standard Actions**");
+            str.Add("__Stand__ - Accept your hand as is");
+            str.Add("__Hit__ - Take Another Card to your hand");
+            str.Add("__Double__ - Double your bet, and take one more card, then automatically Stand");
+            str.Add("__Split__ - If you have two matching value cards you can split your hand into an additional one. You can have upto 4 hands");
+            str.Add("__Surrender__ - If taken as the first option on your turn you receive 50% of your bet back");
+            str.Add("**Payouts**");
+            str.Add("__Push (Tie)__ - You get your bet back");
+            str.Add("__Win__ - Pays 1:1, bet 10 get back 20 (10 + 10)");
+            str.Add("__Blackjack__ - Pays 3:2, bet 10 get back 25 (10 + 15)");
+            str.Add("__Insurance__ - Pays 2:1, bet 10, insure 5, get back 15 (5 + 10)");
+            str.Add("More Information: <https://www.pagat.com/banking/blackjack.html>");
+            return String.Join(System.Environment.NewLine,str);
+        }
 
         private void newDeck() {
             List<StandardCard> cards = StandardCard.straightDeck();
@@ -75,7 +97,7 @@ namespace trillbot.Classes {
                 } else {
                     table.Remove(player);
                     helpers.output(channel,Context.User.Mention + ", you stand up and leave the table." + System.Environment.NewLine + dealerName + " sits and wait for someone to approach his table.");
-                    CardsUntilShuffle = -1;
+                    //CardsUntilShuffle = -1;
                 }
             }
         }
@@ -536,6 +558,16 @@ namespace trillbot.Classes {
 
             position = new Tuple<int, int>(position.Item1+1,0);
             nextPlayer();
+        }
+
+        public string payout() {
+            var str = new List<string>();
+            str.Add("**BLACKJACK PAYOUTS**");
+            str.Add("Blackjack. Hand Value of 21 with 2 cards Pays 3:2");
+            str.Add("Beating the Dealer Pays 1:1");
+            str.Add("Tie with the dealer (Push) pays 1:1");
+            str.Add("Insurance Bets pay 2:1 when the dealer has blackjack");
+            return String.Join(System.Environment.NewLine,str);
         }
     }
 

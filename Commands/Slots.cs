@@ -29,7 +29,8 @@ namespace trillbot.Commands
             if (game == null) {
                 await ReplyAsync(Context.User.Mention + ", you didn't select a valid slot machine ID");
             }
-            Program.slots.Add(Context.Channel.Id, game);
+            var smr = new slotMachineRunner(Context.Guild.GetTextChannel(Context.Channel.Id),game);
+            Program.slots.Add(Context.Channel.Id, smr);
             await Context.Channel.SendMessageAsync("Slot machine added. Use `ta!payouts` to determin the payouts of this machine.");
         }
 
@@ -45,52 +46,5 @@ namespace trillbot.Commands
             await Context.Channel.SendMessageAsync("Slot machine removed.");
         }
 
-        [Command("security")]
-        [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task securityAsync(int i) {
-            var slot = Program.slots.ToList()[i];
-            if (slot.Value == null) {
-                await Context.Channel.SendMessageAsync("Whoah, that slot Machine isn't in the dictonary");
-                return;
-            }
-            slot.Value.ChannelID = Context.Channel.Id;
-            slotMachine.update_slotMachine(slot.Value);
-            await Context.Channel.SendMessageAsync("Channel set to security");
-        }
-
-        [Command("payouts")]
-        public async Task payoutsAsync() {
-            var slot = Program.slots.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
-            if (slot.Value == null) {
-                //await Context.Channel.SendMessageAsync("Woah there, isn't slot machine in this channel.");
-                return;
-            }
-            await ReplyAsync(slot.Value.payouts());
-        }
-
-        [Command("slot")]
-        public async Task slotAsync(int bet = 1) {
-            var slot = Program.slots.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
-            if (slot.Value == null) {
-                await Context.Channel.SendMessageAsync("Woah there, isn't slot machine in this channel.");
-                return;
-            }
-            var character = Character.get_character(Context.User.Id);
-            if(character == null) {
-                await Context.Channel.SendMessageAsync("You don't have an account. Create one with `ta!registeraccount`");
-                return;
-            }
-            if(character.balance-bet < 0) {
-                await Context.Channel.SendMessageAsync("You can't make a bet that brings you to a negative balance.");
-                return;
-            }
-            if(bet < slot.Value.minBet || bet > slot.Value.maxBet) {
-                await Context.Channel.SendMessageAsync("You can't make a bet larger than this machines max bet OR a negative bet.");
-                return;
-            }
-            character.balance -= bet;
-            await ReplyAsync(slot.Value.rollSlot(character, bet, Context));
-            Character.update_character(character);
-        }
     }
 }
