@@ -105,7 +105,7 @@ namespace trillbot.Classes {
 
         //Internal Variables
         public string dealerName { get; set; }
-        private ISocketMessageChannel channel { get; set;}
+        public ISocketMessageChannel channel { get; set;}
         public List<roulettePlayer> table { get; set; } = new List<roulettePlayer>();
         private List<ulong> toSub { get; set; } = new List<ulong>();
         private bool isRolling { get; set; }

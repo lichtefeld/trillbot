@@ -17,7 +17,27 @@ namespace trillbot.Commands
 {
     public class Casino : ModuleBase<SocketCommandContext> {
         //ADMIN COMMANDS
+        [Command("casino")]
+        public async Task casinoNestedCommands(params string[] inputs) {
+            if(inputs.Length == 0) {
+                var casino = Classes.Casino.get_Casino(Context.Guild.Id);
+                if (casino == null) {
+                    await ReplyAsync("No casino for this server found... attempting to create one");
+                    makeCasino(Context);
+                    return;
+                }
+                casino.display(Context);
+                return;
+            }
+        }
 
+        public void makeCasino(SocketCommandContext Context) {
+            if(Classes.Casino.isCasinoManager(Context.Guild.GetUser(Context.User.Id))) {
+                var c = new Classes.Casino(Context.Guild);
+                helpers.output(Context.Channel,Context.User.Mention + ", Casino generated for this server");
+                Classes.Casino.insert_Casino(c);
+            }
+        }
 
         //GROUP CASINO GAME COMMANDS
         [Command("payouts")] //List Game Payouts, if a game doesn't exist in that channel, fail silently. If no other output, DM user to let them know no game exists in that channel

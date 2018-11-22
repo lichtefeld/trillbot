@@ -37,8 +37,32 @@ namespace trillbot.Classes {
         public List<string> display(SocketGuild Guild) {
             var chan = Guild.GetTextChannel(chanID);
             var str = new List<string>();
-            str.Add(dealerName + " is located in " + chan);
+            str.Add("Blackjack Dealer " + dealerName + " is located in " + chan);
             str.Add("Using " + numDecks + " decks with a minimum bet of " + minBet + " and a maximum bet of " + maxBet);
+            return str;
+        }
+    }
+
+    public class casino_RL { //Temp Storage Unit for a Roulette Table
+        public string name { get; set;}
+        public ulong chanID { get; set;}
+        public int minBet { get; set; }
+        public int maxInside { get; set;}
+        public int maxOutside { get; set;}
+
+        public casino_RL(roulette rl) {
+            name = rl.dealerName;
+            chanID = rl.channel.Id;
+            minBet = rl.minBet;
+            maxInside = rl.maxInside;
+            maxOutside = rl.maxOutside;
+        }
+
+        public List<string> display(SocketGuild Guild) {
+            var chan = Guild.GetTextChannel(chanID);
+            var str = new List<string>();
+            str.Add("Roulette Table with " + name + " as the host. Located in " + chan);
+            str.Add("Minimum Bet: " + minBet + ". Maximum Inside: " + maxInside + ". Maxiumum Outside: " + maxOutside);
             return str;
         }
     }
@@ -53,6 +77,8 @@ namespace trillbot.Classes {
         public List<casino_BJ> blackjacks { get; set; } 
         [JsonProperty("slots")]
         public List<slotMachine> slots { get; set; }
+        [JsonProperty("roulettes")]
+        public List<casino_RL> roulettes { get; set;}
         [JsonProperty("Guild ID")]
         public ulong guildID { get; set;}
         [JsonProperty("Casino Admin Channels")]
@@ -67,6 +93,7 @@ namespace trillbot.Classes {
             autorebuild = ar;
             blackjacks = new List<casino_BJ>();
             slots = new List<slotMachine>();
+            roulettes = new List<casino_RL>();
             adminChannels = new List<ulong>();
         }
         //Methods
@@ -141,6 +168,10 @@ namespace trillbot.Classes {
             foreach (var sm in slots) {
                 str.Add(sm.display(Context.Guild));
             }
+            str.Add("**ROULETTE TABLES**"); //Roulette Tables
+            foreach (var rl in roulettes) {
+                str.AddRange(rl.display(Context.Guild));
+            }
 
             //TO FILL IN ADDITIONAL GAMES
             str.Add("**ADMIN CHANNELS**"); //Admin Channel List
@@ -174,8 +205,6 @@ namespace trillbot.Classes {
                 return (manager != null);
             }
         }
-
-
     }
 
     public partial class Casino
@@ -196,6 +225,15 @@ namespace trillbot.Classes {
 
             // Get employee collection
             var rtrner = store.GetCollection<Casino> ().AsQueryable ().FirstOrDefault (e => e.Id == id);
+            store.Dispose();
+            return rtrner;
+        }
+
+        public static Casino get_Casino (ulong id) {
+            var store = new DataStore ("Casino.json");
+
+            // Get employee collection
+            var rtrner = store.GetCollection<Casino> ().AsQueryable ().FirstOrDefault (e => e.guildID == id);
             store.Dispose();
             return rtrner;
         }
