@@ -48,7 +48,7 @@ namespace trillbot.Classes {
             else return handValue(hand[i]);
         }
 
-        private int handValue(List<StandardCard> cards) {
+        private static int handValue(List<StandardCard> cards) {
             int value = 0;
             int numAces = 0;
             if (cards.Count == 0) return -1;
