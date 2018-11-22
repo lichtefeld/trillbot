@@ -112,9 +112,6 @@ namespace trillbot.Classes {
             } else if (rolls[0] != 7 && rolls[1] != 7 && rolls[2] != 7) { //Three non-pinapple symbols
                 str.Add("You've Won " + Payouts[10]*bet + " Credits!");
                 c.balance+=Payouts[10]*bet;
-            } else if (rolls[0] == 7 && rolls[1] == 7 && rolls[2] == 7) {
-                str.Add("You lost " + bet + " credits");
-                if(ChannelID != 0) security(Context); //Trill Security Comment. 
             } else {
                 str.Add("You lost " + bet + " credits");
             }
@@ -137,15 +134,6 @@ namespace trillbot.Classes {
             str.Add(reels[4] + reels[5] + reels[6] + " | " + reels[4] + reels[5] + reels[6] + " | " + reels[4] + reels[5] + reels[6] + ": " + Payouts[9]);
             str.Add("Any three symbols which aren't " + reels[7] + ": " + Payouts[10]);
             return(String.Join(System.Environment.NewLine,str));
-        }
-
-        public void security(ICommandContext Context) { //Trill Security Commands
-            var channel = Context.Guild.GetChannelAsync(ChannelID).GetAwaiter().GetResult() as ISocketMessageChannel;
-            var usrs = Context.Guild.GetUsersAsync().GetAwaiter().GetResult().ToList();
-            var user = usrs[Program.rand.Next(usrs.Count)];
-
-            string output = user.Nickname.ToString() + " is being monitored by security drones.";
-            helpers.output(channel, output);
         }
 
     }
