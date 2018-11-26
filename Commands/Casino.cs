@@ -19,16 +19,68 @@ namespace trillbot.Commands
         //ADMIN COMMANDS
         [Command("casino")]
         public async Task casinoNestedCommands(params string[] inputs) {
+            var casino = Classes.Casino.get_Casino(Context.Guild.Id);
+            if (casino == null) {
+                await ReplyAsync("No casino for this server found... attempting to create one");
+                makeCasino(Context);
+                return;
+            }
+
             if(inputs.Length == 0) {
-                var casino = Classes.Casino.get_Casino(Context.Guild.Id);
-                if (casino == null) {
-                    await ReplyAsync("No casino for this server found... attempting to create one");
-                    makeCasino(Context);
-                    return;
-                }
                 casino.display(Context);
                 return;
             }
+            
+            switch(inputs[0].ToLower()) {
+                case "add":
+                    if(!Classes.Casino.isCasinoManager(Context.Guild.GetUser(Context.User.Id))) {
+                        await ReplyAsync(Context.User.Mention + ", you aren't a Casino Manager so you can't add a game.");
+                        return;
+                    }
+                    if(inputs.Length >= 2) {
+                        switch(inputs[1].ToLower()) {
+                            case "blackjack":
+                                if (inputs.Length < 6) {
+                                    await ReplyAsync(Context.User.Mention + ", You didn't provide enough context to add a blackjack channel. `ta!casino add blackjack [Dealer Name] [Num Decks] [Min Bet] [Max Bet]`");
+                                    return;
+                                }
+
+                                var name = inputs[2]; //Assign name to temp variable
+
+                                if (!Int32.TryParse(inputs[3],out int numDecks)) {
+                                    await ReplyAsync(Context.User.Mention + ", you didn't provide a valid number of decks. `ta!casino add blackjack " + name + " [Num Decks] [Min Bet] [Max Bet]`");
+                                    return;
+                                }
+                                if (!Int32.TryParse(inputs[4], out int minBet)) {
+                                    await ReplyAsync(Context.User.Mention + ", you didn't provide a valid number of decks. `ta!casino add blackjack " + name + " " + numDecks + " [Min Bet] [Max Bet]`");
+                                    return;
+                                }
+                                if (!Int32.TryParse(inputs[4], out int maxBet)) {
+                                    await ReplyAsync(Context.User.Mention + ", you didn't provide a valid number of decks. `ta!casino add blackjack " + name + " " + numDecks + " " + minBet + " [Max Bet]`");
+                                    return;
+                                }                               
+
+                                var bj = new blackjackDealer(name,numDecks,Context.Channel,minBet,maxBet);
+                                trillbot.Program.blackjack.Add(Context.Channel.Id,bj);
+                                casino.addBlackjack(bj);
+
+                            break;
+
+                            default:
+
+                            break;
+                        }
+                    } else {
+                        await ReplyAsync("You need to specifiy what to add");
+                        return;
+                    }
+                break;
+                default:
+
+                break;
+            }
+
+            Classes.Casino.update_Casino(casino);
         }
 
         public void makeCasino(SocketCommandContext Context) {

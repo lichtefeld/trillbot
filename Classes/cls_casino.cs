@@ -183,6 +183,14 @@ namespace trillbot.Classes {
             helpers.output(Context.Channel,str);
         }
 
+        public void addRoulette(roulette rl) {
+            roulettes.Add(new casino_RL(rl));
+        }
+
+        public void addBlackjack(blackjackDealer bj) {
+            blackjacks.Add(new casino_BJ(bj));
+        }
+
         public void addAdminChannel(ulong chanID) {
             if(adminChannels.Contains(chanID)) return;
             else {
