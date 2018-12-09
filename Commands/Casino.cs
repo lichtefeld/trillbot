@@ -45,30 +45,33 @@ namespace trillbot.Commands
                                     return;
                                 }
 
-                                var name = inputs[2]; //Assign name to temp variable
+                                var nameBuilder = new List<string>();
+                                string name = inputs[5];
 
-                                if (!Int32.TryParse(inputs[3],out int numDecks)) {
-                                    await ReplyAsync(Context.User.Mention + ", you didn't provide a valid number of decks. `ta!casino add blackjack " + name + " [Num Decks] [Min Bet] [Max Bet]`");
+                                for(int i = 6; i < inputs.Length; i++) {
+                                    name += " " + inputs[i];
+                                }
+
+                                if (!Int32.TryParse(inputs[2],out int numDecks)) {
+                                    await ReplyAsync(Context.User.Mention + ", you didn't provide a valid number of decks. `ta!casino add blackjack [Num Decks] [Min Bet] [Max Bet] " + name + "`");
                                     return;
                                 }
-                                if (!Int32.TryParse(inputs[4], out int minBet)) {
-                                    await ReplyAsync(Context.User.Mention + ", you didn't provide a valid number of decks. `ta!casino add blackjack " + name + " " + numDecks + " [Min Bet] [Max Bet]`");
+                                if (!Int32.TryParse(inputs[3], out int minBet)) {
+                                    await ReplyAsync(Context.User.Mention + ", you didn't provide a valid number of decks. `ta!casino add blackjack " + numDecks + " [Min Bet] [Max Bet] [Name with Spaces] " + name + "`");
                                     return;
                                 }
                                 if (!Int32.TryParse(inputs[4], out int maxBet)) {
-                                    await ReplyAsync(Context.User.Mention + ", you didn't provide a valid number of decks. `ta!casino add blackjack " + name + " " + numDecks + " " + minBet + " [Max Bet]`");
+                                    await ReplyAsync(Context.User.Mention + ", you didn't provide a valid number of decks. `ta!casino add blackjack " + numDecks + " " + minBet + " [Max Bet] [Name with Spaces] " + name + "`");
                                     return;
-                                }                               
+                                }       
 
                                 var bj = new blackjackDealer(name,numDecks,Context.Channel,minBet,maxBet);
                                 trillbot.Program.blackjack.Add(Context.Channel.Id,bj);
                                 casino.addBlackjack(bj);
-
                             break;
-
                             default:
-
-                            break;
+                                await ReplyAsync("You need to specifiy what to add");
+                            return;
                         }
                     } else {
                         await ReplyAsync("You need to specifiy what to add");
@@ -76,7 +79,7 @@ namespace trillbot.Commands
                     }
                 break;
                 default:
-
+                    await ReplyAsync("I don't know what you are trying to do");
                 break;
             }
 

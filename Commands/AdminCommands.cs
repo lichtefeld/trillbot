@@ -132,5 +132,12 @@ namespace trillbot.Commands
             await Context.User.SendMessageAsync("Please check out this google document for my commands: <https://docs.google.com/document/d/1pWfIToswRCDVpqTK1Bj5Uv6s-n7zpOaqgZHQjW3SNzU/edit?usp=sharing>");
         }
 
+
+        [Command("lootcrate")]
+        public async Task lootCrate() {
+            var emote = Context.Client.Guilds.FirstOrDefault(e=>e.Id == 493151648894681108).Emotes.ToList();
+            var em = emote.ElementAt(Program.rand.Next(emote.Count));
+            await ReplyAsync(Context.User.Mention + " YOU RECEIVE " + em + "    `" + em.Name + "`");
+        }
     }
 }
