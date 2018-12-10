@@ -26,7 +26,7 @@ namespace trillbot
         };
 
         public static Dictionary<ulong,Classes.GrandPrix> games = new Dictionary<ulong, Classes.GrandPrix>(); //For future multi-game system
-        public static Dictionary<ulong,Classes.slotMachine> slots = new Dictionary<ulong, Classes.slotMachine>(); //Multichannel Slot Machine
+        public static Dictionary<ulong,Classes.slotMachineRunner> slots = new Dictionary<ulong, Classes.slotMachineRunner>(); //Multichannel Slot Machine
         public static Dictionary<ulong,Classes.blackjackDealer> blackjack = new Dictionary<ulong, Classes.blackjackDealer>(); //Blackjack Games
         public static Dictionary<ulong,Classes.roulette> roulette = new Dictionary<ulong, Classes.roulette>(); //Roulette Games
         public static Dictionary<ulong,Classes.psiball_game> psiball = new Dictionary<ulong, Classes.psiball_game>(); //Psiball Games

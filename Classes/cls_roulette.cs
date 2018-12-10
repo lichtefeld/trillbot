@@ -105,7 +105,7 @@ namespace trillbot.Classes {
 
         //Internal Variables
         public string dealerName { get; set; }
-        private ISocketMessageChannel channel { get; set;}
+        public ISocketMessageChannel channel { get; set;}
         public List<roulettePlayer> table { get; set; } = new List<roulettePlayer>();
         private List<ulong> toSub { get; set; } = new List<ulong>();
         private bool isRolling { get; set; }
@@ -120,6 +120,22 @@ namespace trillbot.Classes {
             maxInside = inside;
             maxOutside = outside;
             Timer = new rouletteTimer(chan,this);
+        }
+
+        public string payouts() {
+            var str = new List<string>();
+            str.Add("**Roulette Payouts**");
+            str.Add("__Straight (1 Number)__ 35:1");
+            str.Add("__Split (2 Numbers)__ 17:1");
+            str.Add("__Street (3 Numbers)__ 11:1");
+            str.Add("__Square (4 Numbers)__ 8:1");
+            str.Add("__Line (6 Numbers)__ 5:1");
+            str.Add("__Columns__ 2:1");
+            str.Add("__Dozens__ 2:1");
+            str.Add("__Half (High/Low)__ 1:1");
+            str.Add("__Pair (Even/Odd)__ 1:1");
+            str.Add("__Color (Red/Black)__ 1:1");
+            return String.Join(System.Environment.NewLine,str);
         }
 
         public void config() {

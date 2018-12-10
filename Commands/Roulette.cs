@@ -42,7 +42,7 @@ namespace trillbot.Commands
             await Context.Channel.SendMessageAsync("Dealer removed.");
         }
 
-        [Command("join")]
+        /*[Command("join")]
         public async Task joinRouletteAsync() {
             var rl = Program.roulette.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
             if (rl.Value == null) {
@@ -70,7 +70,7 @@ namespace trillbot.Commands
                 return;
             }
             rl.Value.leave(Context);
-        }
+        }*/
 
         [Command("bet")]
         public async Task roulleteBet(params string[] inputs) {
@@ -224,30 +224,6 @@ namespace trillbot.Commands
             if(inputs[inputs.Count() - 1].ToLower() == "true") b.rolling = true;
             c.balance -= amount;
             rl.Value.bet(Context,b);
-        }
-
-        [Command("payout")]
-        public async Task payoutsAsync() {
-            var rl = Program.roulette.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
-            if (rl.Value == null) {
-                //await Context.Channel.SendMessageAsync("Woah there, isn't roulette table in this channel.");
-                return;
-            }
-
-            var str = new List<string>();
-            str.Add("**Roulette Payouts**");
-            str.Add("__Straight (1 Number)__ 35:1");
-            str.Add("__Split (2 Numbers)__ 17:1");
-            str.Add("__Street (3 Numbers)__ 11:1");
-            str.Add("__Square (4 Numbers)__ 8:1");
-            str.Add("__Line (6 Numbers)__ 5:1");
-            str.Add("__Columns__ 2:1");
-            str.Add("__Dozens__ 2:1");
-            str.Add("__Half (High/Low)__ 1:1");
-            str.Add("__Pair (Even/Odd)__ 1:1");
-            str.Add("__Color (Red/Black)__ 1:1");
-            await ReplyAsync(String.Join(System.Environment.NewLine,str));
-
         }
     }
 }
