@@ -164,8 +164,6 @@ namespace trillbot.Classes {
 
     public partial class slotMachine {
 
-<<<<<<< HEAD
-=======
         [JsonProperty("Id")]
         public int ID {get; set; }
         [JsonProperty("Name")]
@@ -201,7 +199,6 @@ namespace trillbot.Classes {
             var chan = Guild.GetTextChannel(ChannelID);
             return name + " slots. Min Bet: " + minBet + ". Max Bet: " + maxBet + ". Located in " + chan;
         }
->>>>>>> 10bc859b7e94cb0d065d533e7cf6cbea0294cd8c
     }
 
     public partial class slotMachine {
