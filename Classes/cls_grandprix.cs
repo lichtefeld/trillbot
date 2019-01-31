@@ -955,7 +955,7 @@ namespace trillbot.Classes {
                                     if(listRacer2[j].ability.ID == 13) {
                                         extra += ". " + listRacer2[j].name + " uses " + listRacer2[j].ability.Title + " back at " + r.name + " causes them to get hit by Dazzle instead!";
                                         r.addHazard(c, -1);
-                                        listRacer2[j].hazards.RemoveAt(listRacer2.Count-1); //Remove Dazzle
+                                        //listRacer2[j].hazards.RemoveAt(listRacer2.Count-1); //Remove Dazzle
                                     }
                                 }
                             }
