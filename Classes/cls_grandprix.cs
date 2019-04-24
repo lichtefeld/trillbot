@@ -67,6 +67,63 @@ namespace trillbot.Classes {
             }
         }
 
+        //Hazard Output
+        private static string targetHazard(racer racer, racer target, Card card) {
+            target.addHazard(card);
+            return (racer.name + " played a " + card.title + " against " + target.name + target_hazard_output[(int)card.value]);
+        }
+
+        //Show hand
+        public void showHand(SocketCommandContext Context) {
+            var r = racers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);
+            if(r == null) {
+                helpers.output(Context.Channel,"No racer found for you, " + Context.User.Mention + ", in this game");
+            } else {
+                Context.User.SendMessageAsync(r.currentStatus()).GetAwaiter().GetResult();
+            }
+        }
+
+        //One Player Still Alive?
+        private bool oneAlive() {
+            foreach (racer r in racers) {
+                if(r.stillIn) return true;
+                if(!r.stillIn && r.ability.ID == 8) return true;
+            }
+            return false;
+        }
+
+        //Make New Deck of Shuffled Cards
+        private static Stack<Card> generateDeck() {
+            return shuffleDeck(freshDeck());
+        }
+
+        //Make a fresh deck of cards
+        private static List<Card> freshDeck() {
+            List<Card> c = new List<Card>();
+            List<Card> temp = trillbot.Classes.Card.get_card().Where(e=>e.ID < 18).ToList();
+
+            foreach (Card c1 in temp) {
+                for(int i = 0; i < c1.count; i++) {
+                    c.Add(c1);
+                }
+            }
+
+            return c;
+        }
+
+        //Shuffle a deck of cards
+        private static Stack<Card> shuffleDeck(List<Card> c) {
+            Stack<Card> s = new Stack<Card>();
+
+            while (c.Count > 0) {
+                int num = trillbot.Program.rand.Next(0,c.Count);
+                s.Push(c[num]);
+                c.RemoveAt(num);
+            }
+
+            return s;
+        }
+
         //Deal Cards
         private  void dealCards(SocketCommandContext Context)
         {
@@ -89,12 +146,6 @@ namespace trillbot.Classes {
                 var usr = Context.Guild.GetUser(r.player_discord_id);
                 usr.SendMessageAsync(r.currentStatus()).GetAwaiter().GetResult();
             }
-        }
-
-        //Hazard Output
-        private static string targetHazard(racer racer, racer target, Card card) {
-            target.addHazard(card);
-            return (racer.name + " played a " + card.title + " against " + target.name + target_hazard_output[(int)card.value]);
         }
 
         //End of Turn Logic
@@ -189,16 +240,6 @@ namespace trillbot.Classes {
                 r.distance = 0;
             }
             return str;
-        }
-
-        //Show hand
-        public void showHand(SocketCommandContext Context) {
-            var r = racers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);
-            if(r == null) {
-                helpers.output(Context.Channel,"No racer found for you, " + Context.User.Mention + ", in this game");
-            } else {
-                Context.User.SendMessageAsync(r.currentStatus()).GetAwaiter().GetResult();
-            }
         }
 
         //Increment Turn
@@ -309,15 +350,6 @@ namespace trillbot.Classes {
             helpers.output(Context.Channel, crash);
         }
 
-        //One Player Still Alive?
-        private bool oneAlive() {
-            foreach (racer r in racers) {
-                if(r.stillIn) return true;
-                if(!r.stillIn && r.ability.ID == 8) return true;
-            }
-            return false;
-        }
-
         //Passive Movement
         private void endOfTurn(SocketCommandContext Context) {
             foreach (racer r in racers ) {
@@ -380,37 +412,6 @@ namespace trillbot.Classes {
             racers = temp;
         }
 
-        //Make New Deck of Shuffled Cards
-        private static Stack<Card> generateDeck() {
-            return shuffleDeck(freshDeck());
-        }
-
-        //Make a fresh deck of cards
-        private static List<Card> freshDeck() {
-            List<Card> c = new List<Card>();
-            List<Card> temp = trillbot.Classes.Card.get_card().Where(e=>e.ID < 18).ToList();
-
-            foreach (Card c1 in temp) {
-                for(int i = 0; i < c1.count; i++) {
-                    c.Add(c1);
-                }
-            }
-
-            return c;
-        }
-
-        //Shuffle a deck of cards
-        private static Stack<Card> shuffleDeck(List<Card> c) {
-            Stack<Card> s = new Stack<Card>();
-
-            while (c.Count > 0) {
-                int num = trillbot.Program.rand.Next(0,c.Count);
-                s.Push(c[num]);
-                c.RemoveAt(num);
-            }
-
-            return s;
-        }
         public void exitGame(SocketCommandContext Context) {
             if(runningGame) {
                 helpers.output(Context.Channel,"You can't exit the game while it is running. Use `ta!leave`");
