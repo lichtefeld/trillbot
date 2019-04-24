@@ -32,7 +32,7 @@ namespace trillbot.Classes
             foreach (var property in properties)
             {                
                 embed.WithTitle(helpers.GetPropValue(obj,title_property_name).ToString());
-                embed.AddInlineField(property,helpers.GetPropValue(obj,property));
+                embed.AddField(property,helpers.GetPropValue(obj,property),true);
             }
 
             return embed.Build();
@@ -131,14 +131,6 @@ namespace trillbot.Classes
             }
         }
 
-        public static List<string> formatBets(Character character, IGuild Guild) {
-            var output = new List<string>();
-            output.Add("**" +character.name + " Bets**");
-            foreach (trillbot.Classes.Bet bet in character.bets) {
-                output.Add(bet.display(Guild));
-            }
-            return output;
-        }
     }
 
 }

@@ -103,7 +103,7 @@ namespace trillbot.Commands
                 prix.Value.doReset(Context);
                 trillbot.Program.games.Remove(Context.Channel.Id);
                 if(Program.games.Count == 0) {
-                    await Context.Client.SetGameAsync(null, null, StreamType.NotStreaming);
+                    await Context.Client.SetGameAsync("The Trilliant Grand Prix", null, Discord.ActivityType.Playing);
                 }
             }
         }

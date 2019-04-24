@@ -90,11 +90,6 @@ namespace trillbot.Commands
             if (name == null) {
                 name = usr.Nickname != null ? usr.Nickname : usr.Username;
             }
-            /* if(usr.Roles.FirstOrDefault(e=>e.Name == "Racer") == null) 
-            { 
-                await ReplyAsync(name + ", Please contact a moderator if you should be a racer");
-                return;
-            } */
             if(ID == -1) {
                 r = new racer
                 {
@@ -131,13 +126,6 @@ namespace trillbot.Commands
             var embed = new EmbedBuilder();
 
             embed.Title = "Grand Prix Racer: " + r.name;
-            if (r.ID <= 25 && r.ID != 0) {
-                embed.WithThumbnailUrl(racer_to_Image[r.ID]);
-                embed.WithDescription(racer_to_Description[r.ID]);
-                embed.AddField("Payout on Win",Bet.emote_to_ID.FirstOrDefault(e=>e.Item2 == r.ID).Item3.ToString(),true);
-                //embed.AddField("Payout on Death",Bet.emote_to_ID.FirstOrDefault(e=>e.Item2 == r.ID).Item4.ToString(),true);
-                embed.AddField("Emote",Bet.emote_to_ID.FirstOrDefault(e=>e.Item2 == r.ID).Item1,true);
-            }
             embed.AddField("Sponsor",r.faction, true);
             embed.AddField("Ability: " + r.ability.Title, r.ability.Description, true);
             embed.AddField("ID",r.ID.ToString(),true);
@@ -147,8 +135,7 @@ namespace trillbot.Commands
                 var usr = Context.Guild.GetUser(r.player_discord_id);
                 embed.AddField("Player",usr.Mention,true);
             }
-            embed.Build();
-            await Context.Channel.SendMessageAsync("", false, embed, null);
+            await Context.Channel.SendMessageAsync("", false, embed.Build(), null);
         }
 
         [Command("updateability")]

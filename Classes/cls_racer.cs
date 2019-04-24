@@ -127,21 +127,6 @@ namespace trillbot.Classes {
             }
         }
 
-        /* private string center(string s, int i) {
-            bool odd = false;
-            string spaces = "";
-            int toCenter = i - s.Length;
-            if (toCenter % 2 == 1) odd = true;
-            for(int j = 0; j < toCenter/2; j++) {
-                spaces += " ";
-            }
-            if(odd) {
-                return " " + spaces + s + spaces;
-            } else {
-                return spaces + s + spaces;
-            }
-        }*/
-
         public string currentStatus() {
             var str2 = new List<string>();
             str2.Add(this.name + "'s Hand");

@@ -434,7 +434,7 @@ namespace trillbot.Classes {
             leaderCenter();
             runningGame = true;
             Context.Client.SetStatusAsync (UserStatus.Online).GetAwaiter().GetResult();
-            Context.Client.SetGameAsync ("The 86th Trilliant Grand Prix", null, StreamType.NotStreaming).GetAwaiter().GetResult();
+            Context.Client.SetGameAsync ("The 86th Trilliant Grand Prix", null, ActivityType.Playing).GetAwaiter().GetResult();
             displayCurrentBoard(Context);
             inGameAsync(Context);
             nextTurn(Context);
@@ -1064,7 +1064,7 @@ namespace trillbot.Classes {
             });
             Context.Channel.SendMessageAsync("Game Reset").GetAwaiter().GetResult();
             Program.games.Remove(Context.Channel.Id);
-            if(Program.games.Count == 0) Context.Client.SetGameAsync(null, null, StreamType.NotStreaming).GetAwaiter().GetResult();
+            if(Program.games.Count == 0) Context.Client.SetGameAsync(null, null, Discord.ActivityType.Playing).GetAwaiter().GetResult();
         }
 
         //Ping the current players turn
