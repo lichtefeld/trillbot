@@ -51,19 +51,26 @@ namespace trillbot.Classes
             }
         }
 
-        public static void output(ISocketMessageChannel channel, List<string> str) {
+        /** @fn          output
+          * @brief       This function handles outputting a list of strings seperated by a seperator character. The resulting strings are sent to the provided Discord Channel
+          * @param[in] 1 ISocketMessageChannel. A discord channel to send the messages back out to. 
+          * @param[in] 2 List<string>. A list of strings to be appended together for output.
+          * @param[in] 3 string. The string to be appended onto the list of strings to combine them. Default: NewLine character.
+          * @note        This function is syncronous in operation
+          */
+        public static void output(ISocketMessageChannel channel, List<string> str, string seperator = "\n") {
             int count = 0;
             string output_string = "";
             if (str.Count == 0) return; 
             foreach(string s in str) {
-                count += s.Length + 1;
+                count += s.Length + seperator.Length;
                 if (count >= 2000) {
                     channel.SendMessageAsync(output_string);
                     Thread.Sleep (100);
-                    count = s.Length;
-                    output_string = s + System.Environment.NewLine;
+                    count = s.Length + seperator.Length;
+                    output_string = s + seperator;
                 } else {
-                    output_string += s + System.Environment.NewLine;
+                    output_string += s + seperator;
                 }
             }
             channel.SendMessageAsync(output_string).GetAwaiter().GetResult();

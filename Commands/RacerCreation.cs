@@ -51,6 +51,7 @@ namespace trillbot.Commands
                 };
             }
             r.player_discord_id = Context.Message.Author.Id;
+            r.server_discord_id = Context.Guild.Id;
             allRacers.Add(r);
             racer.insert_racer(r);
 

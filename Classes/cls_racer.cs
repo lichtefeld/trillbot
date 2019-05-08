@@ -20,6 +20,7 @@ namespace trillbot.Classes {
     public class racer {
         public int ID { get; set; }
         public ulong player_discord_id { get; set; }
+        public ulong server_discord_id { get ; set; }
         public string name { get; set; }
         public string faction { get; set; }
         public List<Classes.Card> cards { get; set; } = new List<Classes.Card>();
@@ -203,11 +204,11 @@ namespace trillbot.Classes {
             return rtner;
         }
 
-        public static racer get_racer (ulong player_id) {
+        public static racer get_racer (ulong player_id, ulong server_id) {
             var store = new DataStore ("racer.json");
 
             // Get employee collection
-            var rtner = store.GetCollection<racer> ().AsQueryable ().FirstOrDefault (e => e.player_discord_id == player_id);
+            var rtner = store.GetCollection<racer> ().AsQueryable ().FirstOrDefault (e => e.player_discord_id == player_id && e.server_discord_id == server_id);
             store.Dispose();
 
             // Get employee collection
