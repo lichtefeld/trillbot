@@ -417,7 +417,7 @@ namespace trillbot.Classes {
                 helpers.output(Context.Channel,"You can't exit the game while it is running. Use `ta!leave`");
                 return;
             }
-            racer racer = trillbot.Commands.RacerCreation.allRacers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);//racer.get_racer(Context.Message.Author.Id);
+            racer racer = racer.get_racer(Context.Message.Author.Id, Context.Guild.Id);
             if(racer == null) {
                 helpers.output(Context.Channel,"You aren't in this game. You can't exit it!");
                 return;
@@ -476,7 +476,7 @@ namespace trillbot.Classes {
 
         //Join Game
         public void joinGame(SocketCommandContext Context) {
-            racer racer = trillbot.Commands.RacerCreation.allRacers.FirstOrDefault(e=> e.player_discord_id == Context.Message.Author.Id);//racer.get_racer(Context.Message.Author.Id);
+            racer racer = racer.get_racer(Context.Message.Author.Id, Context.Guild.Id);
             if (runningGame) {
                 helpers.output(Context.Channel,"The game has already started");
                 return;
@@ -1061,7 +1061,8 @@ namespace trillbot.Classes {
         //Mannually Reset a Game
         public void doReset(SocketCommandContext Context) {
             racers.ForEach(e=> {
-                trillbot.Commands.RacerCreation.allRacers.FirstOrDefault(k=>k.ID == e.ID).reset();
+                e.reset();
+                racer.update_racer(e);
             });
             Context.Channel.SendMessageAsync("Game Reset").GetAwaiter().GetResult();
             Program.games.Remove(Context.Channel.Id);
