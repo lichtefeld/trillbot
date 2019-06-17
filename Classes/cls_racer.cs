@@ -23,8 +23,10 @@ namespace trillbot.Classes {
         public ulong server_discord_id { get ; set; }
         public string name { get; set; }
         public string faction { get; set; }
-        public List<Classes.Card> cards { get; set; } = new List<Classes.Card>();
+        public string descr { get; set; }
+        public string img { get; set; }
         //Variables Used for Game Mechanics:
+        public List<Classes.Card> cards { get; set; } = new List<Classes.Card>();
         public long distance { get; set;} 
         public List<pair> hazards { get; set; } = new List<pair>();
         public bool inGame { get; set; } = false;
@@ -87,10 +89,11 @@ namespace trillbot.Classes {
             return this.name + " (" + this.ID + ")";
         }
 
-        public string leader(int[] lengths) {
+        public string leader(int[] lengths, bool odd) {
             var str = new List<string>();
             if(lengths == null) {
-                str.Add(this.twoDigitDistance());
+                if (odd) str.Add("# " + this.twoDigitDistance());
+                else str.Add("> " + this.twoDigitDistance());
                 str.Add(this.nameID());
                 if(this.stillIn) {
                     str.Add("Alive");
@@ -103,7 +106,8 @@ namespace trillbot.Classes {
                     str.Add(p.item1.title + " (" + (p.item2+1) + ")");
                 }
             } else {
-                str.Add("      " + this.twoDigitDistance());
+                if (odd) str.Add("#     " + this.twoDigitDistance());
+                else str.Add(">     " + this.twoDigitDistance());
                 str.Add(helpers.center(this.nameID(),lengths[0]));
                 if(this.stillIn) {
                     str.Add(helpers.center("Alive",lengths[1]));

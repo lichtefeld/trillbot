@@ -4,73 +4,85 @@
       "id": 0,
       "title": "Jump Start",
       "description": "You start the race 2 spaces ahead of the starting line.",
-      "active": false
+      "active": false,
+      "enable": true
     },
     {
       "id": 1,
       "title": "Wealthy Sponsor",
       "description": "You start the race with 4 guaranteed cards.",
-      "active": false
+      "active": false,
+      "enable": true
     },
     {
       "id": 2,
       "title": "Frontal Force Field",
       "description": "You are immune to the Debris Hazard.",
-      "active": false
+      "active": false,
+      "enable": true
     },
     {
       "id": 3,
       "title": "Expert Racer",
       "description": "You are immune to the Ramming Hazard.",
-      "active": false
+      "active": false,
+      "enable": true
     },
     {
       "id": 4,
       "title": "Nanite Repair Drones",
       "description": "You are immune to the Mech Failure Hazard.",
-      "active": false
+      "active": false,
+      "enable": true
     },
     {
       "id": 5,
       "title": "Immaculate Engine",
       "description": "You are immune  to the Sabotage Hazard.",
-      "active": false
+      "active": false,
+      "enable": true
     },
     {
       "id": 6,
       "title": "Heart of Gold",
       "description": "You are immune to the Heart Attack Hazard.",
-      "active": false
+      "active": false,
+      "enable": true
     },
     {
       "id": 7,
       "title": "Gambler’s Fallacy",
       "description": "Roll a d2 every turn, on a 2 your passive movement is 3, and on a 1 your passive movement is 0. While affected by a Hazard your passive movement is always 1.",
-      "active": false
+      "active": false,
+      "enable": true
     },
     {
       "id": 8,
       "title": "Marionette Circuit",
       "description": "You can win the race even if you die.",
-      "active": false
+      "active": false,
+      "enable": true
     },
     {
       "id": 9,
       "title": "Daredevil",
       "description": "On the first turn you are affected by the Debris Hazard, your passive movement is 3.",
-      "active": false
+      "active": false,
+      "enable": true
     },
     {
       "id": 10,
       "title": "Energy Siphon",
       "description": "On the first turn you are affected by the Ramming Hazard, your passive movement is 3.",
-      "active": false
+      "active": false,
+      "enable": true
     },
     {
       "id": 11,
       "title": "Living on the Edge",
       "description": "On the first turn you are affected by the Sabotage Hazard, your passive movement is 3.",
-      "active": false
+      "active": false,
+      "enable": true
     },
     {
       "id": 12,
@@ -82,73 +94,85 @@
       "id": 13,
       "title": "Trillwax",
       "description": "You are immune to the Dazzle Hazard. If you are targeted by the Dazzle Hazard, the racer who played the card is affected by the Dazzle Hazard instead.",
-      "active": false
+      "active": false,
+      "enable": true
     },
     {
       "id": 14,
       "title": "Burnout Booster",
       "description": "Play two movement cards this turn and reduce your maximum hand size to 7 cards.",
-      "active": true
+      "active": true,
+      "enable": true
     },
     {
       "id": 15,
       "title": "Scrambler",
       "description": "Target another racer, they discard and redraw 4 random cards.",
-      "active": true
+      "active": true,
+      "enable": true
     },
     {
       "id": 16,
       "title": "Tactical Hacking",
       "description": "Target another racer and pick 4 of your cards, trade those cards for 4 random cards in that racer's hand.",
-      "active": true
+      "active": true,
+      "enable": true
     },
     {
       "id": 17,
       "title": "Psionic Probe",
       "description": "At the start of every turn you see the the hand of the lead (living) racer. If you are in the lead, you instead see the hand of the (living) racer in second place.",
-      "active": false
+      "active": false,
+      "enable": true
     },
     {
       "id": 18,
       "title": "Space Drafting",
       "description": "Move forward until you are on the same space as the closest racer ahead of you.",
-      "active": true
+      "active": true,
+      "enable": true
     },
     {
       "id": 19,
       "title": "Precision Laser",
       "description": "Target another racer and apply the **Pierced Engine** Hazard to them. Pierced engine can be removed with Tech Savvy. If Pierced engine is applied for 2 full turns, they will explode.",
-      "active": true
+      "active": true,
+      "enable": true
     },
     {
       "id": 20,
       "title": "Lucky Break",
       "description": "Remove any hazard.",
-      "active": true
+      "active": true,
+      "enable": true
     },
     {
       "id": 21,
       "title": "Experimental Grav-Sling ",
       "description": "Attempt to switch position with the closest racer ahead of you. Roll a d10, if the result is less than 4, you explode.",
-      "active": true
+      "active": true,
+      "enable": true
     },
     {
       "id": 22,
       "title": "Recalibration",
       "description": "Discard and redraw your whole hand.",
-      "active": true
+      "active": true,
+      "enable": true
     },
     {
       "id": 23,
       "title": "Seasoned Trickster",
       "description": "Target 2 other racers, apply random Hazards to both of them.",
-      "active": true
+      "active": true,
+      "enable": true
     },
     {
       "id": 24,
       "title": "Core Synchronization",
       "description": "Target another racer, if one of you dies the other also dies.",
-      "active": true
+      "active": true,
+      "enable": true
     }
   ]
 }

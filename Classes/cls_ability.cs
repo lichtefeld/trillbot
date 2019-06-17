@@ -29,6 +29,8 @@ namespace trillbot.Classes
         public string Description { get; set; }
         [JsonProperty("active")]
         public bool Active { get; set; }
+        [JsonProperty("enable")]
+        public bool enable { get; set; } = false;
     }
 
     public partial class Ability

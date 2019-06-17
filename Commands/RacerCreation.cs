@@ -21,8 +21,6 @@ namespace trillbot.Commands
     public class RacerCreation : ModuleBase<SocketCommandContext>
     {
 
-        //public static List<racer> allRacers = new List<racer>();
-
         [Command("createracer")]
         public async Task NewracerAsync(string name = null, string faction = "The Trilliant Ring", int ID = -1)
         {
@@ -60,6 +58,30 @@ namespace trillbot.Commands
             await ReplyAsync(name + ", You've got a racer!");
         }
 
+        [Command("setdesc")]
+        public async Task addDescAsync(string desc) {
+            racer r = racer.get_racer(Context.Message.Author.Id, Context.Guild.Id);
+            if ( r == null ) {
+                await ReplyAsync(Context.User.Mention + ", you don't have a current racer or this racer doesn't exist in the database.");
+                return;
+            }
+            r.descr = desc;
+            await ReplyAsync(Context.User.Mention + ", you have added a description to your racer.");
+            racer.update_racer(r);
+        }
+
+        [Command("setImg")]
+        public async Task addImgAsync(string img) {
+            racer r = racer.get_racer(Context.Message.Author.Id, Context.Guild.Id);
+            if ( r == null ) {
+                await ReplyAsync(Context.User.Mention + ", you don't have a current racer or this racer doesn't exist in the database.");
+                return;
+            }
+            r.img = img;
+            await ReplyAsync(Context.User.Mention + ", you have added an image to your racer.");
+            racer.update_racer(r);
+        }
+
         [Command("showracer")]
         public async Task showRacerAsync(int i = -1) {
             racer r = new racer();
@@ -74,6 +96,8 @@ namespace trillbot.Commands
             var embed = new EmbedBuilder();
 
             embed.Title = "Grand Prix Racer: " + r.name;
+            embed.WithDescription(r.descr);
+            embed.WithThumbnailUrl(r.img);
             embed.AddField("Sponsor",r.faction, true);
             embed.AddField("Ability: " + r.ability.Title, r.ability.Description, true);
             embed.AddField("ID",r.ID.ToString(),true);
@@ -88,7 +112,7 @@ namespace trillbot.Commands
 
         [Command("updateability")]
         public async Task UpdateAbilityAsync(int ID) {
-            var r = racer.get_racer(Context.Message.Author.Id, Context.Guild.Id);//racer.get_racer(Context.Message.Author.Id);
+            var r = racer.get_racer(Context.Message.Author.Id, Context.Guild.Id);
 
             if(r == null) {
                 await ReplyAsync("No racer found for you");
@@ -158,7 +182,7 @@ namespace trillbot.Commands
         [Command("deleteracer")]
         public async Task DeleteRacerAsync()
         {
-            var r = racer.get_racer(Context.Message.Author.Id, Context.Guild.Id);//racer.get_racer(Context.Message.Author.Id);
+            var r = racer.get_racer(Context.Message.Author.Id, Context.Guild.Id);
 
             if(r == null) {
                 await ReplyAsync("No racer found for you");
@@ -197,7 +221,7 @@ namespace trillbot.Commands
         public async Task ListRacersAsync() //Need to make this DM & account for more than 2k characters. Using a list to build output strings.
         {
             var s = new List<string>();
-            s.Add("Racers for the Grand Prix!");
+            s.Add("Racers!");
             s.Add("```" );
             var rcrs = racer.get_racer();
             foreach(Classes.racer r in rcrs) {

@@ -57,6 +57,7 @@ namespace trillbot.Classes
           * @param[in] 2 List<string>. A list of strings to be appended together for output.
           * @param[in] 3 string. The string to be appended onto the list of strings to combine them. Default: NewLine character.
           * @note        This function is syncronous in operation
+          * @todo        FIX ALL THESE FUNCTIONS TO CONFORM WITH DISCORD POST SETTINGS. THESE FUNCTIONS SHOULD SELF-CORRECT ANY NON-CONFORMING POSTS!!!
           */
         public static void output(ISocketMessageChannel channel, List<string> str, string seperator = "\n") {
             int count = 0;
