@@ -1,0 +1,74 @@
+{
+  "textVersion": [
+    {
+      "ID": 0,
+      "name": "Trilliant Grand Prix",
+      "description": "Default Flavoring of the mechanical game.",
+      "output": {
+        "coreSyncFail": [
+          "'s core fails in tangent with ",
+          " as their racer goes up in smoke!"
+        ],
+        "conditionDeath": [
+          " succumbs to ",
+          " and their vehicle explodes! 💥"
+        ],
+        "abilitySave": [
+          " uses their ",
+          " to solve ",
+          "."
+        ],
+        "escapePod": [
+          "An escape pod launches from ",
+          "'s lightrunner, giving them another chance to struggle along!"
+        ],
+        "crash": [
+          "'s crash card triggers. ",
+          " crash out of the race."
+        ],
+        "escapePodEscape": [
+          "'s escape pod gets out of the way of all the hazards!"
+        ],
+        "peek" : [
+          "You use ",
+          " to see:\n"
+        ],
+        "causeCrash": [
+          " will cause a crash on space ",
+          " at the start of their next turn!\n"
+        ],
+        "passiveTwo": [
+          "'s ",
+          " activates causing them to passively move an extra two spaces!"
+        ],
+        "luckPassive": [
+          " test's their luck and rolls a ",
+          "."
+        ],
+        "fourUnitStart": [
+          " takes a ",
+          " and starts 4 distance units ahead!"
+        ],
+        "gameOver": [
+          "All racers are dead. This ends the game."
+        ],
+        "coreSync": [
+          " synchronized their core with ",
+          ". If either of them die, the other will explode!"
+        ],
+        "switchPositionFail": [
+          " actives their Grav-Sling and it explodes! Roll: ",
+          "."
+        ],
+        "stun": [
+          " dazzles "
+        ],
+        "stunCounter": [
+          " uses ",
+          " back at ",
+          " causes them to get hit by Dazzle instead!"
+        ]
+      }
+    }
+  ]
+}

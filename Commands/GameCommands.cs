@@ -1,33 +1,23 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
-using Newtonsoft.Json;
 using trillbot.Classes;
-using trillbot;
 
 namespace trillbot.Commands
 {
     public class GameCommands : ModuleBase<SocketCommandContext>
     {
         [Command("initialize")]
-        public async Task initAsync() {
+        public async Task initAsync(int version) {
             var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
             if (prix.Value != null) {
                 await Context.Channel.SendMessageAsync("Woah there, a game is already initialized in this channel. Try using `ta!reset` to reset this channel");
                 return;
             }
-            var game = new GrandPrix {
-                channelName = Context.Channel.Name
-            };
+            var game = new GrandPrix(Context.Channel.Name,version);
             Program.games.Add(Context.Channel.Id, game);
             await Context.Channel.SendMessageAsync("Game started and bound to this channel use `ta!joingame` in this channel to join.");
         }
