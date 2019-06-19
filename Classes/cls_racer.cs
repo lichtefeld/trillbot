@@ -38,29 +38,17 @@ namespace trillbot.Classes {
         }
         public bool canMove() {
             var h = hazards.FirstOrDefault(e=> e.item1.ID == 5 || e.item1.ID == 8 || e.item1.ID == 6 || e.item1.ID == 16);
-            if ( h == null) {
-                return true;
-            } else {
-                return false;
-            }
+            return h == null;
         }
 
         public bool maxMove2() {
             var h = hazards.FirstOrDefault(e=> e.item1.ID == 11);
-            if( h == null) {
-                return false;
-            } else {
-                return true;
-            }
+            return h == null;
         }
 
         public bool sab() {
             var h = hazards.FirstOrDefault(e=> e.item1.ID == 9);
-            if( h == null) {
-                return false;
-            } else {
-                return true;
-            }
+            return h == null;
         }
 
         public void reset() {

@@ -23,11 +23,11 @@ namespace trillbot.Classes
       string rtn = "";
       for(int i = 0; i < inputs.Count || i < output[org].Count; i++) {
         if (inFirst) {
-          if (inputs.Count < i) rtn += inputs[i];
-          if (output[org].Count < i ) rtn += output[org][i];
+          if (inputs.Count > i) rtn += inputs[i];
+          if (output[org].Count > i ) rtn += output[org][i];
         } else {
-          if (output[org].Count < i ) rtn += output[org][i];
-          if (inputs.Count < i) rtn += inputs[i];
+          if (output[org].Count > i ) rtn += output[org][i];
+          if (inputs.Count > i) rtn += inputs[i];
         }
       }
       return rtn;
