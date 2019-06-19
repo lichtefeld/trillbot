@@ -11,7 +11,7 @@ namespace trillbot.Commands
     {
 
         [Command("createracer")]
-        public async Task NewracerAsync(string name = null, string faction = "The Trilliant Ring", int ID = -1)
+        public async Task NewracerAsync(string name = null, string faction = "The Trilliant Ring", int ID = -1, int v = 0)
         {
             var r = racer.get_racer(Context.Message.Author.Id, Context.Guild.Id);
             if(r != null) {
@@ -22,8 +22,9 @@ namespace trillbot.Commands
             if (name == null) {
                 name = usr.Nickname != null ? usr.Nickname : usr.Username;
             }
+            var vT = textVersion.get_textVersion(v);
             if(ID == -1) {
-                var a = Ability.get_ability(Program.rand.Next(25));
+                var a = Ability.get_ability(vT.abilityStore,Program.rand.Next(25));
                 r = new racer
                 {
                     name = name,
@@ -31,7 +32,7 @@ namespace trillbot.Commands
                     ability = a
                 };
             } else {
-                var a = Ability.get_ability(--ID);
+                var a = Ability.get_ability(vT.abilityStore,--ID);
                 r = new racer
                 {
                     name = name,
@@ -100,7 +101,7 @@ namespace trillbot.Commands
         }
 
         [Command("updateability")]
-        public async Task UpdateAbilityAsync(int ID) {
+        public async Task UpdateAbilityAsync(int ID, int v = 0) {
             var r = racer.get_racer(Context.Message.Author.Id, Context.Guild.Id);
 
             if(r == null) {
@@ -110,7 +111,8 @@ namespace trillbot.Commands
                     await ReplyAsync("You can't modify your racer while racing!");
                     return;
                 }
-                var a = Ability.get_ability(--ID);
+                var vT = textVersion.get_textVersion(v);
+                var a = Ability.get_ability(vT.abilityStore,--ID);
                 if(a == null) {
                     await ReplyAsync(Context.User.Mention + ", you didn't give a valid ID.");
                     return;
@@ -123,8 +125,9 @@ namespace trillbot.Commands
         }
 
         [Command("showabilities")]
-        public async Task DisplayAbilitiesAsync() {
-            var abilities = Ability.get_ability();
+        public async Task DisplayAbilitiesAsync(int v = 0) {
+            var vT = textVersion.get_textVersion(v);
+            var abilities = Ability.get_ability(vT.abilityStore);
             var str = new List<string>();
             var count = 21;
             str.Add("**Special Abilities**");
@@ -148,24 +151,15 @@ namespace trillbot.Commands
         }
 
         [Command("showcards")]
-        public async Task showCardsAsync() {
-            var cards = Card.get_card();
+        public async Task showCardsAsync(int v = 0) {
+            var vT = textVersion.get_textVersion(v);
+            var cards = Card.get_card(vT.cardStore);
             var str = new List<string>();
-            var count = 13;
             str.Add("**Card List**");
             for(int i = 0; i < cards.Count; i++) {
-                var s = "**" + cards[i].title + "** - " + cards[i].description;
-                count += s.Length;
-                if (count > 2000) {
-                    var temp_output_string = String.Join(System.Environment.NewLine,str);
-                    await Context.User.SendMessageAsync(temp_output_string);
-                    count = s.Length;
-                    str = new List<string>();
-                }
-                str.Add(s);
+                str.Add("**" + cards[i].title + "** - " + cards[i].description);
             }
-            var output_string = String.Join(System.Environment.NewLine,str);
-            await Context.User.SendMessageAsync(output_string);
+            helpers.output(Context.User,str);
         }
 
         [Command("deleteracer")]

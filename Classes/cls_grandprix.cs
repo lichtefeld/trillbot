@@ -92,14 +92,14 @@ namespace trillbot.Classes {
         }
 
         //Make New Deck of Shuffled Cards
-        private static Stack<Card> generateDeck() {
-            return shuffleDeck(freshDeck());
+        private Stack<Card> generateDeck() {
+            return shuffleDeck(freshDeck(tV.cardStore));
         }
 
         //Make a fresh deck of cards
-        private static List<Card> freshDeck() {
+        private static List<Card> freshDeck(string cardStore) {
             List<Card> c = new List<Card>();
-            List<Card> temp = trillbot.Classes.Card.get_card();
+            List<Card> temp = trillbot.Classes.Card.get_card(cardStore);
 
             foreach (Card c1 in temp) {
                 for(int i = 0; i < c1.count; i++) {
@@ -130,7 +130,7 @@ namespace trillbot.Classes {
             foreach(racer r in racers) {
                 if(r.ability.ID == 1) {
                     for(int i = 0; i < wealthyIDs.Length; i++) {
-                        r.cards.Add(Card.get_card(wealthyIDs[i]));
+                        r.cards.Add(Card.get_card(tV.cardStore,wealthyIDs[i]));
                     }
                     for(int i = r.cards.Count; i < 8; i++) {
                         if(cards.Count == 0) { cards = generateDeck(); }
@@ -393,9 +393,11 @@ namespace trillbot.Classes {
         //Shuffle Racers
         private void shuffleRacers(SocketCommandContext Context) {
             List<racer> temp = new List<racer>();
+            var abilities = Ability.get_ability(tV.abilityStore);
 
             while (racers.Count > 0) {
                 int num = trillbot.Program.rand.Next(0,racers.Count);
+                racers[num].ability = abilities.First(e => e.ID == racers[num].ability.ID );
                 if(racers[num].ability.ID == 0) {
                     racers[num].distance=4;
                     //helpers.output(Context.Channel,racers[num].name + " takes a " + racers[num].ability.Title + " and starts 4 distance units ahead!");
@@ -549,10 +551,10 @@ namespace trillbot.Classes {
                         helpers.output(Context.Channel,"You can't target yourself");
                         return;
                     }
-                    var c1 = Card.get_card(Program.rand.Next(7)+5);
-                    while (c1.ID == 7) c1 = Card.get_card(Program.rand.Next(7)+5);
-                    var c2 = Card.get_card(Program.rand.Next(7)+5);
-                    while (c2.ID == 7) c2 = Card.get_card(Program.rand.Next(7)+5);
+                    var c1 = Card.get_card(tV.cardStore,Program.rand.Next(7)+5);
+                    while (c1.ID == 7) c1 = Card.get_card(tV.cardStore,Program.rand.Next(7)+5);
+                    var c2 = Card.get_card(tV.cardStore,Program.rand.Next(7)+5);
+                    while (c2.ID == 7) c2 = Card.get_card(tV.cardStore,Program.rand.Next(7)+5);
                     t1.addHazard(c1);
                     t2.addHazard(c2);
                     r.abilityRemaining = false;
@@ -613,7 +615,7 @@ namespace trillbot.Classes {
                         helpers.output(Context.Channel,"You didn't target a valid racer");
                         return;
                     }
-                    c = Card.get_card(17);
+                    c = Card.get_card(tV.cardStore,17);
                     t.addHazard(c);
                     r.abilityRemaining = false;
                     helpers.output(Context.Channel,r.name + " used " + r.ability.Title + " and applied a " + c.title + " hazard to " + t.name);
@@ -815,7 +817,7 @@ namespace trillbot.Classes {
                                 return;
                             }
                             else if (racerID == 1) {
-                                c = Card.get_card(12);
+                                c = Card.get_card(tV.cardStore,12);
                                 var h2 = r.hazards.Where(e=> e.item1.ID == remedy_to_hazards[(int)c.value].Item1 || e.item1.ID == remedy_to_hazards[(int)c.value].Item2 ).ToList();
                                 if (h2 == null) {
                                     helpers.output(Context.Channel,"You can't play this card. Try another.");
@@ -950,7 +952,7 @@ namespace trillbot.Classes {
                                         //extra += ". " + listRacer2[j].name + " uses " + listRacer2[j].ability.Title + " back at " + r.name + " causes them to get hit by Dazzle instead!";
                                         extra += "." + tV.stunCounter(listRacer2[j].name,listRacer2[j].ability.Title,r.name);
                                         r.addHazard(c, -1);
-                                        //listRacer2[j].hazards.RemoveAt(listRacer2.Count-1); //Remove Dazzle
+                                        listRacer2[j].hazards.RemoveAt(listRacer2.Count-1); //Remove Dazzle
                                     }
                                 }
                             }

@@ -20,7 +20,7 @@ namespace trillbot.Classes {
         public bool inGame { get; set; } = false;
         public bool stillIn { get; set; } = true;
         public bool crash { get; set; } = false;
-        public Ability ability = Ability.get_ability(1);
+        public Ability ability = Ability.get_ability("ability.json",1);
         public bool abilityRemaining = true;
         public racer coreSync = null;
 
@@ -94,8 +94,8 @@ namespace trillbot.Classes {
                     str.Add(p.item1.title + " (" + (p.item2+1) + ")");
                 }
             } else {
-                if (odd) str.Add("#     " + this.twoDigitDistance());
-                else str.Add(">     " + this.twoDigitDistance());
+                if (odd) str.Add("#       " + this.twoDigitDistance());
+                else str.Add(">       " + this.twoDigitDistance());
                 str.Add(helpers.center(this.nameID(),lengths[0]));
                 if(this.stillIn) {
                     str.Add(helpers.center("Alive",lengths[1]));

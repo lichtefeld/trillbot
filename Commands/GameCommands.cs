@@ -11,7 +11,7 @@ namespace trillbot.Commands
     public class GameCommands : ModuleBase<SocketCommandContext>
     {
         [Command("initialize")]
-        public async Task initAsync(int version) {
+        public async Task initAsync(int version = 0) {
             var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
             if (prix.Value != null) {
                 await Context.Channel.SendMessageAsync("Woah there, a game is already initialized in this channel. Try using `ta!reset` to reset this channel");

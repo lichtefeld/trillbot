@@ -9,14 +9,16 @@ namespace trillbot.Classes
     [JsonProperty ("ID")]
     public int ID { get; set; }
     [JsonProperty("name")]
-    public string name { get; set; }
+    public string name { get; set; } = "Trilliant Grand Prix";
     [JsonProperty("description")]
-    public string desc { get; set; }
+    public string desc { get; set; } = "Default Flavoring of the mechanical game.";
     [JsonProperty("output")]
     private Dictionary<string, List<string>> output { get; set; } = new Dictionary<string, List<string>>();
-    /*
-      "coreSyncFail"    
-     */
+    [JsonProperty("cardStore")]
+    public string cardStore { get; set; } = "card.json";
+    [JsonProperty("abilityStore")]
+    public string abilityStore { get; set; } = "ability.json";
+    private static List<string> verify = new List<string>{"coreSyncFail","conditionDeath","abilitySave","escapePod","crash","escapePodEscape","peek","causeCrash","passiveTwo","luckPassive","fourUnitStart","gameOver","coreSync","switchPositionFail","stun","stunCounter"};
     private string reply(List<string> inputs, string org, bool inFirst) {
       string rtn = "";
       for(int i = 0; i < inputs.Count || i < output[org].Count; i++) {

@@ -24,8 +24,8 @@ namespace trillbot.Classes
     public partial class Ability
     {
         public static Ability[] FromJson(string json) => JsonConvert.DeserializeObject<Ability[]>(json, Converter.Settings);
-        public static List<Ability> get_ability () {
-            var store = new DataStore ("ability.json");
+        public static List<Ability> get_ability (string location) {
+            var store = new DataStore (location);
 
             var rtrnr = store.GetCollection<Ability> ().AsQueryable ().ToList();
             store.Dispose();
@@ -34,8 +34,8 @@ namespace trillbot.Classes
             return rtrnr;
         }
 
-        public static Ability get_ability (int id) {
-            var store = new DataStore ("ability.json");
+        public static Ability get_ability (string location, int id) {
+            var store = new DataStore (location);
 
             // Get employee collection
             var rtrnr = store.GetCollection<Ability> ().AsQueryable ().FirstOrDefault (e => e.ID == id);
@@ -43,8 +43,8 @@ namespace trillbot.Classes
             return rtrnr;
         }
 
-        public static Ability get_ability (string name) {
-            var store = new DataStore ("ability.json");
+        public static Ability get_ability (string location, string name) {
+            var store = new DataStore (location);
 
             // Get employee collection
             var rtrnr = store.GetCollection<Ability> ().AsQueryable ().FirstOrDefault (e => e.Title == name);
@@ -52,8 +52,8 @@ namespace trillbot.Classes
             return rtrnr;
         }
 
-        public static void insert_ability (Ability ability) {
-            var store = new DataStore ("ability.json");
+        public static void insert_ability (string location, Ability ability) {
+            var store = new DataStore (location);
 
             // Get employee collection
             store.GetCollection<Ability> ().InsertOneAsync (ability);
@@ -61,15 +61,15 @@ namespace trillbot.Classes
             store.Dispose();
         }
 
-        public static void replace_ability (Ability ability) {
-            var store = new DataStore ("ability.json");
+        public static void replace_ability (string location, Ability ability) {
+            var store = new DataStore (location);
 
             store.GetCollection<Ability> ().ReplaceOneAsync (e => e.ID == ability.ID, ability);
             store.Dispose();
         }
 
-        public static void delete_card (Ability ability) {
-            var store = new DataStore ("ability.json");
+        public static void delete_card (string location, Ability ability) {
+            var store = new DataStore (location);
 
             store.GetCollection<Card> ().DeleteOne (e => e.ID == ability.ID);
             store.Dispose();
