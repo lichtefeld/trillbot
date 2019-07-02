@@ -53,6 +53,10 @@ namespace trillbot.Classes {
                         case 0:
                         if(r.nameID().Length > lengths[i]) lengths[i] = r.nameID().Length;
                         break;
+                        case 1:
+                        if(tV.leaderBoardAlive(true).Length > tV.leaderBoardAlive(false).Length) lengths[i]  = tV.leaderBoardAlive(true).Length;
+                        else lengths[i]  = tV.leaderBoardAlive(false).Length;
+                        break;
                         case 2:
                         if(r.faction.Length > lengths[i]) lengths[i] = r.faction.Length;
                         break;
@@ -78,7 +82,7 @@ namespace trillbot.Classes {
             if(r == null) {
                 helpers.output(Context.Channel,"No racer found for you, " + Context.User.Mention + ", in this game");
             } else {
-                helpers.output(Context.User,r.currentStatus());
+                helpers.output(Context.User,r.currentStatus(tV));
             }
         }
 
@@ -142,7 +146,7 @@ namespace trillbot.Classes {
                         r.cards.Add(cards.Pop());
                     }
                 }
-                helpers.output(Context.Guild.GetUser(r.player_discord_id),r.currentStatus());
+                helpers.output(Context.Guild.GetUser(r.player_discord_id),r.currentStatus(tV));
             }
         }
 
@@ -153,7 +157,6 @@ namespace trillbot.Classes {
                 endOfRound(Context); //Handle Passive Movement
                 position -= racers.Count;
                 round++;
-                displayCurrentBoard(Context);
             }
         }
 
@@ -294,11 +297,11 @@ namespace trillbot.Classes {
                 var target = ListRacer[0];
                 if (target == racers[position]) target = ListRacer[1];
                 //helpers.output(usr,"You use " + racers[position].ability.Title + " to see:" + System.Environment.NewLine + target.currentStatus());
-                helpers.output(usr,tV.peek(racers[position].ability.Title, target.currentStatus()));
+                helpers.output(usr,tV.peek(racers[position].ability.Title, target.currentStatus(tV)));
             }
 
             //DM Current Hand & Status
-            if (!(position == 0 && round == 1)) helpers.output(usr,racers[position].currentStatus());
+            if (!(position == 0 && round == 1)) helpers.output(usr,racers[position].currentStatus(tV));
 
             //Start Next Turn
             helpers.output(Context.Channel,racers[position].name + " has the next turn.");
@@ -326,7 +329,7 @@ namespace trillbot.Classes {
 
 
             for(int i = 0; i < listRacer.Count; i++) {
-                str.Add(listRacer[i].leader(lengths,(i%2)==1));
+                str.Add(listRacer[i].leader(lengths,(i%2)==1,i==position,tV));
                 if(listRacer[i].crash) {
                     //crash += listRacer[i].name + " will cause a crash on space " + listRacer[i].distance + " at the start of their next turn!" + System.Environment.NewLine;
                     crash += tV.causeCrash(listRacer[i].name,listRacer[i].distance.ToString());
@@ -567,7 +570,7 @@ namespace trillbot.Classes {
                         if(cards.Count == 0) cards = generateDeck();
                         r.cards.Add(cards.Pop());
                     }
-                    helpers.output(Context.User,r.currentStatus());
+                    helpers.output(Context.User,r.currentStatus(tV));
                     r.abilityRemaining = false;
                     helpers.output(Context.Channel,r.name + " used " + r.ability.Title + " and discarded their hand to draw a new one.");
                 break;
@@ -671,8 +674,8 @@ namespace trillbot.Classes {
                         r.cards[j[k]-1] = swap;
                     }
                     r.abilityRemaining = false;
-                    helpers.output(Context.User,r.currentStatus());
-                    helpers.output(Context.Guild.GetUser(t.player_discord_id),t.currentStatus());
+                    helpers.output(Context.User,r.currentStatus(tV));
+                    helpers.output(Context.Guild.GetUser(t.player_discord_id),t.currentStatus(tV));
                     helpers.output(Context.Channel, r.name + " used " + r.ability.Title + " against " + t.name + " to switch hands with them!");
                 break;
                 case 15:
@@ -695,7 +698,7 @@ namespace trillbot.Classes {
                         if(cards.Count == 0) cards = generateDeck();
                         t.cards.Add(cards.Pop());
                         r.abilityRemaining = false;
-                        helpers.output(Context.Guild.GetUser(t.player_discord_id),t.currentStatus());
+                        helpers.output(Context.Guild.GetUser(t.player_discord_id),t.currentStatus(tV));
                         helpers.output(Context.Channel,r.name + " used " + r.ability.Title + " against " + t.name + " causing them to redraw their only card!");
                     } else {
                         var str = new List<string>();
@@ -711,7 +714,7 @@ namespace trillbot.Classes {
                             t.cards.Add(cards.Pop());
                         }
                         r.abilityRemaining = false;
-                        helpers.output(Context.Guild.GetUser(t.player_discord_id),t.currentStatus());
+                        helpers.output(Context.Guild.GetUser(t.player_discord_id),t.currentStatus(tV));
                         helpers.output(Context.Channel,r.name + " used " + r.ability.Title + " against " + t.name + " causing them to redraw four random cards!");
                     }
                 break;
@@ -806,7 +809,7 @@ namespace trillbot.Classes {
                         helpers.output(Context.Channel,"You currently can't move. Try solving a hazard!");
                         return;
                     }
-                    if(c.value > 2 && r.maxMove2() && racerID != 1) {
+                    if(c.value > 2 && !r.maxMove2() && racerID != 1) {
                         helpers.output(Context.Channel,"You currently can't move more than 2 spaces. Try solving a hazard!");
                         return;
                     }
@@ -882,7 +885,7 @@ namespace trillbot.Classes {
                                 helpers.output(Context.Channel,"Sorry, you can't move. Try a different card.");
                                 return;
                             } 
-                            if(r.maxMove2()) {
+                            if(!r.maxMove2()) {
                                 helpers.output(Context.Channel,"Sorry, you can't move this far! Try a different card");
                                 return;
                             }

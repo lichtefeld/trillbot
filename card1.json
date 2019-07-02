@@ -59,7 +59,7 @@
     {
       "id": 7,
       "count": 1,
-      "title": "Thrown Off",
+      "title": "Flailing Flippers",
       "description": "Played on self, move forward 1 space. Anyone in your space at the start of your next turn are thrown off.",
       "type": "Hazard",
       "value": 2

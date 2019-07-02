@@ -65,36 +65,32 @@ namespace trillbot.Classes {
             return this.name + " (" + this.ID + ")";
         }
 
-        public string leader(int[] lengths, bool odd) {
+        public string leader(int[] lengths, bool odd, bool activePlayer, textVersion tV) {
             var str = new List<string>();
             if(lengths == null) {
-                if (odd) str.Add("# " + this.twoDigitDistance());
+                if (activePlayer) str.Add("/* " + this.twoDigitDistance());
+                else if (odd) str.Add("# " + this.twoDigitDistance());
                 else str.Add("> " + this.twoDigitDistance());
                 str.Add(this.nameID());
-                if(this.stillIn) {
-                    str.Add("Alive");
-                } else {
-                    str.Add("Dead");
-                }
+                str.Add(tV.leaderBoardAlive(this.stillIn));
                 str.Add(this.faction);
                 str.Add(this.ability.Title);
                 foreach(pair p in hazards) {
                     str.Add(p.item1.title + " (" + (p.item2+1) + ")");
                 }
+                if (activePlayer) str.Add(" *");
             } else {
+                if (activePlayer) str.Add("/*      " + this.twoDigitDistance());
                 if (odd) str.Add("#       " + this.twoDigitDistance());
                 else str.Add(">       " + this.twoDigitDistance());
                 str.Add(helpers.center(this.nameID(),lengths[0]));
-                if(this.stillIn) {
-                    str.Add(helpers.center("Alive",lengths[1]));
-                } else {
-                    str.Add(helpers.center("Dead",lengths[1]));
-                }
+                str.Add(helpers.center(tV.leaderBoardAlive(this.stillIn),lengths[1]));
                 str.Add(helpers.center(this.faction,lengths[2]));
                 str.Add(helpers.center(this.ability.Title,lengths[3]));
                 foreach (pair p in hazards) {
                     str.Add(p.item1.title + " (" + (p.item2+1) + ")");
                 }
+                if (activePlayer) str.Add(" *");
             }
             var output_string = String.Join(" | ", str);
                 return output_string;
@@ -108,7 +104,7 @@ namespace trillbot.Classes {
             }
         }
 
-        public string currentStatus() {
+        public string currentStatus(textVersion tV) {
             var str2 = new List<string>();
             str2.Add(this.name + "'s Hand");
             str2.Add("-- -- -- -- -- -- -- -- -- --");
@@ -134,22 +130,11 @@ namespace trillbot.Classes {
             if (this.hazards.Count == 0) str2.Add("None");
             var j = 0;
             foreach (pair p in this.hazards) {
-                str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + (p.item2+1) + " turns. " + id_to_condition[p.item1.ID]);
+                str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + (p.item2+1) + " turns. " + tV.id_to_condition[p.item1.ID]);
             }
             str2.Add("-- -- -- -- -- -- -- -- -- --");
             return String.Join(System.Environment.NewLine, str2);
         }
-
-        private Dictionary<int, string> id_to_condition = new Dictionary<int, string> {
-            {5,"You cannot move until you play a Dodge card."},
-            {6, "You cannot move until you play a Dodge card."},
-            {8, "You cannot move until you play a Tech Savvy card."},
-            {9, "Can be removed by a Tech Savvy card. If you end your turn with both Sabotage and another Hazard, you explode."},
-            {10, "Can be removed by a Cyber Healthcare card."},
-            {11, "You cannot play Movement cards higher than 2. Can be removed by a Cyber Healthcare card."},
-            {16, "You can not move this turn. Automatically clears after this turn without a remedy."},
-            {17, "Can be removed by a Tech Savvy Card. You have 2 turns to solve this issue or you die."}
-        };
 
         public static List<racer> get_racer () {
             var store = new DataStore ("racer.json");

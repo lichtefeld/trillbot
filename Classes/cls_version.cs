@@ -18,7 +18,19 @@ namespace trillbot.Classes
     public string cardStore { get; set; } = "card.json";
     [JsonProperty("abilityStore")]
     public string abilityStore { get; set; } = "ability.json";
-    private static List<string> verify = new List<string>{"coreSyncFail","conditionDeath","abilitySave","escapePod","crash","escapePodEscape","peek","causeCrash","passiveTwo","luckPassive","fourUnitStart","gameOver","coreSync","switchPositionFail","stun","stunCounter"};
+    [JsonProperty("id_to_condition")]
+    public Dictionary<int, string> id_to_condition { get; set; } = new Dictionary<int, string> {
+            {5,"You cannot move until you play a Dodge card."},
+            {6, "You cannot move until you play a Dodge card."},
+            {8, "You cannot move until you play a Tech Savvy card."},
+            {9, "Can be removed by a Tech Savvy card. If you end your turn with both Sabotage and another Hazard, you explode."},
+            {10, "Can be removed by a Cyber Healthcare card."},
+            {11, "You cannot play Movement cards higher than 2. Can be removed by a Cyber Healthcare card."},
+            {16, "You can not move this turn. Automatically clears after this turn without a remedy."},
+            {17, "Can be removed by a Tech Savvy Card. You have 2 turns to solve this issue or you die."}
+        };
+    private static List<string> verify = new List<string>{"coreSyncFail","conditionDeath","abilitySave","escapePod","crash","escapePodEscape","peek","causeCrash","passiveTwo","luckPassive","fourUnitStart","gameOver","coreSync","switchPositionFail","stun","stunCounter","alive","dead"};
+    
     private string reply(List<string> inputs, string org, bool inFirst) {
       string rtn = "";
       for(int i = 0; i < inputs.Count || i < output[org].Count; i++) {
@@ -141,6 +153,12 @@ namespace trillbot.Classes
       input.Add(abName);
       input.Add(name2);
       return reply(input,"stunCounter",true);
+    }
+
+    public string leaderBoardAlive(bool alive) {
+      List<string> input = new List<string>();
+      if (alive) return reply(input,"alive",false);
+      else return reply(input,"dead",false);
     }
 
     public static textVersion[] FromJson(string json) => JsonConvert.DeserializeObject<textVersion[]>(json, Converter.Settings);
