@@ -81,7 +81,7 @@ namespace trillbot.Classes {
                 if (activePlayer) str.Add(" *");
             } else {
                 if (activePlayer) str.Add("/*      " + this.twoDigitDistance());
-                if (odd) str.Add("#       " + this.twoDigitDistance());
+                else if (odd) str.Add("#       " + this.twoDigitDistance());
                 else str.Add(">       " + this.twoDigitDistance());
                 str.Add(helpers.center(this.nameID(),lengths[0]));
                 str.Add(helpers.center(tV.leaderBoardAlive(this.stillIn),lengths[1]));
@@ -126,7 +126,7 @@ namespace trillbot.Classes {
             }
             //Hazards
             str2.Add("--");
-            str2.Add("**Current Hazards** - If any Hazard is applied for 3 full turns, you will explode.");
+            str2.Add(tV.statusHazard());
             if (this.hazards.Count == 0) str2.Add("None");
             var j = 0;
             foreach (pair p in this.hazards) {

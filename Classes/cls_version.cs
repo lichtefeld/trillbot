@@ -161,6 +161,11 @@ namespace trillbot.Classes
       else return reply(input,"dead",false);
     }
 
+    public string statusHazard() {
+      List<string> input = new List<string>();
+      return reply(input,"statusHazard",false);
+    }
+
     public static textVersion[] FromJson(string json) => JsonConvert.DeserializeObject<textVersion[]>(json, Converter.Settings);
 
     public override string ToString() {
