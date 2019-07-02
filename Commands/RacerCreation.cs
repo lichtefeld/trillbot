@@ -101,7 +101,7 @@ namespace trillbot.Commands
         }
 
         [Command("updateability")]
-        public async Task UpdateAbilityAsync(int ID, int v = 0) {
+        public async Task UpdateAbilityAsync(int ID, int v = -1) {
             var r = racer.get_racer(Context.Message.Author.Id, Context.Guild.Id);
 
             if(r == null) {
@@ -111,8 +111,15 @@ namespace trillbot.Commands
                     await ReplyAsync("You can't modify your racer while racing!");
                     return;
                 }
-                var vT = textVersion.get_textVersion(v);
-                var a = Ability.get_ability(vT.abilityStore,--ID);
+                textVersion tV;
+                if ( v < 0 ) {
+                    var s = Server.get_Server(Context.Guild.Id);
+                    if ( s == null ) tV = textVersion.get_textVersion(0);
+                    else tV = textVersion.get_textVersion(s.racingVersionDefault);
+                } else {
+                    tV = textVersion.get_textVersion(v);
+                }
+                var a = Ability.get_ability(tV.abilityStore,--ID);
                 if(a == null) {
                     await ReplyAsync(Context.User.Mention + ", you didn't give a valid ID.");
                     return;
@@ -244,7 +251,7 @@ namespace trillbot.Commands
             s.Add("```" );
             var rcrs = racer.get_racer();
             foreach(Classes.racer r in rcrs) {
-                s.Add("ID: #" + r.ID + " | " + r.name);
+                if (r.server_discord_id == Context.Guild.Id) s.Add("ID: #" + r.ID + " | " + r.name);
             }
             s.Add("```");
             await ReplyAsync(String.Join(System.Environment.NewLine,s));
