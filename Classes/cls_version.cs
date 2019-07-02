@@ -19,7 +19,7 @@ namespace trillbot.Classes
     [JsonProperty("abilityStore")]
     public string abilityStore { get; set; } = "ability.json";
     [JsonProperty("id_to_condition")]
-    public Dictionary<int, string> id_to_condition { get; set; } = new Dictionary<int, string> {
+    public Dictionary<int, string> id_to_condition { get; set; } = new Dictionary<int, string> { // This could probably be rebuilt to build dynamically from card names ??
             {5,"You cannot move until you play a Dodge card."},
             {6, "You cannot move until you play a Dodge card."},
             {8, "You cannot move until you play a Tech Savvy card."},
