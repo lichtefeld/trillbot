@@ -1035,6 +1035,13 @@ namespace trillbot.Classes {
                 return;
             }
         }
+
+        public bool inGame(SocketUser User) {
+            foreach (var r in racers) {
+                if (r.player_discord_id == User.Id) return true;
+            }
+            return false;
+        }
         
         //Display Current players in the game
         public void inGameAsync(SocketCommandContext Context) {

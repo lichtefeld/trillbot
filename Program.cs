@@ -22,7 +22,7 @@ namespace trillbot
             "ta!"
         };
 
-        public static Dictionary<ulong,Classes.GrandPrix> games = new Dictionary<ulong, Classes.GrandPrix>(); 
+        public static Dictionary<ulong,Classes.GrandPrix> games = new Dictionary<ulong, Classes.GrandPrix>();
 
         public async Task RunBotAsync()
         {

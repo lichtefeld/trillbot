@@ -11,11 +11,22 @@ namespace trillbot.Commands
     public class GameCommands : ModuleBase<SocketCommandContext>
     {
         [Command("initialize")]
-        public async Task initAsync(int version = 0) {
+        public async Task initAsync(int version = -1) {
             var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
             if (prix.Value != null) {
                 await Context.Channel.SendMessageAsync("Woah there, a game is already initialized in this channel. Try using `ta!reset` to reset this channel");
                 return;
+            }
+            Server sr = Server.get_Server(Context.Guild.Id);
+            if (version == -1) {
+                if (sr == null) version = 0;
+                else version = sr.racingVersionDefault;
+            }
+            if (sr != null) {
+                if (!sr.isRacingChannel(Context.Guild.GetChannel(Context.Channel.Id))) {
+                    await Context.Channel.SendMessageAsync("A racing game can not be created in this channel as it isn't on the approved list.");
+                    return;
+                }
             }
             var game = new GrandPrix(Context.Channel.Name,version);
             Program.games.Add(Context.Channel.Id, game);
@@ -39,7 +50,11 @@ namespace trillbot.Commands
             if ( prix.Value == null) {
                 await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else {
-                prix.Value.startGame(Context); //Consider checking for a player to be in the game, rather than the Administrator node
+                if (!prix.Value.inGame(Context.User)) {
+                    await Context.Channel.SendMessageAsync("You aren't a player in this game so you can't start it!");
+                    return;
+                }
+                prix.Value.startGame(Context); 
             }
         }
 

@@ -1,0 +1,148 @@
+{
+  "card": [
+    {
+      "id": 0,
+      "count": 11,
+      "title": "Movement 1",
+      "description": "Move forward 1 space",
+      "type": "Movement",
+      "value": 1
+    },
+    {
+      "id": 1,
+      "count": 11,
+      "title": "Movement 2",
+      "description": "Move forward 2 spaces",
+      "type": "Movement",
+      "value": 2
+    },
+    {
+      "id": 2,
+      "count": 11,
+      "title": "Movement 3",
+      "description": "Move forward 3 spaces",
+      "type": "Movement",
+      "value": 3
+    },
+    {
+      "id": 3,
+      "count": 11,
+      "title": "Movement 4",
+      "description": "Move forward 4 spaces",
+      "type": "Movement",
+      "value": 4
+    },
+    {
+      "id": 4,
+      "count": 5,
+      "title": "Movement 6",
+      "description": "This card can be played to move forward 6 spaces OR used as a Dodge card (Removes Debris and Ram). To play as Movement provide the value of 0, to play as a Dodge provide 1",
+      "type": "Movement",
+      "value": 6
+    },
+    {
+      "id": 5,
+      "count": 3,
+      "title": "Debris",
+      "description": "The five racers at the front cannot play Movement cards",
+      "type": "Hazard",
+      "value": 0
+    },
+    {
+      "id": 6,
+      "count": 3,
+      "title": "Ram",
+      "description": "Move forward 3 spaces, the racers in front of you by 1 space after the move cannot play Movement cards",
+      "type": "Hazard",
+      "value": 1
+    },
+    {
+      "id": 7,
+      "count": 1,
+      "title": "Thrown Off",
+      "description": "Played on self, move forward 1 space. Anyone in your space at the start of your next turn are thrown off.",
+      "type": "Hazard",
+      "value": 2
+    },
+    {
+      "id": 8,
+      "count": 3,
+      "title": "Frustration",
+      "description": "Target another user, target is prevented from playing Movement cards",
+      "type": "THazard",
+      "value": 0
+    },
+    {
+      "id": 9,
+      "count": 3,
+      "title": "Distraction",
+      "description": "Target another user, target is thrown off if they end a turn with Distraction AND another hazard applied",
+      "type": "THazard",
+      "value": 1
+    },
+    {
+      "id": 10,
+      "count": 3,
+      "title": "Motivation Loss",
+      "description": "Target another user, thrown off in three turns if not removed",
+      "type": "THazard",
+      "value": 2
+    },
+    {
+      "id": 11,
+      "count": 3,
+      "title": "High Turbulence",
+      "description": "Target another user, they can't play a Movement card higher than move 2.",
+      "type": "THazard",
+      "value": 3
+    },
+    {
+      "id": 12,
+      "count": 6,
+      "title": "Dodge",
+      "description": "Removes Debris and Ram",
+      "type": "Remedy",
+      "value": 0
+    },
+    {
+      "id": 13,
+      "count": 5,
+      "title": "Dolphin Handling",
+      "description": "Removes Frustration and Distraction",
+      "type": "Remedy",
+      "value": 1
+    },
+    {
+      "id": 14,
+      "count": 4,
+      "title": "Cyber Healthcare",
+      "description": "Removes Motivation Loss and High Turbulence",
+      "type": "Remedy",
+      "value": 2
+    },
+    {
+      "id": 15,
+      "count": 4,
+      "title": "Snack Break",
+      "description": "Remove 2 Hazards and move back 2 spaces. Please provide the two numbers of the hazards you would like to remove. This card can be used to remove only 1 hazard, provide a 0 as the second input.",
+      "type": "Remedy",
+      "value": 3
+    },
+    {
+      "id": 16,
+      "count": 3,
+      "title": "Dazzle",
+      "description": "Affects 3 players behind you. They cannot move for 1 turn. Does not require a Remedy card to clear. You move forward one space after dazzling!",
+      "type": "Hazard",
+      "value": 3
+    },
+    {
+      "id": 17,
+      "count": 0,
+      "title": "Tickle Laser",
+      "description": "Target another racer, if Tickle Laser is applied for 2 full turns, they will be thrown off.",
+      "type": "THazard",
+      "value": 4
+    }
+  ]
+}

@@ -8,6 +8,7 @@ using trillbot.Classes;
 namespace trillbot.Commands
 {
   public class textVersionCommands : ModuleBase<SocketCommandContext> {
-    // This thing will allow for personal construction of text versions and verify all parts are around ?? 
+    // This thing will allow for personal construction of text versions and verify all parts are around ??
+    
   }
 }

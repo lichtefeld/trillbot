@@ -1,0 +1,178 @@
+{
+  "ability": [
+    {
+      "id": 0,
+      "title": "Jump Start",
+      "description": "You start the race 2 spaces ahead of the starting line.",
+      "active": false,
+      "enable": true
+    },
+    {
+      "id": 1,
+      "title": "Wealthy Sponsor",
+      "description": "You start the race with 4 guaranteed cards.",
+      "active": false,
+      "enable": true
+    },
+    {
+      "id": 2,
+      "title": "Frontal Force Field",
+      "description": "You are immune to the Debris Hazard.",
+      "active": false,
+      "enable": true
+    },
+    {
+      "id": 3,
+      "title": "Expert Racer",
+      "description": "You are immune to the Ramming Hazard.",
+      "active": false,
+      "enable": true
+    },
+    {
+      "id": 4,
+      "title": "Nanite Snack Drones",
+      "description": "You are immune to the Frustration Hazard.",
+      "active": false,
+      "enable": true
+    },
+    {
+      "id": 5,
+      "title": "Immaculate Spirit",
+      "description": "You are immune  to the Distraction Hazard.",
+      "active": false,
+      "enable": true
+    },
+    {
+      "id": 6,
+      "title": "Heart of Gold",
+      "description": "You are immune to the Motivation Loss Hazard.",
+      "active": false,
+      "enable": true
+    },
+    {
+      "id": 7,
+      "title": "Gambler’s Fallacy",
+      "description": "Roll a d2 every turn, on a 2 your passive movement is 3, and on a 1 your passive movement is 0. While affected by a Hazard your passive movement is always 1.",
+      "active": false,
+      "enable": true
+    },
+    {
+      "id": 8,
+      "title": "Jockey Dummy",
+      "description": "You can win the race even if you die.",
+      "active": false,
+      "enable": true
+    },
+    {
+      "id": 9,
+      "title": "Daredevil",
+      "description": "On the first turn you are affected by the Debris Hazard, your passive movement is 3.",
+      "active": false,
+      "enable": true
+    },
+    {
+      "id": 10,
+      "title": "Energy Siphon",
+      "description": "On the first turn you are affected by the Ramming Hazard, your passive movement is 3.",
+      "active": false,
+      "enable": true
+    },
+    {
+      "id": 11,
+      "title": "Living on the Edge",
+      "description": "On the first turn you are affected by the Sabotage Hazard, your passive movement is 3.",
+      "active": false,
+      "enable": true
+    },
+    {
+      "id": 12,
+      "title": "Glider",
+      "description": "If you are thrown off, you can keep racing in your glider and you are immune to all Hazards until your next turn. While in the glider, your maximum hand size is 1.",
+      "active": false
+    },
+    {
+      "id": 13,
+      "title": "Trillwax",
+      "description": "You are immune to the Dazzle Hazard. If you are targeted by the Dazzle Hazard, the racer who played the card is affected by the Dazzle Hazard instead.",
+      "active": false,
+      "enable": true
+    },
+    {
+      "id": 14,
+      "title": "Candy Boost",
+      "description": "Play two movement cards this turn and reduce your maximum hand size to 7 cards.",
+      "active": true,
+      "enable": true
+    },
+    {
+      "id": 15,
+      "title": "Scrambler",
+      "description": "Target another racer, they discard and redraw 4 random cards.",
+      "active": true,
+      "enable": true
+    },
+    {
+      "id": 16,
+      "title": "Tactical Taught",
+      "description": "Target another racer and pick 4 of your cards, trade those cards for 4 random cards in that racer's hand.",
+      "active": true,
+      "enable": true
+    },
+    {
+      "id": 17,
+      "title": "Psionic Probe",
+      "description": "At the start of every turn you see the the hand of the lead (On Dolphin) racer. If you are in the lead, you instead see the hand of the (On Dolphin) racer in second place.",
+      "active": false,
+      "enable": true
+    },
+    {
+      "id": 18,
+      "title": "Dolphin Drafting",
+      "description": "Move forward until you are on the same space as the closest racer ahead of you.",
+      "active": true,
+      "enable": true
+    },
+    {
+      "id": 19,
+      "title": "Precision Laser",
+      "description": "Target another racer and apply the **Tickle Laser** Hazard to them. Tickle Laser can be removed with Dolphin Handling. If Tickle Laser is applied for 2 full turns, they will be thrown off.",
+      "active": true,
+      "enable": true
+    },
+    {
+      "id": 20,
+      "title": "Lucky Break",
+      "description": "Remove any hazard.",
+      "active": true,
+      "enable": true
+    },
+    {
+      "id": 21,
+      "title": "Experimental Grav-Sling ",
+      "description": "Attempt to switch position with the closest racer ahead of you. Roll a d10, if the result is less than 4, you explode.",
+      "active": true,
+      "enable": true
+    },
+    {
+      "id": 22,
+      "title": "Recalibration",
+      "description": "Discard and redraw your whole hand.",
+      "active": true,
+      "enable": true
+    },
+    {
+      "id": 23,
+      "title": "Seasoned Trickster",
+      "description": "Target 2 other racers, apply random Hazards to both of them.",
+      "active": true,
+      "enable": true
+    },
+    {
+      "id": 24,
+      "title": "Core Synchronization",
+      "description": "Target another racer, if one of you dies the other also dies.",
+      "active": true,
+      "enable": true
+    }
+  ]
+}

@@ -75,6 +75,8 @@
     {
       "ID": 1,
       "name": "Sky Dolphin Racing",
+      "cardStore": "card1.json",
+      "abilityStore": "ability1.json",
       "description": "Tiber Themed Racing Event",
       "output": {
         "coreSyncFail": [
@@ -83,7 +85,7 @@
         ],
         "conditionDeath": [
           " succumbs to ",
-          " and their vehicle explodes! 💥"
+          " and they are thrown off! 💥"
         ],
         "abilitySave": [
           " uses their ",
@@ -91,22 +93,22 @@
           "."
         ],
         "escapePod": [
-          "An escape pod launches from ",
-          "'s lightrunner, giving them another chance to struggle along!"
+          "A glider launches from ",
+          "'s glider, giving them another chance to struggle along!"
         ],
         "crash": [
-          "'s crash card triggers. ",
-          " crash out of the race."
+          "'s thrown off card triggers. ",
+          " thrown out of the race."
         ],
         "escapePodEscape": [
-          "'s escape pod gets out of the way of all the hazards!"
+          "'s glider gets out of the way of all the hazards!"
         ],
         "peek" : [
           "You use ",
           " to see:\n"
         ],
         "causeCrash": [
-          " will cause a crash on space ",
+          " will cause a knock off on space ",
           " at the start of their next turn!\n"
         ],
         "passiveTwo": [
@@ -122,14 +124,14 @@
           " and starts 4 distance units ahead!"
         ],
         "gameOver": [
-          "All racers are dead. This ends the game."
+          "All racers are thrown off. This ends the game."
         ],
         "coreSync": [
-          " synchronized their core with ",
-          ". If either of them die, the other will explode!"
+          " synchronized their spirits with ",
+          ". If either of them are thrown off, the other will be thrown off!"
         ],
         "switchPositionFail": [
-          " actives their Grav-Sling and it explodes! Roll: ",
+          " actives their Grav-Sling and is thrown off! Roll: ",
           "."
         ],
         "stun": [

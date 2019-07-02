@@ -125,8 +125,16 @@ namespace trillbot.Commands
         }
 
         [Command("showabilities")]
-        public async Task DisplayAbilitiesAsync(int v = 0) {
-            var vT = textVersion.get_textVersion(v);
+        public async Task DisplayAbilitiesAsync(int v = -1) {
+            Server sr = Server.get_Server(Context.Guild.Id);
+            if (sr == null) v = 0;
+            textVersion vT;
+            if (v == -1) {
+                vT = textVersion.get_textVersion(sr.racingVersionDefault);
+                if (vT == null) vT = textVersion.get_textVersion(0);
+            } else {
+                vT = textVersion.get_textVersion(v);
+            }
             var abilities = Ability.get_ability(vT.abilityStore);
             var str = new List<string>();
             var count = 21;
@@ -151,8 +159,16 @@ namespace trillbot.Commands
         }
 
         [Command("showcards")]
-        public async Task showCardsAsync(int v = 0) {
-            var vT = textVersion.get_textVersion(v);
+        public async Task showCardsAsync(int v = -1) {
+            Server sr = Server.get_Server(Context.Guild.Id);
+            if (sr == null) v = 0;
+            textVersion vT;
+            if (v == -1) {
+                vT = textVersion.get_textVersion(sr.racingVersionDefault);
+                if (vT == null) vT = textVersion.get_textVersion(0);
+            } else {
+                vT = textVersion.get_textVersion(v);
+            }
             var cards = Card.get_card(vT.cardStore);
             var str = new List<string>();
             str.Add("**Card List**");
@@ -177,8 +193,17 @@ namespace trillbot.Commands
         }
 
         [Command("resetracer")]
-        [RequireUserPermission(GuildPermission.Administrator)]
+        //[RequireUserPermission(GuildPermission.Administrator)]
         public async Task resetOneRacer(int i) {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't authorized on this server.");
+                return;
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
             var r = racer.get_racer(i);
             if (r == null) {
                 await ReplyAsync("No racer with that ID");
@@ -190,14 +215,25 @@ namespace trillbot.Commands
         }
 
         [Command("resetracers")]
-        [RequireUserPermission(GuildPermission.Administrator)]
+        //[RequireUserPermission(GuildPermission.Administrator)]
         public async Task resetAllRacers() {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't authorized on this server.");
+                return;
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
             var rcs = racer.get_racer();
             rcs.ForEach(e=>{
-                e.inGame = false;
-                racer.update_racer(e);
-                });           
-            await ReplyAsync("All Racers Reset");
+                if ( e.server_discord_id == Context.Guild.Id ) {
+                    e.inGame = false;
+                    racer.update_racer(e);
+                }
+            });
+            await ReplyAsync("All Racers on this Server Reset");
         }
 
         [Command("listracers")]
