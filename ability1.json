@@ -149,7 +149,7 @@
     {
       "id": 21,
       "title": "Experimental Grav-Sling ",
-      "description": "Attempt to switch position with the closest racer ahead of you. Roll a d10, if the result is less than 4, you explode.",
+      "description": "Attempt to switch positions with the closest racer ahead of you. Roll a d10, if the result is less than 4, you get thrown off.",
       "active": true,
       "enable": true
     },
