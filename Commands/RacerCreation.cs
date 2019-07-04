@@ -11,7 +11,7 @@ namespace trillbot.Commands
     {
 
         [Command("createracer")]
-        public async Task NewracerAsync(string name = null, string faction = "The Trilliant Ring", int ID = -1, int v = 0)
+        public async Task NewracerAsync(string name = null, string faction = "The Trilliant Ring", int ID = -1, int v = -1)
         {
             var r = racer.get_racer(Context.Message.Author.Id, Context.Guild.Id);
             if(r != null) {
@@ -21,6 +21,11 @@ namespace trillbot.Commands
             var usr = Context.Guild.GetUser(Context.Message.Author.Id);
             if (name == null) {
                 name = usr.Nickname != null ? usr.Nickname : usr.Username;
+            }
+            Server sr = Server.get_Server(Context.Guild.Id);
+            if (v == -1) {
+                if (sr == null) v = 0;
+                else v = sr.racingVersionDefault;
             }
             var vT = textVersion.get_textVersion(v);
             if(ID == -1) {
