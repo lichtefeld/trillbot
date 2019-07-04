@@ -19,18 +19,20 @@ namespace trillbot.Classes {
 
     public class blackjackPlayer {
         public ulong player_discord_id { get; set; }
+        public ulong player_server_id { get; set; }
         public string name { get; set; }
         public List<List<StandardCard>> hand { get; set; } = new List<List<StandardCard>>();
         public int bet { get; set; }
         public int insurance { get; set;}
-        public bool doubleDown { get; set;}
+        public List<bool> doubleDown { get; set;} = new List<bool>();
         public bool surrender { get; set;}
 
-        public blackjackPlayer(ulong ID, string n, int b) {
+        public blackjackPlayer(ulong ID, string n, int b, ulong serverID) {
             player_discord_id = ID;
+            player_server_id = serverID;
             name = n;
             bet = b;
-            doubleDown = false;
+            doubleDown.Add(false);
             surrender = false;
             hand.Add(new List<StandardCard>());
         }
@@ -38,7 +40,8 @@ namespace trillbot.Classes {
         public void reset() {
             hand = new List<List<StandardCard>>();
             hand.Add(new List<StandardCard>());
-            doubleDown = false;
+            doubleDown = new List<bool>();
+            doubleDown.Add(false);
             surrender = false;
         }
 
@@ -47,7 +50,7 @@ namespace trillbot.Classes {
             else return handValue(hand[i]);
         }
 
-        private int handValue(List<StandardCard> cards) {
+        private static int handValue(List<StandardCard> cards) {
             int value = 0;
             int numAces = 0;
             if (cards.Count == 0) return -1;

@@ -1,19 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Dynamic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
 using JsonFlatFileDataStore;
 using Newtonsoft.Json;
-using trillbot.Classes;
 
 namespace trillbot.Classes {
 
@@ -43,8 +31,8 @@ namespace trillbot.Classes {
             return "**" + title + "** : " + description;
         }
 
-        public static List<Card> get_card () {
-            var store = new DataStore ("card.json");
+        public static List<Card> get_card (string location) {
+            var store = new DataStore (location);
 
             // Get employee collection
             var rtrner = store.GetCollection<Card> ().AsQueryable ().ToList();
@@ -52,8 +40,8 @@ namespace trillbot.Classes {
             return rtrner;
         }
 
-        public static Card get_card (int id) {
-            var store = new DataStore ("card.json");
+        public static Card get_card (string location, int id) {
+            var store = new DataStore (location);
 
             // Get employee collection
             var rtrner = store.GetCollection<Card> ().AsQueryable ().FirstOrDefault (e => e.ID == id);
@@ -61,8 +49,8 @@ namespace trillbot.Classes {
             return rtrner;
         }
 
-        public static Card get_card (string name) {
-            var store = new DataStore ("card.json");
+        public static Card get_card (string location, string name) {
+            var store = new DataStore (location);
 
             // Get employee collection
             var rtrner = store.GetCollection<Card> ().AsQueryable ().FirstOrDefault (e => e.title == name);
@@ -70,8 +58,8 @@ namespace trillbot.Classes {
             return rtrner;
         }
 
-        public static void insert_card (Card card) {
-            var store = new DataStore ("card.json");
+        public static void insert_card (string location, Card card) {
+            var store = new DataStore (location);
 
             // Get employee collection
             store.GetCollection<Card> ().InsertOneAsync (card);
@@ -79,15 +67,15 @@ namespace trillbot.Classes {
             store.Dispose();
         }
 
-        public static void update_card (Card card) {
-            var store = new DataStore ("card.json");
+        public static void update_card (string location, Card card) {
+            var store = new DataStore (location);
 
             store.GetCollection<Card> ().ReplaceOneAsync (e => e.ID == card.ID, card);
             store.Dispose();
         }
 
-        public static void delete_card (Card card) {
-            var store = new DataStore ("card.json");
+        public static void delete_card (string location, Card card) {
+            var store = new DataStore (location);
 
             store.GetCollection<Card> ().DeleteOne (e => e.ID == card.ID);
             store.Dispose();

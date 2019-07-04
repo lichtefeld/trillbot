@@ -140,11 +140,11 @@ namespace trillbot.Classes
             {
                 if(eval.Count(e=>e.value == card.value) == 3)
                 {
-                    threes = true;
+                  threes = true;
                 }
                 if(eval.Count(e=>e.value == card.value) == 2)
                 {
-                    pair = true;
+                  pair = true;
                 }
             }
 
@@ -152,7 +152,6 @@ namespace trillbot.Classes
             {
                 weight = 7;
             }
-
             return weight;
         }
 
@@ -161,7 +160,6 @@ namespace trillbot.Classes
             int weight = 0;
 
             if(contains_all_same_suit(eval)) weight = 6;
-
             return weight;
         }
 
@@ -170,7 +168,6 @@ namespace trillbot.Classes
             int weight = 0;
 
             if(contains_five_sequential(eval.ToArray())) weight = 5;
-
             return weight;
         }
 
@@ -188,7 +185,6 @@ namespace trillbot.Classes
             }
 
             if(threes) weight = 4;
-
             return weight;
 
         }
@@ -212,12 +208,9 @@ namespace trillbot.Classes
             }
 
             if(paircount == 2) weight = 3;
-
             if(paircount == 1) weight = 2;
 
             return weight;
-
         }
-
     }
 }

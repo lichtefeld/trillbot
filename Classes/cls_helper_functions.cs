@@ -1,12 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Globalization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Discord;
-using Discord.Commands;
 using Discord.WebSocket;
 using System.Linq;
+using System.Threading;
 
 namespace trillbot.Classes
 {
@@ -31,7 +27,7 @@ namespace trillbot.Classes
             foreach (var property in properties)
             {                
                 embed.WithTitle(helpers.GetPropValue(obj,title_property_name).ToString());
-                embed.AddInlineField(property,helpers.GetPropValue(obj,property));
+                embed.AddField(property,helpers.GetPropValue(obj,property),true);
             }
 
             return embed.Build();
@@ -50,29 +46,65 @@ namespace trillbot.Classes
             }
         }
 
-        public static void output(ISocketMessageChannel channel, List<string> str) {
+        /** @fn          output
+          * @brief       This function handles outputting a list of strings seperated by a seperator character. The resulting strings are sent to the provided Discord Channel
+          * @param[in] 1 ISocketMessageChannel. A discord channel to send the messages back out to. 
+          * @param[in] 2 List<string>. A list of strings to be appended together for output.
+          * @param[in] 3 string. The string to be appended onto the list of strings to combine them. Default: NewLine character.
+          * @note        This function is syncronous in operation
+          * @todo        FIX ALL THESE FUNCTIONS TO CONFORM WITH DISCORD POST SETTINGS. THESE FUNCTIONS SHOULD SELF-CORRECT ANY NON-CONFORMING POSTS!!!
+          */
+        public static void output(ISocketMessageChannel channel, List<string> str, string seperator = "\n") {
+            int count = 0;
+            string output_string = "";
+            if (str.Count == 0) return; 
+            foreach(string s in str) {
+                count += s.Length + seperator.Length;
+                if (count >= 2000) {
+                    channel.SendMessageAsync(output_string);
+                    Thread.Sleep (100);
+                    count = s.Length + seperator.Length;
+                    output_string = s + seperator;
+                } else {
+                    output_string += s + seperator;
+                }
+            }
+            channel.SendMessageAsync(output_string).GetAwaiter().GetResult();
+        }
+        public static void output(IUser User, List<string> str) {
             int count = 0;
             string output_string = "";
             if (str.Count == 0) return; 
             foreach(string s in str) {
                 count += s.Length + 1;
                 if (count >= 2000) {
-                    channel.SendMessageAsync(output_string);
+                    User.SendMessageAsync(output_string);
                     count = s.Length;
                     output_string = s + System.Environment.NewLine;
                 } else {
                     output_string += s + System.Environment.NewLine;
                 }
             }
-            channel.SendMessageAsync(output_string).GetAwaiter().GetResult();
+            User.SendMessageAsync(output_string).GetAwaiter().GetResult();
         }
 
-        public static void UpdateRacersDatabase() {
-            Serialize.ToJson(trillbot.Commands.RacerCreation.allRacers.ToArray());
-        }
-
-        public static void UpdateRacersList() {
-            trillbot.Commands.RacerCreation.allRacers = racer.get_racer().OrderBy(e=>e.ID).ToList();;
+        public static void output(IUser User, string str) {
+            if (str.Length == 0) return;
+            if (str.Length > 2000) {
+                int split = 0;
+                for(int i = 2000; i > 0; i--) {
+                    if(str[i] == ' ') {
+                        split = i;
+                        break;
+                    }
+                }
+                string output = str.Remove(split);
+                helpers.output(User, output);
+                str = str.Remove(0,split);
+                helpers.output(User,str);
+            } else {
+                User.SendMessageAsync(str).GetAwaiter().GetResult();
+            }
         }
 
         public static void output(ISocketMessageChannel channel, string str) {
@@ -94,14 +126,6 @@ namespace trillbot.Classes
             }
         }
 
-        public static string formatBets(Character character, IGuild Guild) {
-            var output = new List<string>();
-            output.Add("**" +character.name + " Bets**");
-            foreach (trillbot.Classes.Bet bet in character.bets) {
-                output.Add(bet.display(Guild));
-            }
-            return String.Join(System.Environment.NewLine,output);
-        }
     }
 
 }

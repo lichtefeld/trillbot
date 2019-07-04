@@ -17,41 +17,71 @@ using trillbot.Classes;
 
 namespace trillbot.Classes {
 
-    public partial class slotMachine {
+    public class slotMachineRunner {
+        public SocketTextChannel Channel { get; set;}
+        public int ID { get; set; }
+        public string name { get; set;}
+        public string description { get; set;}
+        public int maxBet { get; set; }
+        public int minBet { get; set;}
+        public List<string> reels { get; set; }
+        public List<List<int>> Weights { get; set; }
+        public List<int> Payouts { get; set; }
+        public ulong ChannelID { get; set; }
 
-        [JsonProperty("Id")]
-        public int ID {get; set; }
-        [JsonProperty("Name")]
-        public string name { get; set; }
-        [JsonProperty("Description")]
-        public string description { get; set; }
-        [JsonProperty("Max Bet")]
-        public int maxBet {get; set; }
-        [JsonProperty("Reels")]
-        public List<string> reels { get; set; } = new List<string>();
-        [JsonProperty("Weights")]
-        public List<List<int>> Weights { get; set; } = new List<List<int>>();
-        [JsonProperty("Payouts")]
-        public List<int> Payouts { get; set; } = new List<int>();
-        [JsonProperty("Channel")]
-        public ulong ChannelID {get; set;}
+        public slotMachineRunner(SocketTextChannel Chan, slotMachine sm) {
+            /* var sm = slotMachine.get_slotMachine(id);
+            if(sm == null) {
+                await Context.Channel.sendMessageAsyn(Context.User.Mention + ", you didn't pass a valid slot machine ID.");
+                return;
+            }*/
+            Channel = Chan;
+            this.ID = sm.ID;
+            this.name = sm.name;
+            this.description = sm.description;
+            this.maxBet = sm.maxBet;
+            this.minBet = sm.minBet;
+            this.reels = sm.reels;
+            this.Weights = sm.Weights;
+            this.Payouts = sm.Payouts;
+            this.ChannelID = Channel.Id;
 
-        private string displayReel(int i, int j, int k ) {
-            if (i < 0 || i > reels.Count || j < 0 || j > reels.Count || k < 0 || k > reels.Count) {
+        }
+
+        private string displayReel(int[] rolls ) {
+            if (rolls[0] < 0 || rolls[0] > reels.Count || rolls[1] < 0 || rolls[1] > reels.Count || rolls[2] < 0 || rolls[2] > reels.Count) {
                 return "";
             } else {
-                return reels[i] + " | " + reels[j] + " | " + reels[k];
+                return reels[rolls[0]] + " | " + reels[rolls[1]] + " | " + reels[rolls[2]];
             }
         }
 
-        public string rollSlot(Character c, int bet, ICommandContext Context) {
+        public void rollSlot(int bet, ICommandContext Context) {
+            
+            var c = Character.get_character(Context.User.Id,Context.Guild.Id);
+            if(c == null) {
+                helpers.output(Channel,Context.User.Mention + ", You don't have an account. Create one with `ta!registeraccount`");
+                return;
+            }
+            if(c.balance-bet < 0) {
+                helpers.output(Channel,Context.User.Mention + ",You can't make a bet that brings you to a negative balance.");
+                return;
+            }
+            if(bet < minBet || bet > maxBet) {
+                helpers.output(Channel,Context.User.Mention + ", You can't make a bet larger than this machine's max bet OR a negative bet.");
+                return;
+            }
+            c.balance -= bet;
+            
+            //Roll a Slot Roll
             List<string> str = new List<string>();
             str.Add("**" + this.name + "**");
             int[] rolls = new int[3];
+
             for(int i = 0; i < rolls.Length; i++) {
-                var roll = Program.rand.Next(1,65);
+                var roll = Program.rand.Next(1,65); //Roll a number between 1 and 64
                 int sum = 0;
-                for(int j = 0; j < Weights[i].Count; j++) {
+                for(int j = 0; j < Weights[i].Count; j++) { //Find which reel to display from the weighted machine
                     sum += Weights[i][j];
                     if (roll <= sum) {
                         rolls[i] = j;
@@ -59,52 +89,29 @@ namespace trillbot.Classes {
                     }
                 }
             }
-            str.Add(displayReel(rolls[0], rolls[1], rolls[2])); //Comments Assume Default Emotes
+            
+            str.Add(displayReel(rolls)); //Comments Assume Default Emotes
             if(rolls[0] == 0 && rolls[1] == 0 && rolls[2] == 0) { //3 Moneybags
                 str.Add("JACKPOT! You've Won " + Payouts[0]*bet + " Credits!");
                 c.balance+=Payouts[0]*bet;
-            } else if (rolls[0] == 1 && rolls[0] == 2 && rolls[0] == 3 ) { //One of each Fruit
-                switch(rolls[0]) {
-                    case 3:
-                    if(rolls[1] == 2) {
-                        if(rolls[2] == 1) {
-                            str.Add("You've Won " + Payouts[1]*bet + " Credits!");
-                            c.balance+=Payouts[1]*bet;
-                        }
-                    } else if (rolls[1] == 1) {
-                        if(rolls[2] == 2) {
-                            str.Add("You've Won " + Payouts[1]*bet + " Credits!");
-                            c.balance+=Payouts[1]*bet;
-                        }
-                    }
-                    break;
-                    case 2:
-                    if(rolls[1] == 1) {
-                        if(rolls[2] == 3) {
-                            str.Add("You've Won " + Payouts[1]*bet + " Credits!");
-                            c.balance+=Payouts[1]*bet;
-                        }
-                    } else if (rolls[1] == 3) {
-                        if(rolls[2] == 1) {
-                            str.Add("You've Won " + Payouts[1]*bet + " Credits!");
-                            c.balance+=Payouts[1]*bet;
-                        }
-                    }
-                    break;
-                    case 1:
-                    if(rolls[1] == 2) {
-                        if(rolls[2] == 3) {
-                            str.Add("You've Won " + Payouts[1]*bet + " Credits!");
-                            c.balance+=Payouts[1]*bet;
-                        }
-                    } else if (rolls[1] == 3) {
-                        if(rolls[2] == 2) {
-                            str.Add("You've Won " + Payouts[1]*bet + " Credits!");
-                            c.balance+=Payouts[1]*bet;
-                        }
-                    }
-                    break;
-                } 
+            } else if (rolls[0] == 1 && rolls[1] == 2 && rolls[2] == 3 ) { //One of each Fruit Variant 1
+                str.Add("You've Won " + Payouts[1]*bet + " Credits!");
+                c.balance+=Payouts[1]*bet;
+            } else if (rolls[0] == 1 && rolls[1] == 3 && rolls[2] == 2) { //One of each Fruit Variant 2
+                str.Add("You've Won " + Payouts[1]*bet + " Credits!");
+                c.balance+=Payouts[1]*bet;
+            } else if (rolls[0] == 2 && rolls[1] == 1 && rolls[2] == 3) { //One of each Fruit Variant 3
+                str.Add("You've Won " + Payouts[1]*bet + " Credits!");
+                c.balance+=Payouts[1]*bet;
+            } else if (rolls[0] == 2 && rolls[1] == 3 && rolls[3] == 1) { //One of each Fruit Variant 4
+                str.Add("You've Won " + Payouts[1]*bet + " Credits!");
+                c.balance+=Payouts[1]*bet;
+            } else if (rolls[0] == 3 && rolls[1] == 1 && rolls[2] == 2) { //One of each Fruit Variant 5
+                str.Add("You've Won " + Payouts[1]*bet + " Credits!");
+                c.balance+=Payouts[1]*bet;
+            } else if (rolls[0] == 3 && rolls[1] == 2 && rolls[2] == 1) { //One of each Fruit Variant 6
+                str.Add("You've Won " + Payouts[1]*bet + " Credits!");
+                c.balance+=Payouts[1]*bet;
             } else if (rolls[0] == 1 && rolls[1] == 1 && rolls[2] == 1) { //Three Cherries
                 str.Add("You've Won " + Payouts[2]*bet + " Credits!");
                 c.balance+=Payouts[2]*bet;
@@ -132,19 +139,23 @@ namespace trillbot.Classes {
             } else if (rolls[0] != 7 && rolls[1] != 7 && rolls[2] != 7) { //Three non-pinapple symbols
                 str.Add("You've Won " + Payouts[10]*bet + " Credits!");
                 c.balance+=Payouts[10]*bet;
-            } else if (rolls[0] == 7 && rolls[1] == 7 && rolls[2] == 7) {
-                str.Add("You lost " + bet + " credits");
-                if(ChannelID != 0) security(Context);
             } else {
                 str.Add("You lost " + bet + " credits");
+                Server s = Server.get_Server(Context.Guild.Id);
+                if (s != null) { 
+                    s.houseBal += bet;
+                    Server.replace_Server(s);
+                }
             }
-            return(String.Join(System.Environment.NewLine,str));
+            //Update Character JSON & Output results
+            Character.update_character(c);
+            helpers.output(Channel,String.Join(System.Environment.NewLine,str));
         }
         public string payouts() {
             List<string> str = new List<string>();
             str.Add("**" + this.name + " Payouts**");
             str.Add(this.description);
-            str.Add("*Payouts assume a bet of 1 Imperial Credit.* This machines's max bet is: " + this.maxBet);
+            str.Add("*Payouts assume a bet of 1 Imperial Credit.* This machines's max bet is: " + this.maxBet + ". This machine's minimum bet is: " + this.minBet);
             str.Add(reels[0] + " | " + reels[0] + " | " + reels[0] + ": " + Payouts[0]);
             str.Add(reels[1] + " | " + reels[2] + " | " + reels[3] + ": " + Payouts[1]);
             str.Add(reels[1] + " | " + reels[1] + " | " + reels[1] + ": " + Payouts[2]);
@@ -158,16 +169,45 @@ namespace trillbot.Classes {
             str.Add("Any three symbols which aren't " + reels[7] + ": " + Payouts[10]);
             return(String.Join(System.Environment.NewLine,str));
         }
+    }
 
-        public void security(ICommandContext Context) { 
-            var channel = Context.Guild.GetChannelAsync(ChannelID).GetAwaiter().GetResult() as ISocketMessageChannel;
-            var usrs = Context.Guild.GetUsersAsync().GetAwaiter().GetResult().ToList();
-            var user = usrs[Program.rand.Next(usrs.Count)];
+    public partial class slotMachine {
 
-            string output = user.Nickname.ToString() + " is being monitored by security drones.";
-            helpers.output(channel, output);
+        [JsonProperty("Id")]
+        public int ID {get; set; }
+        [JsonProperty("Name")]
+        public string name { get; set; }
+        [JsonProperty("Description")]
+        public string description { get; set; }
+        [JsonProperty("Max Bet")]
+        public int maxBet {get; set; }
+        [JsonProperty("Min Bet")]
+        public int minBet {get; set; }
+        [JsonProperty("Reels")]
+        public List<string> reels { get; set; } = new List<string>();
+        [JsonProperty("Weights")]
+        public List<List<int>> Weights { get; set; } = new List<List<int>>();
+        [JsonProperty("Payouts")]
+        public List<int> Payouts { get; set; } = new List<int>();
+        [JsonProperty("Channel")]
+        public ulong ChannelID {get; set;}
+
+        /*public slotMachine(slotMachineRunner sm) {
+            ID = sm.ID;
+            name = sm.name;
+            description = sm.description;
+            maxBet = sm.maxBet;
+            minBet = sm.minBet;
+            reels = sm.reels;
+            Weights = sm.Weights;
+            Payouts = sm.Payouts;
+            ChannelID = sm.ChannelID;
+        }*/
+
+        public string display(SocketGuild Guild) {
+            var chan = Guild.GetTextChannel(ChannelID);
+            return name + " slots. Min Bet: " + minBet + ". Max Bet: " + maxBet + ". Located in " + chan;
         }
-
     }
 
     public partial class slotMachine {
