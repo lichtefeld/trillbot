@@ -49,12 +49,6 @@ namespace trillbot
 
             await _client.StartAsync();
 
-            foreach(var s in Server.get_Server()) {
-                foreach(var c in s.racingChannelSnowflakes) {
-                   games.Add(c, new GrandPrix(_client.GetGuild(s.snowflake).GetChannel(c).Name,s.racingVersionDefault));
-                }
-            }
-
             await Task.Delay(-1);
         }
 

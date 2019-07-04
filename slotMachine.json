@@ -125,6 +125,195 @@
               2,
               1 
           ]
+      },
+      {
+          "Id": 3,
+          "Name": "In The Black",
+          "Description": "This Tiberian Slot Machine is known to be one of the most expensive to play, but when it pays out, you win big! 🔻 is considered a bust",
+          "Max Bet": 5000,
+          "Min Bet": 100,
+          "Channel": 0,
+          "Reels": [
+              "🤑",
+              "💸",
+              "💰",
+              "💵",
+              "💲",
+              "💷",
+              "✒️",
+              "🔻"
+          ],
+          "Weights": [
+              [
+                  1,
+                  3,
+                  2,
+                  7,
+                  7,
+                  11,
+                  9,
+                  26
+              ],
+              [
+                  1,
+                  2,
+                  5,
+                  2,
+                  11,
+                  10,
+                  9,
+                  24
+              ],
+              [
+                  1,
+                  3,
+                  3,
+                  2,
+                  8,
+                  8,
+                  14,
+                  26
+              ]
+          ],
+          "Payouts": [
+              10000,
+              2500,
+              500,
+              350,
+              140,
+              60,
+              60,
+              45,
+              25,
+              3,
+              1 
+          ]
+      },
+      {
+          "Id": 4,
+          "Name": "Rivers of Tiber",
+          "Description": "Enjoy the majestic waters of Tiber in this river themed slot machine! 🏖️ is considered a bust",
+          "Max Bet": 20,
+          "Min Bet": 1,
+          "Channel": 0,
+          "Reels": [
+              "🚤",
+              "⛵",
+              "🚣",
+              "🛥️",
+              "🌊",
+              "💦",
+              "💧",
+              "🏖️"
+          ],
+          "Weights": [
+              [
+                  1,
+                  2,
+                  2,
+                  8,
+                  6,
+                  12,
+                  10,
+                  23
+              ],
+              [
+                  1,
+                  1,
+                  6,
+                  3,
+                  10,
+                  12,
+                  10,
+                  21
+              ],
+              [
+                  1,
+                  5,
+                  2,
+                  3,
+                  7,
+                  9,
+                  12,
+                  26
+              ]
+          ],
+          "Payouts": [
+              8000,
+              1000,
+              300,
+              200,
+              100,
+              40,
+              40,
+              30,
+              20,
+              2,
+              1 
+          ]
+      },
+      {
+          "Id": 5,
+          "Name": "Tiberian Tropical Fruits",
+          "Description": "Tiber is a tropical paradise, win big with some of the exotic fruits and fine drinks! 🍅 is considered a bust",
+          "Max Bet": 200,
+          "Min Bet": 10,
+          "Channel": 0,
+          "Reels": [
+              "☕",
+              "🍵",
+              "🥝",
+              "🍉",
+              "🍊",
+              "🍋",
+              "🍈",
+              "🍅"
+          ],
+          "Weights": [
+              [
+                  1,
+                  2,
+                  2,
+                  8,
+                  6,
+                  12,
+                  10,
+                  23
+              ],
+              [
+                  1,
+                  1,
+                  6,
+                  3,
+                  10,
+                  12,
+                  10,
+                  21
+              ],
+              [
+                  1,
+                  5,
+                  2,
+                  3,
+                  7,
+                  9,
+                  12,
+                  26
+              ]
+          ],
+          "Payouts": [
+              8000,
+              1000,
+              300,
+              200,
+              100,
+              40,
+              40,
+              30,
+              20,
+              2,
+              1 
+          ]
       }
   ]
 }

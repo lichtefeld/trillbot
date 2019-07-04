@@ -17,6 +17,105 @@ namespace trillbot.Commands
         {
             await Context.User.SendMessageAsync("Please check out this google document for my commands: <https://docs.google.com/document/d/1pWfIToswRCDVpqTK1Bj5Uv6s-n7zpOaqgZHQjW3SNzU/edit?usp=sharing>");
         }
+
+        [Command("addRace")]
+        public async Task addBettingRaceAsync(int winAmount) {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            race r = new race();
+            r.totalPool[0] = winAmount;
+            r.totalPool[1] = winAmount * 2 / 3;
+            r.totalPool[2] = winAmount / 3;
+            race.insert_race(r);
+            await Context.Channel.SendMessageAsync("Race Added");
+        }
+
+        [Command("addRacer")]
+        public async Task addRacertoRaceAsync(int id, int racer) {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            race r = race.get_race(id);
+            if ( r == null ) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", this race ID doesn't exist.");
+                return;
+            }
+            racer rr = Classes.racer.get_racer(racer);
+            if ( rr == null ) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", this racer ID doesn't exist.");
+                return;
+            }
+            r.racersWithBets.Add(new racerBet(racer));
+            await Context.Channel.SendMessageAsync(Context.User.Mention + ", added " + rr.nameID() + " to the race!");
+            race.update_race(r);
+        }
+
+        [Command("removeRacer")]
+        public async Task removeRacerFromRaceAsync() {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+        }
+
+        [Command("pauseBet")]
+        public async Task pauseBettingAsync(int ID) {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            race r = race.get_race(ID);
+            if ( r == null ) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", this race ID doesn't exist.");
+                return;
+            }
+            r.acceptingBets = false;
+            race.update_race(r);
+            await Context.Channel.SendMessageAsync(Context.User.Mention + ", ");
+        }
+
+        [Command("payoutRace")]
+        public async Task payoutRaceAsync(int ID, int win, int place, int show) {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            race r = race.get_race(ID);
+            if ( r == null ) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", this race ID doesn't exist.");
+                return;
+            }
+            r.makePayouts(win,place,show,Context);
+            await Context.Channel.SendMessageAsync("Payouts Complete.");
+        }
         
         [Command("removeRacingChannel")]
         public async Task removeRacingChannelAsync() {
@@ -124,6 +223,7 @@ namespace trillbot.Commands
             s.snowflake = Context.Guild.Id;
             s.Title = Context.Guild.Name;
             s.adminSnowflakes.Add(Context.Guild.OwnerId);
+            s.startingBalance = 1000000;
             Server.insert_Server(s);
         }
     }

@@ -11,25 +11,25 @@ using System.Linq;
 namespace trillbot.Classes {
 
     public partial class Bet {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string RacerName { get; set; }
         public int RacerID { get; set;}
         public int Amount { get; set; }
         public string Type { get; set; }
-        public string Emote { get; set; }
+        public int raceID { get; set;}
+        public int characterID { get; set;}
 
-        public Bet(int i, string rn, int a, string type, string emote, int ID) {
-            Id = i;
+        public Bet(string rn, int a, string type, int ID, int rID, int charID) {
             RacerName = rn;
             Amount = a;
             Type = type;
-            Emote = emote;
             RacerID = ID;
+            raceID = rID;
+            characterID = charID;
         }
 
-        public string display(IGuild Guild) {
-            var emote = Guild.Emotes.ToList().FirstOrDefault(e=>e.Name == Emote);
-            return "Bet ID: " + Id + " | Racer Name: " + RacerName + emote + "| Type " + Type + " | Amount: " + Amount;
+        public string display() {
+            return "Bet. Racer Name: " + RacerName  + "| Type " + Type + " | Amount: " + Amount;
         }
 
     }

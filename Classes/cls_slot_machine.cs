@@ -48,8 +48,12 @@ namespace trillbot.Classes {
 
         }
 
-        private string displayReel(int[] rolls) {
-            return String.Join(" | ", rolls);
+        private string displayReel(int[] rolls ) {
+            if (rolls[0] < 0 || rolls[0] > reels.Count || rolls[1] < 0 || rolls[1] > reels.Count || rolls[2] < 0 || rolls[2] > reels.Count) {
+                return "";
+            } else {
+                return reels[rolls[0]] + " | " + reels[rolls[1]] + " | " + reels[rolls[2]];
+            }
         }
 
         public void rollSlot(int bet, ICommandContext Context) {
@@ -183,17 +187,17 @@ namespace trillbot.Classes {
         [JsonProperty("Channel")]
         public ulong ChannelID {get; set;}
 
-        public slotMachine(slotMachineRunner sm) {
-            this.ID = sm.ID;
-            this.name = sm.name;
-            this.description = sm.description;
-            this.maxBet = sm.maxBet;
-            this.minBet = sm.minBet;
-            this.reels = sm.reels;
-            this.Weights = sm.Weights;
-            this.Payouts = sm.Payouts;
-            this.ChannelID = sm.ChannelID;
-        }
+        /*public slotMachine(slotMachineRunner sm) {
+            ID = sm.ID;
+            name = sm.name;
+            description = sm.description;
+            maxBet = sm.maxBet;
+            minBet = sm.minBet;
+            reels = sm.reels;
+            Weights = sm.Weights;
+            Payouts = sm.Payouts;
+            ChannelID = sm.ChannelID;
+        }*/
 
         public string display(SocketGuild Guild) {
             var chan = Guild.GetTextChannel(ChannelID);

@@ -17,7 +17,7 @@ namespace trillbot.Commands
 {
     public class Casino : ModuleBase<SocketCommandContext> {
         //ADMIN COMMANDS
-        [Command("casino")]
+        /*[Command("casino")]
         public async Task casinoNestedCommands(params string[] inputs) {
             var casino = Classes.Casino.get_Casino(Context.Guild.Id);
             if (casino == null) {
@@ -84,15 +84,14 @@ namespace trillbot.Commands
             }
 
             Classes.Casino.update_Casino(casino);
-        }
+        } 
 
-        public void makeCasino(SocketCommandContext Context) {
+        private void makeCasino(SocketCommandContext Context) {
             if(Classes.Casino.isCasinoManager(Context.Guild.GetUser(Context.User.Id))) {
                 var c = new Classes.Casino(Context.Guild);
-                helpers.output(Context.Channel,Context.User.Mention + ", Casino generated for this server");
                 Classes.Casino.insert_Casino(c);
             }
-        }
+        } */
 
         //GROUP CASINO GAME COMMANDS
         [Command("payouts")] //List Game Payouts, if a game doesn't exist in that channel, fail silently. If no other output, DM user to let them know no game exists in that channel
@@ -157,6 +156,7 @@ namespace trillbot.Commands
                 }
                 var p = new blackjackPlayer(Context.User.Id,c.name,b,Context.Guild.Id);
                 bj.Value.addPlayer(p,Context); //Add New Blackjack player to to the table
+                return;
             }
 
             //If Roulette Table
@@ -164,12 +164,13 @@ namespace trillbot.Commands
             if(rl.Value != null) {
                 //Check if Player in game
                 if(rl.Value.table.FirstOrDefault(e=>e.player_discord_id == Context.User.Id) != null) {
-                    await Context.Channel.SendMessageAsync(Context.User.Mention + ", sorry you have already joined this blackjack table.");
+                    await Context.Channel.SendMessageAsync(Context.User.Mention + ", sorry you have already joined this roulette table.");
                     return;
                 }
 
                 var p = new roulettePlayer(c.player_discord_id,c.name,c.player_server_id);
                 rl.Value.join(Context,p);
+                return;
             }
 
             //Default Response
@@ -286,6 +287,48 @@ namespace trillbot.Commands
         }
 
         //ROULETTE SPECIFIC COMMANDS
+
+        // RACING BETTING SPECIFIC COMMANDS
+        [Command("wager")]
+        public async Task racingWagger(int raceID, int racerID, string type, int amount = 2) {
+          var c = Character.get_character(Context.User.Id,Context.User.Id);
+          if (c == null) {
+              await Context.Channel.SendMessageAsync(Context.User.Mention + ", you don't have an account. Try making one with ta!registeraccount");
+              return;
+          }
+          var r = race.get_race(raceID);
+          if ( r == null) {
+              await Context.Channel.SendMessageAsync(Context.User.Mention + ", this race ID doesn't exist. Please try again.");
+              return;
+          }
+          var rr = r.racersWithBets.FirstOrDefault(e=>e.ID == racerID);
+          if (rr == null) {
+              await Context.Channel.SendMessageAsync(Context.User.Mention + ", this racer ID doesn't exist for this race.");
+              return;
+          }
+          var rcs = racer.get_racer(racerID);
+          if (rcs == null) {
+              await Context.Channel.SendMessageAsync(Context.User.Mention + ", this racer isn't in the database anymore.");
+              return;
+          }
+          type = type.ToLower();
+          if (!type.Equals("win") || !type.Equals("place") || !type.Equals("show")) {
+              await Context.Channel.SendMessageAsync(Context.User.Mention +", this bet type isn't valid. Please try `win`, `place`, or `show`");
+              return;
+          }
+          if (amount < 2 || amount > 100000) {
+              await Context.Channel.SendMessageAsync(Context.User.Mention + ", the bet must be between 2 and 100,000 imperial credits.");
+              return;
+          }
+          Bet b = new Bet(rcs.name,amount,type,racerID,raceID,c.ID);
+          c.bets.Add(b);
+          Character.update_character(c);
+          r.addBet(b);
+          race.update_race(r);
+          await Context.Channel.SendMessageAsync(Context.User.Mention + ", you have made the following bet: " + b.display());
+        }
+
+
     }
 
 }

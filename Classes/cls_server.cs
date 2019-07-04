@@ -26,6 +26,8 @@ namespace trillbot.Classes
         public List<ulong> racingChannelSnowflakes { get; set; } = new List<ulong>();
         [JsonProperty("racingVersionDefault")]
         public int racingVersionDefault { get; set; }
+        [JsonProperty("startingBalance")]
+        public int startingBalance { get; set; }
 
         public bool isAdmin(IGuildUser User) {
           foreach (var r in User.RoleIds) {

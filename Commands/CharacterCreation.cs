@@ -28,17 +28,23 @@ namespace trillbot.Commands
             }
 
             var name = usr.Nickname != null ? usr.Nickname : usr.Username;
-            
+            Server sr = Server.get_Server(Context.Guild.Id);
+            int balance = 1000000;
+            if (sr != null) {
+                balance = sr.startingBalance;
+            }
             c = new Character
             {
-                name = name
+                name = name,
+                balance = balance
             };
 
             c.player_discord_id = Context.Message.Author.Id;
+            c.player_server_id = Context.Guild.Id;
 
             Character.insert_character(c);
 
-            await ReplyAsync(name + ", you have created an account. You can now use ta!bet <racer> <amount>");
+            await ReplyAsync(name + ", you have created an account.");
 
         }
 
@@ -63,7 +69,7 @@ namespace trillbot.Commands
         {
             var characters = Character.get_character();
 
-            await ReplyAsync("**Racers for the Grand Prix**"+System.Environment.NewLine+string.Join(System.Environment.NewLine,characters.Select(e=>e.name).ToList()));
+            await ReplyAsync("**Accounts**"+System.Environment.NewLine+string.Join(System.Environment.NewLine,characters.Where(e=>e.player_server_id==Context.Guild.Id).Select(e=>e.name).ToList()));
         }
 
         [Command("balance")]
@@ -83,7 +89,6 @@ namespace trillbot.Commands
 
         [Command("bal")]
         public async Task displayBalAsync() {
-            var usr = Context.Guild.GetUser(Context.Message.Author.Id);
             var character = Character.get_character(Context.Message.Author.Id,Context.Guild.Id);
 
             if (character == null)
@@ -93,6 +98,19 @@ namespace trillbot.Commands
             }
 
             await ReplyAsync(Context.User.Mention + ", you have a current balance of " + character.balance + " imperial credits.");
+        }
+
+        [Command("bal")]
+        public async Task displayBalAsync(SocketUser User) {
+            var character = Character.get_character(User.Id,Context.Guild.Id);
+
+            if (character == null)
+            {
+                await ReplyAsync("Account not found.");
+                return;
+            }
+
+            await ReplyAsync(character.name + " has a current balance of " + character.balance + " imperial credits.");
         }
 
         [Command("give")]
