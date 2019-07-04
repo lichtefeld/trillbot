@@ -72,7 +72,7 @@ namespace trillbot.Commands
             racer.update_racer(r);
         }
 
-        [Command("showracer")]
+        [Command("racer")]
         public async Task showRacerAsync(int i = -1) {
             racer r = new racer();
             if (i < 0) r = racer.get_racer(Context.Message.Author.Id, Context.Guild.Id);

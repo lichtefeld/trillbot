@@ -45,11 +45,11 @@ namespace trillbot.Commands
             Character.insert_character(c);
 
             await ReplyAsync(name + ", you have created an account.");
+            await Context.User.SendMessageAsync("Please note. This discord bot enables fictional gambling for the intent of RP creation. No real money is invested into this casino or gambling experience. Results here are not indicative of actual outcomes from a casino. If you have a gambling addiction, please do not continue to play and seek help from professionals.");
 
         }
 
         [Command("deleteaccount")]
-        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task DeletecharacterAsync()
         {
             var c = Character.get_character(Context.Message.Author.Id,Context.Guild.Id);
@@ -64,18 +64,16 @@ namespace trillbot.Commands
         }
 
         [Command("listaccounts")]
-        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task ListcharactersAsync()
         {
             var characters = Character.get_character();
 
-            await ReplyAsync("**Accounts**"+System.Environment.NewLine+string.Join(System.Environment.NewLine,characters.Where(e=>e.player_server_id==Context.Guild.Id).Select(e=>e.name).ToList()));
+            await Context.User.SendMessageAsync("**Accounts**"+System.Environment.NewLine+string.Join(System.Environment.NewLine,characters.Where(e=>e.player_server_id==Context.Guild.Id).Select(e=>e.name).ToList()));
         }
 
         [Command("balance")]
         public async Task DisplayBalanceAsync() {
             //Display bets to the User in a DM?
-            var usr = Context.Guild.GetUser(Context.Message.Author.Id);
             var character = Character.get_character(Context.Message.Author.Id,Context.Guild.Id);
 
             if (character == null)
@@ -90,7 +88,6 @@ namespace trillbot.Commands
         [Command("bal")]
         public async Task displayBalAsync() {
             var character = Character.get_character(Context.Message.Author.Id,Context.Guild.Id);
-
             if (character == null)
             {
                 await ReplyAsync("Account not found. Please create one before proceeding via `ta!registeraccount`");
@@ -139,5 +136,56 @@ namespace trillbot.Commands
             Character.update_character(Char);
             Character.update_character(userChar);
         }
+
+        [Command("add")]
+        public async Task addMoneyAsync(SocketUser user, int amount) {
+            var userChar = Character.get_character(user.Id,Context.Guild.Id);
+            if (userChar == null) {
+                await ReplyAsync(Context.User.Mention + ", Account not found. Please create one before proceeding via `ta!registeraccount`");
+                return;
+            }
+
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", a server object doesn't exist for this server. Please create one.");
+                return;
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+
+            userChar.balance += amount;
+
+            await ReplyAsync(Context.User.Mention + ", you have given " + amount + ", to " + userChar.name);
+
+            Character.update_character(userChar);
+        }
+
+        [Command("sub")]
+        public async Task subMoneyAsync(SocketUser user, int amount) {
+            var userChar = Character.get_character(user.Id,Context.Guild.Id);
+            if (userChar == null) {
+                await ReplyAsync(Context.User.Mention + ", Account not found. Please create one before proceeding via `ta!registeraccount`");
+                return;
+            }
+
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", a server object doesn't exist for this server. Please create one.");
+                return;
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+
+            userChar.balance -= amount;
+
+            await ReplyAsync(Context.User.Mention + ", you have removed " + amount + ", to " + userChar.name);
+
+            Character.update_character(userChar);
+        }
+
     }
 }

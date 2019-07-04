@@ -334,13 +334,34 @@ namespace trillbot.Commands
         }
 
         [Command("odds")]
-        public async Task showRaceOdds(int raceID) {
+        public async Task showRaceOddsAsync(int raceID) {
             var r = race.get_race(raceID);
             if ( r == null) {
               await Context.Channel.SendMessageAsync(Context.User.Mention + ", this race ID doesn't exist. Please try again.");
               return;
             }
             r.displayPayouts(Context);
+        }
+
+        [Command("odds")]
+        public async Task showAllRaceOddsAsync() {
+            var rs = race.get_race();
+            List<string> str = new List<string>();
+            str.Add("**List of All Races to Bet On**");
+            str.Add("```");
+            str.Add("Race ID | Racers in Race (ID numbers) ");
+            foreach (var r in rs) {
+                if (r.discord_server_id == Context.Guild.Id) {
+                    List<string> strs = new List<string>();
+                    foreach( var rb in r.racersWithBets) {
+                        strs.Add(rb.ID.ToString());
+                    }
+                    str.Add(r.ID.ToString() + " | " + String.Join(", ",strs));
+                }
+            }
+            str.Add("```");
+
+            await Context.User.SendMessageAsync(String.Join(System.Environment.NewLine,str));
         }
     }
 

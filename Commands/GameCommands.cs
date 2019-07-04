@@ -197,7 +197,7 @@ namespace trillbot.Commands
             }
         }
 
-        [Command("kill")]
+        [Command("remove")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task killAsync(int i) {
             var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
