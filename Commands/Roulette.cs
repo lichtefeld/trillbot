@@ -85,6 +85,12 @@ namespace trillbot.Commands
                 return;
             }
 
+            var p = rl.Value.table.FirstOrDefault(e=> e.player_discord_id == Context.User.Id);
+            if (p == null ) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't at this roulette table. To join `ta!join`");
+                return;
+            }
+
             if(inputs.Length < 3) {
                 await Context.Channel.SendMessageAsync(Context.User.Mention + ", your input ins't structured correctly: `ta!bet type [amount] [Nums OR Type Option]`");
                 return;

@@ -1,0 +1,179 @@
+{
+  "race": [
+    {
+      "id": 0,
+      "serverID": 0,
+      "racersBets": [
+        {
+          "id": 0,
+          "bets": [
+            2,
+            0,
+            0
+          ],
+          "payouts": [
+            0.999640143942423,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "id": 2,
+          "bets": [
+            0,
+            25000,
+            50
+          ],
+          "payouts": [
+            1.0,
+            0.20587301027070906,
+            0.97377622377622375
+          ]
+        },
+        {
+          "id": 3,
+          "bets": [
+            0,
+            0,
+            0
+          ],
+          "payouts": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "id": 4,
+          "bets": [
+            0,
+            0,
+            0
+          ],
+          "payouts": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "bets": [
+        {
+          "id": 0,
+          "racerName": "The Man in the Gold Mask",
+          "racerID": 0,
+          "amount": 2,
+          "type": "win",
+          "raceID": 0,
+          "characterID": 0
+        },
+        {
+          "id": 0,
+          "racerName": "Xavier",
+          "racerID": 2,
+          "amount": 50,
+          "type": "show",
+          "raceID": 0,
+          "characterID": 0
+        },
+        {
+          "id": 0,
+          "racerName": "Xavier",
+          "racerID": 2,
+          "amount": 25000,
+          "type": "place",
+          "raceID": 0,
+          "characterID": 0
+        }
+      ],
+      "totalPool": [
+        5002,
+        28333,
+        1716
+      ],
+      "cut": 0.1,
+      "acceptingBets": true
+    },
+    {
+      "id": 1,
+      "serverID": 0,
+      "racersBets": [
+        {
+          "id": 0,
+          "bets": [
+            2,
+            2,
+            2
+          ],
+          "payouts": [
+            0.099999999999999978,
+            0.099999999999999978,
+            0.099999999999999978
+          ]
+        },
+        {
+          "id": 2,
+          "bets": [
+            0,
+            0,
+            0
+          ],
+          "payouts": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "id": 4,
+          "bets": [
+            0,
+            0,
+            0
+          ],
+          "payouts": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "bets": [
+        {
+          "id": 0,
+          "racerName": "The Man in the Gold Mask",
+          "racerID": 0,
+          "amount": 2,
+          "type": "win",
+          "raceID": 1,
+          "characterID": 0
+        },
+        {
+          "id": 0,
+          "racerName": "The Man in the Gold Mask",
+          "racerID": 0,
+          "amount": 2,
+          "type": "show",
+          "raceID": 1,
+          "characterID": 0
+        },
+        {
+          "id": 0,
+          "racerName": "The Man in the Gold Mask",
+          "racerID": 0,
+          "amount": 2,
+          "type": "place",
+          "raceID": 1,
+          "characterID": 0
+        }
+      ],
+      "totalPool": [
+        2,
+        2,
+        2
+      ],
+      "cut": 0.1,
+      "acceptingBets": false
+    }
+  ]
+}

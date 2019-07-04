@@ -29,7 +29,7 @@ namespace trillbot.Classes {
         }
 
         public string display() {
-            return "Bet. Racer Name: " + RacerName  + "| Type " + Type + " | Amount: " + Amount;
+            return "Racer Name: " + RacerName  + " | Type: " + Type + " | Amount: " + Amount + " imperial credits";
         }
 
     }

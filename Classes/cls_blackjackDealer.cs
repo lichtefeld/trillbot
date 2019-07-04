@@ -277,6 +277,7 @@ namespace trillbot.Classes {
                                 }
                                 Character.update_character(c);    
                             } else {
+                                
                                 toOutput.Add(p.name + " loses to the dealer with hand " + (i+1) + "!");
                             }
                         } else {

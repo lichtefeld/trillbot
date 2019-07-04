@@ -291,7 +291,7 @@ namespace trillbot.Commands
         // RACING BETTING SPECIFIC COMMANDS
         [Command("wager")]
         public async Task racingWagger(int raceID, int racerID, string type, int amount = 2) {
-          var c = Character.get_character(Context.User.Id,Context.User.Id);
+          var c = Character.get_character(Context.User.Id,Context.Guild.Id);
           if (c == null) {
               await Context.Channel.SendMessageAsync(Context.User.Mention + ", you don't have an account. Try making one with ta!registeraccount");
               return;
@@ -299,6 +299,10 @@ namespace trillbot.Commands
           var r = race.get_race(raceID);
           if ( r == null) {
               await Context.Channel.SendMessageAsync(Context.User.Mention + ", this race ID doesn't exist. Please try again.");
+              return;
+          }
+          if (!r.acceptingBets) {
+              await Context.Channel.SendMessageAsync(Context.User.Mention + ", this race isn't accepting bets. It might be racing or already ran!");
               return;
           }
           var rr = r.racersWithBets.FirstOrDefault(e=>e.ID == racerID);
@@ -312,7 +316,7 @@ namespace trillbot.Commands
               return;
           }
           type = type.ToLower();
-          if (!type.Equals("win") || !type.Equals("place") || !type.Equals("show")) {
+          if (!type.Equals("win") && !type.Equals("place") && !type.Equals("show")) {
               await Context.Channel.SendMessageAsync(Context.User.Mention +", this bet type isn't valid. Please try `win`, `place`, or `show`");
               return;
           }
@@ -324,11 +328,20 @@ namespace trillbot.Commands
           c.bets.Add(b);
           Character.update_character(c);
           r.addBet(b);
+          r.updatePayouts();
           race.update_race(r);
           await Context.Channel.SendMessageAsync(Context.User.Mention + ", you have made the following bet: " + b.display());
         }
 
-
+        [Command("odds")]
+        public async Task showRaceOdds(int raceID) {
+            var r = race.get_race(raceID);
+            if ( r == null) {
+              await Context.Channel.SendMessageAsync(Context.User.Mention + ", this race ID doesn't exist. Please try again.");
+              return;
+            }
+            r.displayPayouts(Context);
+        }
     }
 
 }

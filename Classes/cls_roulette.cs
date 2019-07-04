@@ -172,10 +172,6 @@ namespace trillbot.Classes {
 
         public void bet(SocketCommandContext context, rouletteBet bet) {
             var p = table.FirstOrDefault(e=> e.player_discord_id == context.User.Id);
-            if (p == null ) {
-                helpers.output(channel,context.User.Mention + ", you aren't at this roulette table. To join `ta!join`");
-                return;
-            }
             p.bets.Add(bet);
             helpers.output(channel,context.User.Mention + " you have placed a bet: " + bet.ToString());
             if(!isRolling) {

@@ -60,6 +60,7 @@ namespace trillbot.Commands
             }
             r.racersWithBets.Add(new racerBet(racer));
             await Context.Channel.SendMessageAsync(Context.User.Mention + ", added " + rr.nameID() + " to the race!");
+            r.updatePayouts();
             race.update_race(r);
         }
 
@@ -94,7 +95,7 @@ namespace trillbot.Commands
             }
             r.acceptingBets = false;
             race.update_race(r);
-            await Context.Channel.SendMessageAsync(Context.User.Mention + ", ");
+            await Context.Channel.SendMessageAsync(Context.User.Mention + ", bets paused");
         }
 
         [Command("payoutRace")]
@@ -115,6 +116,20 @@ namespace trillbot.Commands
             }
             r.makePayouts(win,place,show,Context);
             await Context.Channel.SendMessageAsync("Payouts Complete.");
+        }
+
+        [Command("house")]
+        public async Task houseBalAsync() {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            await Context.Channel.SendMessageAsync(Context.User.Mention + ", the house has a balance of " + s.houseBal + " imperial credits.");
         }
         
         [Command("removeRacingChannel")]

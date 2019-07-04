@@ -141,6 +141,11 @@ namespace trillbot.Classes {
                 c.balance+=Payouts[10]*bet;
             } else {
                 str.Add("You lost " + bet + " credits");
+                Server s = Server.get_Server(Context.Guild.Id);
+                if (s != null) { 
+                    s.houseBal += bet;
+                    Server.replace_Server(s);
+                }
             }
             //Update Character JSON & Output results
             Character.update_character(c);

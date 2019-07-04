@@ -33,10 +33,21 @@ namespace trillbot.Classes {
       [JsonProperty("acceptingBets")]
       public bool acceptingBets { get; set; } = true;
 
+      private int houseCut(racerBet r, int pos) {
+        return (int) Math.Ceiling(r.bets[pos] * cut);
+      }
+
       public void makePayouts(int win, int place, int show, SocketCommandContext Context) {
         racerBet winner = racersWithBets.FirstOrDefault(e=> e.ID == win);
         racerBet second = racersWithBets.FirstOrDefault(e=> e.ID == place);
         racerBet third = racersWithBets.FirstOrDefault(e=> e.ID == show);
+        Server s = Server.get_Server(Context.Guild.Id);
+
+        long cut = houseCut(winner,0);
+        cut += houseCut(second,1);
+        cut += houseCut(third,2);
+        s.houseBal += cut;
+        Server.replace_Server(s);
 
         foreach (var b in bets) {
           var c = Character.get_character(b.characterID);
@@ -73,7 +84,7 @@ namespace trillbot.Classes {
             c.balance += amount;
             Character.update_character(c);
             var usr = Context.Guild.GetUser(c.player_discord_id);
-            if (usr != null) usr.SendMessageAsync("You won a " + b.Type + " bet on race ID: " + ID + ". It paid you " + amount + " of imperial credits.");
+            if (usr != null) usr.SendMessageAsync("You won a " + b.Type + " bet on race ID: " + ID + ". It paid you " + amount + " imperial credits.");
             Thread.Sleep(100);
           }
         }
@@ -83,7 +94,8 @@ namespace trillbot.Classes {
         foreach (var r in racersWithBets) {
           for(int i = 0; i < 3; i++) {
             double amt = r.bets[i] * (1-cut);
-            r.payouts[i] = amt / (double) totalPool[i];
+            amt = totalPool[i] - amt;
+            r.payouts[i] =  amt / ((double) totalPool[i]);
           }
         }
       }
@@ -108,29 +120,30 @@ namespace trillbot.Classes {
       }
 
       public void displayPayouts(SocketCommandContext Context) {
-        //   Racer ID  | ID1 | ID2 | IDi
-        //   Win Odds  |  5  | 
-        //  Place Odds |  3  |
-        //   Show Odds |  2  |
+        // /*  Racer ID | ID1 | ID2 | IDi *
+        // >   Win Odds |  5  | 
+        // # Place Odds |  3  |
+        // >  Show Odds |  2  |
         List<string> str = new List<string>();
         str.Add("```md");
         str.Add("/* Race ID: " + ID + " *");
         str.Add("< Odds are listed per 1 credit bet. Minimum bet is 2 credits. >");
-        List<string> strs = new List<string>();
         for (int z = 0; z < 4; z++ ) {
+          List<string> strs = new List<string>();
           for(int i = 0; i < racersWithBets.Count; i++) {
             if(z == 0) {
               if (i == 0 ) {
-                strs.Add(helpers.center(payouts_to_line[i],10));
+                strs.Add(payouts_to_line[z]);
               }
               strs.Add(helpers.center(racersWithBets[i].ID.ToString(),5));
             } else {
               if (i == 0) {
-                strs.Add(helpers.center(payouts_to_line[i],10));
+                strs.Add(payouts_to_line[z]);
               }
               strs.Add(helpers.center(((int)Math.Round(racersWithBets[i].payouts[z-1])).ToString(),5));
             }
           }
+          if (z == 0 ) strs.Add(" *");
           str.Add(String.Join(" | ",strs));
         }
         str.Add("```");
@@ -138,10 +151,10 @@ namespace trillbot.Classes {
       }
 
       public static Dictionary<int,string> payouts_to_line = new Dictionary<int, string> {
-        {0,"RacerID"},
-        {1,"Win Odds"},
-        {2,"Place Odds"},
-        {3,"Show Odds"}
+        {0,"/*  Racer ID"},
+        {1,">   Win Odds"},
+        {2,"# Place Odds"},
+        {3,">  Show Odds"}
       };
 
       public static List<race> get_race () {
