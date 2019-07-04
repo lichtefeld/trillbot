@@ -110,7 +110,7 @@ namespace trillbot.Classes {
 
         private void collectBets() {
             foreach(blackjackPlayer p in table) {
-                var c = Character.get_character(p.player_discord_id);
+                var c = Character.get_character(p.player_discord_id,p.player_server_id);
                 if (c != null) {
                     if(c.balance - p.bet >= 0) {
                         c.balance -= p.bet;
@@ -233,12 +233,12 @@ namespace trillbot.Classes {
             if(handValue(hand) == 21 && hand.Count == 2) { //Dealer Has Blackjack!
                 foreach(var p in table) {
                     if(p.handValue(0) == 21) {
-                        var c = Character.get_character(p.player_discord_id);
+                        var c = Character.get_character(p.player_discord_id,p.player_server_id);
                         c.balance += p.bet;
                         Character.update_character(c);
                         toOutput.Add(p.name + " has a blackjack! This results in a __push__.");
                     } else if(p.insurance > 0) {
-                        var c = Character.get_character(p.player_discord_id);
+                        var c = Character.get_character(p.player_discord_id,p.player_server_id);
                         c.balance += 3*p.insurance;
                         Character.update_character(c);
                         toOutput.Add(p.name + " wins their insurance bet and receives " + 3*p.insurance + " credits back.");
@@ -252,13 +252,13 @@ namespace trillbot.Classes {
                         if(p.handValue(i) > 21) {
                             toOutput.Add(p.name +"s hand " + (i+1) + " is a bust");
                         } else if (p.handValue(i) == 21 && p.hand[i].Count == 2) {
-                            var c = Character.get_character(p.player_discord_id);
+                            var c = Character.get_character(p.player_discord_id,p.player_server_id);
                             c.balance += (int)((double)p.bet*1.5 + p.bet);
                             Character.update_character(c);
                             toOutput.Add(p.name + " has a blackjack with hand " + (i+1) + "! They win " + (int)((double)p.bet*1.5 + p.bet) + " credits.");
                         } else if (dealerValue < 22) {
                             if (p.handValue(i) == dealerValue) {
-                                var c = Character.get_character(p.player_discord_id);
+                                var c = Character.get_character(p.player_discord_id,p.player_server_id);
                                 if(p.doubleDown[i]) {
                                     c.balance += p.bet*2;
                                 } else {
@@ -267,7 +267,7 @@ namespace trillbot.Classes {
                                 Character.update_character(c);
                                 toOutput.Add(p.name + " has a tie with hand " + (i+1) + "! This results in a __push__.");
                             } else if (p.handValue(i) > dealerValue) {
-                                var c = Character.get_character(p.player_discord_id);
+                                var c = Character.get_character(p.player_discord_id,p.player_server_id);
                                 if(p.doubleDown[i]) {
                                     c.balance += p.bet*4;
                                     toOutput.Add(p.name + " beats the dealer with hand " + (i+1) + "! They win " + 4*p.bet + " credits.");
@@ -277,10 +277,11 @@ namespace trillbot.Classes {
                                 }
                                 Character.update_character(c);    
                             } else {
+                                
                                 toOutput.Add(p.name + " loses to the dealer with hand " + (i+1) + "!");
                             }
                         } else {
-                            var c = Character.get_character(p.player_discord_id);
+                            var c = Character.get_character(p.player_discord_id,p.player_server_id);
                             if(p.doubleDown[i]) {
                                 c.balance += p.bet*4;
                                 toOutput.Add(p.name + " beats the dealer with hand " + (i+1) + "! They win " + 4*p.bet + " credits.");
@@ -349,7 +350,7 @@ namespace trillbot.Classes {
                 helpers.output(channel,context.User.Mention + ", use `ta!next` to start the next round or `ta!join [amount]` to join the game");
                 return; 
             }
-            var c = Character.get_character(p.player_discord_id);
+            var c = Character.get_character(p.player_discord_id,context.Guild.Id);
             if (c == null) {
                 helpers.output(channel,context.User.Mention + ", Context Xavier. Something horrible has gone wrong: No Character Account while in Blackjack Game");
                 return;
@@ -467,7 +468,7 @@ namespace trillbot.Classes {
                 helpers.output(channel,context.User.Mention + ", Sorry you can only double down as the first move on a hand.");
                 return;
             }
-            var c = Character.get_character(p.player_discord_id);
+            var c = Character.get_character(p.player_discord_id,context.Guild.Id);
             if(p.player_discord_id != context.User.Id) {
                 helpers.output(channel,context.User.Mention + ", Contact Xavier. Error Code: Character missing while in Blackjack Game");
                 return;
@@ -512,7 +513,7 @@ namespace trillbot.Classes {
             var val2 = p.hand[position.Item2][1].value;
             if(val2 != 14 && val2 > 10) val2 = 10;
             if(val1 == val2) {
-                var c = Character.get_character(p.player_discord_id);
+                var c = Character.get_character(p.player_discord_id,context.Guild.Id);
                 if (c == null) {
                     helpers.output(channel,context.User.Mention + ", Contact Xavier: Error Blackjack without Character");
                     return;
@@ -546,7 +547,7 @@ namespace trillbot.Classes {
                 return; 
             }
             if(p.hand.Count == 1 && p.hand[0].Count == 2) {
-                var c  = Character.get_character(p.player_discord_id);
+                var c  = Character.get_character(p.player_discord_id,context.Guild.Id);
                 if (c == null) {
                     helpers.output(channel,context.User.Mention + ", Contact Xavier: Error Blackjack without Character");
                     return;

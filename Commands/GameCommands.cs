@@ -1,33 +1,34 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
-using Newtonsoft.Json;
 using trillbot.Classes;
-using trillbot;
 
 namespace trillbot.Commands
 {
     public class GameCommands : ModuleBase<SocketCommandContext>
     {
         [Command("initialize")]
-        public async Task initAsync() {
+        public async Task initAsync(int version = -1) {
             var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
             if (prix.Value != null) {
                 await Context.Channel.SendMessageAsync("Woah there, a game is already initialized in this channel. Try using `ta!reset` to reset this channel");
                 return;
             }
-            var game = new GrandPrix {
-                channelName = Context.Channel.Name
-            };
+            Server sr = Server.get_Server(Context.Guild.Id);
+            if (version == -1) {
+                if (sr == null) version = 0;
+                else version = sr.racingVersionDefault;
+            }
+            if (sr != null) {
+                if (!sr.isRacingChannel(Context.Guild.GetChannel(Context.Channel.Id))) {
+                    await Context.Channel.SendMessageAsync("A racing game can not be created in this channel as it isn't on the approved list.");
+                    return;
+                }
+            }
+            var game = new GrandPrix(Context.Channel.Name,version);
             Program.games.Add(Context.Channel.Id, game);
             await Context.Channel.SendMessageAsync("Game started and bound to this channel use `ta!joingame` in this channel to join.");
         }
@@ -49,7 +50,11 @@ namespace trillbot.Commands
             if ( prix.Value == null) {
                 await Context.Channel.SendMessageAsync("No game running in this channel. Initialize one with `ta!initialize`");
             } else {
-                prix.Value.startGame(Context); //Consider checking for a player to be in the game, rather than the Administrator node
+                if (!prix.Value.inGame(Context.User)) {
+                    await Context.Channel.SendMessageAsync("You aren't a player in this game so you can't start it!");
+                    return;
+                }
+                prix.Value.startGame(Context); 
             }
         }
 
@@ -103,7 +108,7 @@ namespace trillbot.Commands
                 prix.Value.doReset(Context);
                 trillbot.Program.games.Remove(Context.Channel.Id);
                 if(Program.games.Count == 0) {
-                    await Context.Client.SetGameAsync(null, null, StreamType.NotStreaming);
+                    await Context.Client.SetGameAsync("The Trilliant Grand Prix", null, Discord.ActivityType.Playing);
                 }
             }
         }
@@ -192,7 +197,7 @@ namespace trillbot.Commands
             }
         }
 
-        [Command("kill")]
+        [Command("remove")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task killAsync(int i) {
             var prix = Program.games.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);

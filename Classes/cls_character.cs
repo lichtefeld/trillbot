@@ -18,10 +18,17 @@ using trillbot.Classes;
 namespace trillbot.Classes {
 
     public class Character {
+        [JsonProperty("ID")]
         public int ID { get; set; }
+        [JsonProperty("player_server_id")]
+        public ulong player_server_id { get; set; }
+        [JsonProperty("player_discord_id")]
         public ulong player_discord_id { get; set; }
+        [JsonProperty("name")]
         public string name { get; set; }
+        [JsonProperty("balance")]
         public int balance { get; set; } = 1000000;
+        [JsonProperty("bets")]
         public List<Classes.Bet> bets { get; set; } = new List<Bet>();
 
         public static List<Character> get_character () {
@@ -51,11 +58,11 @@ namespace trillbot.Classes {
             return rtrner;
         }
 
-        public static Character get_character (ulong player_id) {
+        public static Character get_character (ulong player_id, ulong server_id) {
             var store = new DataStore ("character.json");
 
             // Get employee collection
-            var rtrner = store.GetCollection<Character> ().AsQueryable ().FirstOrDefault (e => e.player_discord_id == player_id);
+            var rtrner = store.GetCollection<Character> ().AsQueryable ().FirstOrDefault (e => e.player_discord_id == player_id && e.player_server_id == server_id);
             store.Dispose();
             return rtrner;
         }

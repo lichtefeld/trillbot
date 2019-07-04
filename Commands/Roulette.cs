@@ -61,7 +61,6 @@ namespace trillbot.Commands
             var p = new roulettePlayer(c.player_discord_id,c.name);
             rl.Value.join(Context,p);
         }
-
         [Command("leave")]
         public async Task leaveRouletteAsync() {
             var rl = Program.roulette.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);
@@ -80,9 +79,15 @@ namespace trillbot.Commands
                 return;
             }
 
-            var c = Character.get_character(Context.User.Id);
+            var c = Character.get_character(Context.User.Id,Context.Guild.Id);
             if (c == null) {
                 await Context.Channel.SendMessageAsync(Context.User.Mention + ", you haven't created an account `ta!registeraccount`.");
+                return;
+            }
+
+            var p = rl.Value.table.FirstOrDefault(e=> e.player_discord_id == Context.User.Id);
+            if (p == null ) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't at this roulette table. To join `ta!join`");
                 return;
             }
 

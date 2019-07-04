@@ -1,35 +1,26 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Dynamic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
 using JsonFlatFileDataStore;
-using Newtonsoft.Json;
-using trillbot.Classes;
 
 namespace trillbot.Classes {
 
     public class racer {
         public int ID { get; set; }
         public ulong player_discord_id { get; set; }
+        public ulong server_discord_id { get ; set; }
         public string name { get; set; }
         public string faction { get; set; }
-        public List<Classes.Card> cards { get; set; } = new List<Classes.Card>();
+        public string descr { get; set; }
+        public string img { get; set; }
         //Variables Used for Game Mechanics:
+        public List<Classes.Card> cards { get; set; } = new List<Classes.Card>();
         public long distance { get; set;} 
         public List<pair> hazards { get; set; } = new List<pair>();
         public bool inGame { get; set; } = false;
         public bool stillIn { get; set; } = true;
         public bool crash { get; set; } = false;
-        public Ability ability = Ability.get_ability(1);
+        public Ability ability = Ability.get_ability("ability.json",1);
         public bool abilityRemaining = true;
         public racer coreSync = null;
 
@@ -47,29 +38,17 @@ namespace trillbot.Classes {
         }
         public bool canMove() {
             var h = hazards.FirstOrDefault(e=> e.item1.ID == 5 || e.item1.ID == 8 || e.item1.ID == 6 || e.item1.ID == 16);
-            if ( h == null) {
-                return true;
-            } else {
-                return false;
-            }
+            return h == null;
         }
 
         public bool maxMove2() {
             var h = hazards.FirstOrDefault(e=> e.item1.ID == 11);
-            if( h == null) {
-                return false;
-            } else {
-                return true;
-            }
+            return h == null;
         }
 
         public bool sab() {
             var h = hazards.FirstOrDefault(e=> e.item1.ID == 9);
-            if( h == null) {
-                return false;
-            } else {
-                return true;
-            }
+            return h == null;
         }
 
         public void reset() {
@@ -86,34 +65,32 @@ namespace trillbot.Classes {
             return this.name + " (" + this.ID + ")";
         }
 
-        public string leader(int[] lengths) {
+        public string leader(int[] lengths, bool odd, bool activePlayer, textVersion tV) {
             var str = new List<string>();
             if(lengths == null) {
-                str.Add(this.twoDigitDistance());
+                if (activePlayer) str.Add("/* " + this.twoDigitDistance());
+                else if (odd) str.Add("# " + this.twoDigitDistance());
+                else str.Add("> " + this.twoDigitDistance());
                 str.Add(this.nameID());
-                if(this.stillIn) {
-                    str.Add("Alive");
-                } else {
-                    str.Add("Dead");
-                }
+                str.Add(tV.leaderBoardAlive(this.stillIn));
                 str.Add(this.faction);
                 str.Add(this.ability.Title);
                 foreach(pair p in hazards) {
                     str.Add(p.item1.title + " (" + (p.item2+1) + ")");
                 }
+                if (activePlayer) str.Add(" *");
             } else {
-                str.Add("      " + this.twoDigitDistance());
+                if (activePlayer) str.Add("/*      " + this.twoDigitDistance());
+                else if (odd) str.Add("#       " + this.twoDigitDistance());
+                else str.Add(">       " + this.twoDigitDistance());
                 str.Add(helpers.center(this.nameID(),lengths[0]));
-                if(this.stillIn) {
-                    str.Add(helpers.center("Alive",lengths[1]));
-                } else {
-                    str.Add(helpers.center("Dead",lengths[1]));
-                }
+                str.Add(helpers.center(tV.leaderBoardAlive(this.stillIn),lengths[1]));
                 str.Add(helpers.center(this.faction,lengths[2]));
                 str.Add(helpers.center(this.ability.Title,lengths[3]));
                 foreach (pair p in hazards) {
                     str.Add(p.item1.title + " (" + (p.item2+1) + ")");
                 }
+                if (activePlayer) str.Add(" *");
             }
             var output_string = String.Join(" | ", str);
                 return output_string;
@@ -127,22 +104,7 @@ namespace trillbot.Classes {
             }
         }
 
-        /* private string center(string s, int i) {
-            bool odd = false;
-            string spaces = "";
-            int toCenter = i - s.Length;
-            if (toCenter % 2 == 1) odd = true;
-            for(int j = 0; j < toCenter/2; j++) {
-                spaces += " ";
-            }
-            if(odd) {
-                return " " + spaces + s + spaces;
-            } else {
-                return spaces + s + spaces;
-            }
-        }*/
-
-        public string currentStatus() {
+        public string currentStatus(textVersion tV) {
             var str2 = new List<string>();
             str2.Add(this.name + "'s Hand");
             str2.Add("-- -- -- -- -- -- -- -- -- --");
@@ -164,26 +126,15 @@ namespace trillbot.Classes {
             }
             //Hazards
             str2.Add("--");
-            str2.Add("**Current Hazards** - If any Hazard is applied for 3 full turns, you will explode.");
+            str2.Add(tV.statusHazard());
             if (this.hazards.Count == 0) str2.Add("None");
             var j = 0;
             foreach (pair p in this.hazards) {
-                str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + (p.item2+1) + " turns. " + id_to_condition[p.item1.ID]);
+                str2.Add("#" + ++j + ": " + p.item1.title +" has been applied for " + (p.item2+1) + " turns. " + tV.id_to_condition[p.item1.ID]);
             }
             str2.Add("-- -- -- -- -- -- -- -- -- --");
             return String.Join(System.Environment.NewLine, str2);
         }
-
-        private Dictionary<int, string> id_to_condition = new Dictionary<int, string> {
-            {5,"You cannot move until you play a Dodge card."},
-            {6, "You cannot move until you play a Dodge card."},
-            {8, "You cannot move until you play a Tech Savvy card."},
-            {9, "Can be removed by a Tech Savvy card. If you end your turn with both Sabotage and another Hazard, you explode."},
-            {10, "Can be removed by a Cyber Healthcare card."},
-            {11, "You cannot play Movement cards higher than 2. Can be removed by a Cyber Healthcare card."},
-            {16, "You can not move this turn. Automatically clears after this turn without a remedy."},
-            {17, "Can be removed by a Tech Savvy Card. You have 2 turns to solve this issue or you die."}
-        };
 
         public static List<racer> get_racer () {
             var store = new DataStore ("racer.json");
@@ -218,11 +169,11 @@ namespace trillbot.Classes {
             return rtner;
         }
 
-        public static racer get_racer (ulong player_id) {
+        public static racer get_racer (ulong player_id, ulong server_id) {
             var store = new DataStore ("racer.json");
 
             // Get employee collection
-            var rtner = store.GetCollection<racer> ().AsQueryable ().FirstOrDefault (e => e.player_discord_id == player_id);
+            var rtner = store.GetCollection<racer> ().AsQueryable ().FirstOrDefault (e => e.player_discord_id == player_id && e.server_discord_id == server_id);
             store.Dispose();
 
             // Get employee collection

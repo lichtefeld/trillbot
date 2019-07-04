@@ -30,22 +30,22 @@
     },
     {
       "id": 4,
-      "title": "Nanite Repair Drones",
-      "description": "You are immune to the Mech Failure Hazard.",
+      "title": "Nanite Snack Drones",
+      "description": "You are immune to the Frustration Hazard.",
       "active": false,
       "enable": true
     },
     {
       "id": 5,
-      "title": "Immaculate Engine",
-      "description": "You are immune  to the Sabotage Hazard.",
+      "title": "Immaculate Spirit",
+      "description": "You are immune  to the Distraction Hazard.",
       "active": false,
       "enable": true
     },
     {
       "id": 6,
       "title": "Heart of Gold",
-      "description": "You are immune to the Heart Attack Hazard.",
+      "description": "You are immune to the Motivation Loss Hazard.",
       "active": false,
       "enable": true
     },
@@ -58,7 +58,7 @@
     },
     {
       "id": 8,
-      "title": "Marionette Circuit",
+      "title": "Jockey Dummy",
       "description": "You can win the race even if you die.",
       "active": false,
       "enable": true
@@ -86,8 +86,8 @@
     },
     {
       "id": 12,
-      "title": "Escape Pod",
-      "description": "If you are killed, you can keep racing in your escape pod and you are immune to all Hazards until your next turn. While in the escape pod, your maximum hand size is 1.",
+      "title": "Glider",
+      "description": "If you are thrown off, you can keep racing in your glider and you are immune to all Hazards until your next turn. While in the glider, your maximum hand size is 1.",
       "active": false
     },
     {
@@ -99,7 +99,7 @@
     },
     {
       "id": 14,
-      "title": "Burnout Booster",
+      "title": "Candy Boost",
       "description": "Play two movement cards this turn and reduce your maximum hand size to 7 cards.",
       "active": true,
       "enable": true
@@ -113,7 +113,7 @@
     },
     {
       "id": 16,
-      "title": "Tactical Hacking",
+      "title": "Tactical Taught",
       "description": "Target another racer and pick 4 of your cards, trade those cards for 4 random cards in that racer's hand.",
       "active": true,
       "enable": true
@@ -121,13 +121,13 @@
     {
       "id": 17,
       "title": "Psionic Probe",
-      "description": "At the start of every turn you see the the hand of the lead (living) racer. If you are in the lead, you instead see the hand of the (living) racer in second place.",
+      "description": "At the start of every turn you see the the hand of the lead (On Dolphin) racer. If you are in the lead, you instead see the hand of the (On Dolphin) racer in second place.",
       "active": false,
       "enable": true
     },
     {
       "id": 18,
-      "title": "Space Drafting",
+      "title": "Dolphin Drafting",
       "description": "Move forward until you are on the same space as the closest racer ahead of you.",
       "active": true,
       "enable": true
@@ -135,7 +135,7 @@
     {
       "id": 19,
       "title": "Precision Laser",
-      "description": "Target another racer and apply the **Pierced Engine** Hazard to them. Pierced engine can be removed with Tech Savvy. If Pierced engine is applied for 2 full turns, they will explode.",
+      "description": "Target another racer and apply the **Tickle Laser** Hazard to them. Tickle Laser can be removed with Dolphin Handling. If Tickle Laser is applied for 2 full turns, they will be thrown off.",
       "active": true,
       "enable": true
     },
@@ -149,7 +149,7 @@
     {
       "id": 21,
       "title": "Experimental Grav-Sling ",
-      "description": "Attempt to switch position with the closest racer ahead of you. Roll a d10, if the result is less than 4, you explode.",
+      "description": "Attempt to switch positions with the closest racer ahead of you. Roll a d10, if the result is less than 4, you get thrown off.",
       "active": true,
       "enable": true
     },

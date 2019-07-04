@@ -19,17 +19,19 @@ namespace trillbot.Classes {
 
     public class roulettePlayer {
         public ulong player_discord_id { get; set; }
+        public ulong player_server_id { get; set;}
         public string name { get; set; }
         public List<rouletteBet> bets { get; set; } = new List<rouletteBet>();
 
-        public roulettePlayer(ulong id, string n) {
+        public roulettePlayer(ulong id, string n, ulong serverID) {
             player_discord_id = id;
+            player_server_id = serverID;
             name = n;
         }
 
         public bool reset() {
             var b = new List<rouletteBet>();
-            var c = Character.get_character(player_discord_id);
+            var c = Character.get_character(player_discord_id,player_server_id);
             foreach (var bet in bets) {
                 if(bet.rolling) {
                     if(c.balance - bet.amount >= 0) {
@@ -170,10 +172,6 @@ namespace trillbot.Classes {
 
         public void bet(SocketCommandContext context, rouletteBet bet) {
             var p = table.FirstOrDefault(e=> e.player_discord_id == context.User.Id);
-            if (p == null ) {
-                helpers.output(channel,context.User.Mention + ", you aren't at this roulette table. To join `ta!join`");
-                return;
-            }
             p.bets.Add(bet);
             helpers.output(channel,context.User.Mention + " you have placed a bet: " + bet.ToString());
             if(!isRolling) {
@@ -195,7 +193,7 @@ namespace trillbot.Classes {
 
             //Adding Each Player's Successful Bets
             foreach(var p in table) {
-                var c = Character.get_character(p.player_discord_id);
+                var c = Character.get_character(p.player_discord_id,p.player_server_id);
                 foreach(var b in p.bets) {
                     var payout = 0;
                     switch(b.type) {

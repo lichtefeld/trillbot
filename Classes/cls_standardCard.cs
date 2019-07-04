@@ -84,23 +84,6 @@ namespace trillbot.Classes
             return shuffled;
         }
 
-        public static int eval_hand (List<StandardCard> eval)
-        {
-            int weight = 0;
-            
-            weight = ContainsPairOrTwoPair(eval);
-            weight = ContainsStraightFlush(eval);
-            weight = ContainsThreeOfAKind(eval);
-            weight = ContainsStraight(eval);
-            weight = ContainsFlush(eval);
-            weight = ContainsFullHouse(eval);
-            weight = ContainsFourOfAKind(eval);
-            weight = ContainsStraightFlush(eval);
-            weight = ContainsRoyalFlush(eval);
-
-            return weight;
-        }
-
         public static bool contains_all_same_suit(List<StandardCard> eval)
         {
             StandardCard FirstCard = eval.First();
@@ -117,7 +100,7 @@ namespace trillbot.Classes
         {
             int weight = 0;
 
-            if(contains_all_same_suit(eval) && contains_five_sequential(eval.ToArray()) && eval.OrderBy(e=>e.value).Last().value ==14) weight = 10;
+            if(contains_all_same_suit(eval) && contains_five_sequential(eval.ToArray()) && eval.Last().value ==14) weight = 10;
 
             return weight;
         }
@@ -157,11 +140,11 @@ namespace trillbot.Classes
             {
                 if(eval.Count(e=>e.value == card.value) == 3)
                 {
-                    threes = true;
+                  threes = true;
                 }
                 if(eval.Count(e=>e.value == card.value) == 2)
                 {
-                    pair = true;
+                  pair = true;
                 }
             }
 
@@ -169,7 +152,6 @@ namespace trillbot.Classes
             {
                 weight = 7;
             }
-
             return weight;
         }
 
@@ -178,7 +160,6 @@ namespace trillbot.Classes
             int weight = 0;
 
             if(contains_all_same_suit(eval)) weight = 6;
-
             return weight;
         }
 
@@ -187,7 +168,6 @@ namespace trillbot.Classes
             int weight = 0;
 
             if(contains_five_sequential(eval.ToArray())) weight = 5;
-
             return weight;
         }
 
@@ -205,7 +185,6 @@ namespace trillbot.Classes
             }
 
             if(threes) weight = 4;
-
             return weight;
 
         }
@@ -229,12 +208,9 @@ namespace trillbot.Classes
             }
 
             if(paircount == 2) weight = 3;
-
             if(paircount == 1) weight = 2;
 
             return weight;
-
         }
-
     }
 }

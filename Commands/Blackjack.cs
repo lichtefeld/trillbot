@@ -65,7 +65,6 @@ namespace trillbot.Commands
             var p = new blackjackPlayer(Context.User.Id,c.name,b);
             bj.Value.addPlayer(p,Context);
         }
-
         [Command("leave")]
         public async Task leaveBlackjackAsync() {
             var bj = Program.blackjack.ToList().FirstOrDefault(e=> e.Key == Context.Channel.Id);

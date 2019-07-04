@@ -19,6 +19,7 @@ namespace trillbot.Classes {
 
     public class blackjackPlayer {
         public ulong player_discord_id { get; set; }
+        public ulong player_server_id { get; set; }
         public string name { get; set; }
         public List<List<StandardCard>> hand { get; set; } = new List<List<StandardCard>>();
         public int bet { get; set; }
@@ -26,8 +27,9 @@ namespace trillbot.Classes {
         public List<bool> doubleDown { get; set;} = new List<bool>();
         public bool surrender { get; set;}
 
-        public blackjackPlayer(ulong ID, string n, int b) {
+        public blackjackPlayer(ulong ID, string n, int b, ulong serverID) {
             player_discord_id = ID;
+            player_server_id = serverID;
             name = n;
             bet = b;
             doubleDown.Add(false);

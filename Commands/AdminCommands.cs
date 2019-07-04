@@ -1,130 +1,16 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
-using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 using trillbot.Classes;
-using RestSharp;
+using Discord.Commands;
 
 namespace trillbot.Commands
 {
-    public class leaderboard
-    {
-        public string name {get;set;}
-        public long credits {get;set;}
-    }
-    public class leaderboard_stats
-    {
-        public List<leaderboard> leaderboard { get; set; }
-        public string api_key { get; set; }
-    }
+
     public class AdminCommands : ModuleBase<SocketCommandContext>
     {
-
-        [Command("add")]
-        [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task addFundsAsync(SocketUser user, int i)
-        {
-            var c = Character.get_character(user.Id);
-            if (c == null)
-            {
-                await ReplyAsync("This user doesn't have an account");
-                return;
-            }
-
-            if (i <= 0)
-            {
-                await ReplyAsync("Don't add negative or 0 funds.");
-                return;
-            }
-
-            c.balance += i;
-            await ReplyAsync(c.name + " has a new balance of " + c.balance);
-            Character.update_character(c);
-        }
-
-        [Command("updateleaderboards")]
-        [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task updateleaderboardsAsync()
-        {
-            List<Classes.Character> characters = Classes.Character.get_character();
-
-            List<leaderboard> rtn = new List<leaderboard>();
-
-            characters.OrderByDescending(e=>e.balance).ToList().ForEach(e=>rtn.Add(new leaderboard {name = e.name, credits = e.balance}));
-
-
-            var file = "trillbot.json";
-
-            var secrets = JsonConvert.DeserializeObject<Dictionary<string, string>>(System.IO.File.ReadAllText(file));
-
-            string key = secrets["api_key"];
-
-            leaderboard_stats s = new leaderboard_stats
-            {
-                leaderboard = rtn,
-                api_key = key
-            };
-
-            string baseurl = string.Concat("https://trilliantring.com/api/Updateleaderboard");
-            // string baseurl = string.Concat ("http://localhost:5000/api/UpdateMemCount");
-
-            var client = new RestClient(baseurl);
-
-            var request = new RestRequest(Method.POST);
-            request.AddParameter("text/json", JsonConvert.SerializeObject(s), ParameterType.RequestBody);
-
-            request.AddHeader("Content-Type", "text/json");
-
-            var response = client.Execute(request);
-
-            await ReplyAsync("Stats uploaded.");
-        }
-
-        [Command("sub")]
-        [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task subFundsAsync(SocketUser user, int i)
-        {
-            var c = Character.get_character(user.Id);
-            if (c == null)
-            {
-                await ReplyAsync("This user doesn't have an account");
-                return;
-            }
-
-            if (i <= 0)
-            {
-                await ReplyAsync("Don't sub negative or 0 funds.");
-                return;
-            }
-
-            c.balance -= i;
-            await ReplyAsync(c.name + " has a new balance of " + c.balance);
-            Character.update_character(c);
-        }
-
-        [Command("bal")]
-        [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task balFundsAsync(SocketUser user)
-        {
-            var c = Character.get_character(user.Id);
-            if (c == null)
-            {
-                await ReplyAsync("This user doesn't have an account");
-                return;
-            }
-
-            await ReplyAsync(c.name + " has a balance of " + c.balance);
-            Character.update_character(c);
-        }
 
         [Command("help")]
         public async Task helpAsync()
@@ -132,12 +18,228 @@ namespace trillbot.Commands
             await Context.User.SendMessageAsync("Please check out this google document for my commands: <https://docs.google.com/document/d/1pWfIToswRCDVpqTK1Bj5Uv6s-n7zpOaqgZHQjW3SNzU/edit?usp=sharing>");
         }
 
+        [Command("addRace")]
+        public async Task addBettingRaceAsync(int winAmount) {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            race r = new race();
+            r.totalPool[0] = winAmount;
+            r.totalPool[1] = winAmount * 2 / 3;
+            r.totalPool[2] = winAmount / 3;
+            race.insert_race(r);
+            await Context.Channel.SendMessageAsync("Race Added");
+        }
 
-        [Command("lootcrate")]
-        public async Task lootCrate() {
-            var emote = Context.Client.Guilds.FirstOrDefault(e=>e.Id == 493151648894681108).Emotes.ToList();
-            var em = emote.ElementAt(Program.rand.Next(emote.Count));
-            await ReplyAsync(Context.User.Mention + " YOU RECEIVE " + em + "    `" + em.Name + "`");
+        [Command("addRacer")]
+        public async Task addRacertoRaceAsync(int id, int racer) {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            race r = race.get_race(id);
+            if ( r == null ) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", this race ID doesn't exist.");
+                return;
+            }
+            racer rr = Classes.racer.get_racer(racer);
+            if ( rr == null ) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", this racer ID doesn't exist.");
+                return;
+            }
+            r.racersWithBets.Add(new racerBet(racer));
+            await Context.Channel.SendMessageAsync(Context.User.Mention + ", added " + rr.nameID() + " to the race!");
+            r.updatePayouts();
+            race.update_race(r);
+        }
+
+        [Command("removeRacer")]
+        public async Task removeRacerFromRaceAsync() {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+        }
+
+        [Command("pauseBet")]
+        public async Task pauseBettingAsync(int ID) {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            race r = race.get_race(ID);
+            if ( r == null ) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", this race ID doesn't exist.");
+                return;
+            }
+            r.acceptingBets = false;
+            race.update_race(r);
+            await Context.Channel.SendMessageAsync(Context.User.Mention + ", bets paused");
+        }
+
+        [Command("payoutRace")]
+        public async Task payoutRaceAsync(int ID, int win, int place, int show) {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            race r = race.get_race(ID);
+            if ( r == null ) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", this race ID doesn't exist.");
+                return;
+            }
+            r.makePayouts(win,place,show,Context);
+            await Context.Channel.SendMessageAsync("Payouts Complete.");
+        }
+
+        [Command("house")]
+        public async Task houseBalAsync() {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            await Context.Channel.SendMessageAsync(Context.User.Mention + ", the house has a balance of " + s.houseBal + " imperial credits.");
+        }
+        
+        [Command("removeRacingChannel")]
+        public async Task removeRacingChannelAsync() {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            s.racingChannelSnowflakes.Remove(Context.Channel.Id);
+            Server.replace_Server(s);
+            await Context.Channel.SendMessageAsync(Context.User.Mention + ", removed " + Context.Channel.Name + ", from the racing channels on this server.");
+        }
+
+        [Command("addRacingChannel")]
+        public async Task addRacingChannelAsync() {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            s.racingChannelSnowflakes.Add(Context.Channel.Id);
+            Server.replace_Server(s);
+            await Context.Channel.SendMessageAsync(Context.User.Mention + ", added " + Context.Channel.Name + ", to the racing channels on this server.");
+        }
+
+        [Command("removeAuthorized")]
+        public async Task removeAuthorizedAsync(IGuildUser User) {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            s.adminSnowflakes.Remove(User.Id);
+            Server.replace_Server(s);
+            await Context.Channel.SendMessageAsync(Context.User.Mention + ", removed " + User.Mention + ", from the authorized users on this server.");
+        }
+
+        [Command("addAuthorized")]
+        public async Task addAuthorizedAsync(IGuildUser User) {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            s.adminSnowflakes.Add(User.Id);
+            Server.replace_Server(s);
+            await Context.Channel.SendMessageAsync(Context.User.Mention + ", added " + User.Mention + ", to the authorized users on this server.");
+        }
+
+        [Command("showRacingVersions")]
+        public async Task showRacingVersionAsync() {
+            var tV = textVersion.get_textVersion();
+            var str = new List<string>();
+            var count = 21;
+            str.Add("**Special Abilities**");
+            for(int i = 0; i < tV.Count; i++) {
+                var s = "**#" + (i) + ":** " + tV[i].name + " - *" +tV[i].desc + "*";
+                count += s.Length;
+                if (count > 1950) {
+                    var temp_output_string = String.Join(System.Environment.NewLine,str);
+                    await Context.User.SendMessageAsync(temp_output_string);
+                    count = s.Length;
+                    str = new List<string>();
+                }
+                str.Add(s);
+            }
+            var output_string = String.Join(System.Environment.NewLine,str);
+            await Context.User.SendMessageAsync(output_string);
+        }
+
+        [Command("setRacingVersion")]
+        public async Task setRacingVersionAsync(int i) {
+            Server s = Server.get_Server(Context.Guild.Id);
+            if (s == null) { 
+                createServerObject(Context); 
+                s = Server.get_Server(Context.Guild.Id);
+            }
+            if (!s.isAdmin(Context.Guild.GetUser(Context.User.Id))) {
+                await Context.Channel.SendMessageAsync(Context.User.Mention + ", you aren't listed as an authorized user for this server.");
+                return;
+            }
+            s.racingVersionDefault = i;
+            Server.replace_Server(s);
+            await Context.Channel.SendMessageAsync(Context.User.Mention + ", the default racing version has been set to id " + i );
+        }
+
+        private void createServerObject(SocketCommandContext Context) {
+            Server s = new Server();
+            s.snowflake = Context.Guild.Id;
+            s.Title = Context.Guild.Name;
+            s.adminSnowflakes.Add(Context.Guild.OwnerId);
+            s.startingBalance = 1000000;
+            Server.insert_Server(s);
         }
     }
 }
