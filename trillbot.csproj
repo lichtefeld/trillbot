@@ -11,7 +11,7 @@
     <PackageReference Include="jsonflatfiledatastore" Version="2.0.0" />
     <PackageReference Include="microsoft.extensions.dependencyinjection" Version="2.1.1" />
     <PackageReference Include="nodatime" Version="2.4.0" />
-    <PackageReference Include="RestSharp" Version="106.3.1" />
+    <PackageReference Include="RestSharp" Version="106.12.0" />
   </ItemGroup>
    <ItemGroup>
     <Content Include="trillbot.json">
